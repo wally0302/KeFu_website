@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://wally0302.github.io/kefu-website/sitemap.xml
+Sitemap: https://kefu-website.vercel.app/sitemap.xml
