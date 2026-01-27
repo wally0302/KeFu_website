@@ -1,0 +1,1914 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+
+    <title>KeFu 封測版｜虛擬公司接待系統</title>
+    <meta name="description" content="KeFu 虛擬公司封測版，限量 5 名，14 天免費體驗智能問卷與虛擬團隊後台。" />
+
+    <link rel="canonical" href="https://wally0302.github.io/kefu-website/beta/" />
+
+    <meta property="og:title" content="KeFu 虛擬公司封測版" />
+    <meta property="og:description" content="限量 5 名，14 天免費體驗智能問卷與虛擬團隊後台。" />
+    <meta property="og:url" content="https://wally0302.github.io/kefu-website/beta/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://wally0302.github.io/kefu-website/icon.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" type="image/png" href="/kefu-website/icon.png" />
+
+    <!-- Google Fonts: Inter (英文) & Noto Sans TC (中文) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="/kefu-website/assets/site.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+
+    <script src="/kefu-website/assets/tailwind-base.js"></script>
+    <script>
+        window.setTailwindConfig({
+            theme: {
+                extend: {
+                    backgroundImage: {
+                        'hero-gradient': 'radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.15) 0%, rgba(11, 15, 25, 0) 50%)',
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 6s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float': 'float 3s ease-in-out infinite',
+                        'fade-up': 'fade-up 0.8s ease-out forwards',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        },
+                        'fade-up': {
+                            '0%': { opacity: '0', transform: 'translateY(16px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                    },
+                },
+            },
+        });
+    </script>
+
+    <!-- Tailwind CSS (快速排版與響應式設計) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Lucide Icons (輕量級圖標) -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        .scroll-float.is-visible {
+            animation: float-reveal 0.9s ease-out forwards;
+        }
+
+        @keyframes float-reveal {
+            0% {
+                opacity: 0;
+                transform: translateY(18px);
+            }
+
+            70% {
+                opacity: 1;
+                transform: translateY(-4px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .scroll-float.is-visible {
+                animation: none;
+            }
+        }
+
+        [data-org-chart] [data-role-id] {
+            transition: opacity 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        [data-org-chart].is-modal-open [data-role-id] {
+            opacity: 0.4;
+        }
+
+        [data-org-chart].is-modal-open [data-role-id].is-active {
+            opacity: 1;
+            transform: translateY(-2px);
+            box-shadow: 0 0 0 1px rgba(99, 102, 241, 0.6), 0 12px 24px rgba(15, 23, 42, 0.35);
+        }
+
+        body.is-org-modal-open .site-header {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        #pain-points {
+            padding: 72px 64px;
+        }
+
+        #pain-points .section-header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        #pain-points .card-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 24px;
+        }
+
+        #pain-points .pain-card {
+            min-height: 280px;
+            padding: 26px;
+            border-radius: 24px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            box-shadow: 0 16px 30px rgba(0, 0, 0, 0.25);
+            cursor: default;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #pain-points .pain-iconbox {
+            width: 40px;
+            height: 40px;
+            border-radius: 14px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(79, 70, 229, 0.25);
+        }
+
+        #pain-points .pain-tag {
+            margin-top: 14px;
+            display: inline-flex;
+            width: fit-content;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(99, 102, 241, 0.18);
+            border: 1px solid rgba(129, 140, 248, 0.35);
+            font-size: 12px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.85);
+            letter-spacing: 0.02em;
+        }
+
+        #pain-points .pain-card-title {
+            margin-top: 10px;
+            font-size: 20px;
+            font-weight: 700;
+            line-height: 1.3;
+            color: #ffffff;
+        }
+
+        #pain-points .pain-card-lead {
+            margin-top: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            line-height: 1.7;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        #pain-points .pain-card-body {
+            margin-top: 8px;
+            font-size: 15px;
+            font-weight: 400;
+            line-height: 1.7;
+            color: rgba(255, 255, 255, 0.75);
+        }
+
+        .line-clamp-1,
+        .line-clamp-2,
+        .line-clamp-3 {
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .line-clamp-1 {
+            -webkit-line-clamp: 1;
+        }
+
+        .line-clamp-2 {
+            -webkit-line-clamp: 2;
+        }
+
+        .line-clamp-3 {
+            -webkit-line-clamp: 3;
+        }
+
+        #roi {
+            padding: 80px 64px;
+        }
+
+        #roi .roi-container {
+            max-width: 72rem;
+            margin: 0 auto;
+        }
+
+        #roi .roi-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        #roi .roi-title {
+            font-size: 24px;
+            font-weight: 700;
+            line-height: 1.2;
+            color: #ffffff;
+        }
+
+        #roi .roi-subtitle {
+            margin-top: 12px;
+            font-size: 16px;
+            font-weight: 400;
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.72);
+        }
+
+        #roi .roi-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 24px;
+        }
+
+        #roi .roi-card {
+            position: relative;
+            min-height: 360px;
+            padding: 28px;
+            border-radius: 28px;
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            background: rgba(11, 15, 25, 0.78);
+            box-shadow: 0 24px 40px rgba(0, 0, 0, 0.35);
+            cursor: default;
+            backdrop-filter: blur(18px);
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        #roi .roi-card--manual {
+            border-color: rgba(248, 113, 113, 0.28);
+            box-shadow: 0 18px 36px rgba(248, 113, 113, 0.12);
+        }
+
+        #roi .roi-card--kefu {
+            border-color: rgba(129, 140, 248, 0.35);
+            box-shadow: 0 20px 40px rgba(99, 102, 241, 0.2);
+        }
+
+        #roi .card-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 12px;
+            border-radius: 999px;
+            background: rgba(248, 113, 113, 0.1);
+            color: #fca5a5;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+
+        #roi .card-badge--kefu {
+            background: rgba(129, 140, 248, 0.18);
+            color: #c7d2fe;
+            border: 1px solid rgba(129, 140, 248, 0.4);
+        }
+
+        #roi .card-tag {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            padding: 6px 12px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+        }
+
+        #roi .card-tag.best-value {
+            background: rgba(129, 140, 248, 0.18);
+            color: #c7d2fe;
+            border: 1px solid rgba(129, 140, 248, 0.4);
+        }
+
+        #roi .card-title {
+            margin-top: 8px;
+            font-size: 16px;
+            font-weight: 700;
+            color: rgba(226, 232, 240, 0.9);
+            letter-spacing: 0.02em;
+        }
+
+        #roi .card-metric {
+            padding: 16px 18px;
+            border-radius: 18px;
+            border: 1px solid rgba(148, 163, 184, 0.25);
+            background: rgba(15, 23, 42, 0.65);
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.03);
+        }
+
+        #roi .card-metric-label {
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: rgba(226, 232, 240, 0.65);
+            margin-bottom: 8px;
+        }
+
+        #roi .card-headline {
+            font-size: 24px;
+            font-weight: 600;
+            line-height: 1.4;
+            color: #f8fafc;
+        }
+
+        #roi .card-list {
+            display: grid;
+            gap: 10px;
+            font-size: 16px;
+            font-weight: 400;
+            line-height: 1.8;
+            color: rgba(226, 232, 240, 0.78);
+            padding-left: 18px;
+            list-style: disc;
+        }
+
+        #roi .card-list li {
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            -webkit-line-clamp: 1;
+        }
+
+        #roi .card-cta {
+            margin-top: auto;
+        }
+
+        #roi .card-cta .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-weight: 600;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.9), rgba(139, 92, 246, 0.9));
+            color: #ffffff;
+            border: 1px solid rgba(165, 180, 252, 0.6);
+            box-shadow: 0 12px 26px rgba(99, 102, 241, 0.35);
+            transition: opacity 0.2s ease, transform 0.2s ease;
+        }
+
+        #roi .card-cta .btn:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        #why-virtual-employees {
+            padding: 72px 0;
+        }
+
+        #why-virtual-employees .why-container {
+            max-width: 72rem;
+            margin: 0 auto;
+            padding: 0 64px;
+        }
+
+        #why-virtual-employees .why-header {
+            text-align: center;
+            margin-bottom: 36px;
+        }
+
+        #why-virtual-employees .why-title {
+            font-size: 24px;
+            font-weight: 700;
+            line-height: 1.2;
+            color: #ffffff;
+        }
+
+        #why-virtual-employees .why-subtitle {
+            margin-top: 12px;
+            font-size: 16px;
+            font-weight: 400;
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.75);
+        }
+
+        #why-virtual-employees .why-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 24px;
+        }
+
+        #why-virtual-employees .why-card {
+            min-height: 220px;
+            padding: 24px;
+            border-radius: 24px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            cursor: default;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #why-virtual-employees .why-iconbox {
+            width: 40px;
+            height: 40px;
+            border-radius: 14px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #why-virtual-employees .why-iconbox--indigo {
+            background: rgba(67, 56, 202, 0.35);
+        }
+
+        #why-virtual-employees .why-iconbox--purple {
+            background: rgba(88, 28, 135, 0.4);
+        }
+
+        #why-virtual-employees .why-iconbox--blue {
+            background: rgba(30, 64, 175, 0.35);
+        }
+
+        #why-virtual-employees .why-tag {
+            margin-top: 14px;
+            display: inline-flex;
+            width: fit-content;
+            padding: 4px 10px;
+            border-radius: 999px;
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            background: rgba(99, 102, 241, 0.14);
+            font-size: 12px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.85);
+            letter-spacing: 0.02em;
+        }
+
+        #why-virtual-employees .why-card--2 .why-tag {
+            border-color: rgba(168, 85, 247, 0.35);
+            background: rgba(168, 85, 247, 0.16);
+        }
+
+        #why-virtual-employees .why-card--3 .why-tag {
+            border-color: rgba(59, 130, 246, 0.35);
+            background: rgba(59, 130, 246, 0.16);
+        }
+
+        #why-virtual-employees .why-card-title {
+            margin-top: 10px;
+            font-size: 20px;
+            font-weight: 700;
+            line-height: 1.3;
+            color: #ffffff;
+        }
+
+        #why-virtual-employees .why-card-lead {
+            margin-top: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            line-height: 1.7;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        #why-virtual-employees .why-card-body {
+            margin-top: 8px;
+            font-size: 15px;
+            font-weight: 400;
+            line-height: 1.7;
+            color: rgba(255, 255, 255, 0.75);
+        }
+
+        .section-divider {
+            display: none;
+        }
+
+        .section-separator {
+            border-top: 1px solid rgba(255, 255, 255, 0.22);
+        }
+
+        @media (min-width: 768px) {
+
+            #roi .roi-title,
+            #why-virtual-employees .why-title {
+                font-size: 30px;
+            }
+        }
+
+        @media (max-width: 1023px) {
+            #pain-points {
+                padding: 64px 32px;
+            }
+
+            #pain-points .card-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 20px;
+            }
+
+            #roi {
+                padding: 72px 32px;
+            }
+
+            #roi .roi-grid {
+                gap: 24px;
+            }
+
+            #roi .roi-card {
+                min-height: 340px;
+            }
+
+            #why-virtual-employees .why-container {
+                padding: 0 32px;
+            }
+
+            #why-virtual-employees .why-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 20px;
+            }
+        }
+
+        @media (max-width: 767px) {
+            #pain-points {
+                padding: 56px 20px;
+            }
+
+            #pain-points .card-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+
+            #pain-points .pain-card {
+                min-height: auto;
+            }
+
+            #roi {
+                padding: 64px 20px;
+            }
+
+            #roi .roi-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+
+            #roi .roi-card {
+                min-height: auto;
+            }
+
+            #roi .card-cta .btn {
+                width: 100%;
+            }
+
+            #roi .card-headline {
+                -webkit-line-clamp: 3;
+            }
+
+            #why-virtual-employees .why-container {
+                padding: 0 20px;
+            }
+
+            #why-virtual-employees .why-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+
+            #why-virtual-employees .why-card {
+                min-height: auto;
+            }
+        }
+    </style>
+</head>
+
+<body class="relative overflow-x-hidden">
+    <!-- 背景裝飾 -->
+    <div class="fixed inset-0 pointer-events-none z-0">
+        <div class="absolute top-0 left-0 w-full h-full bg-grid"></div>
+        <div
+            class="animate-blob absolute top-[-10%] left-[20%] w-[500px] h-[500px] bg-brand-primary/10 rounded-full blur-[120px] mix-blend-screen">
+        </div>
+        <div
+            class="animate-blob animate-blob-delay absolute bottom-[-10%] right-[10%] w-[400px] h-[400px] bg-brand-accent/10 rounded-full blur-[100px] mix-blend-screen">
+        </div>
+    </div>
+
+    <!-- 導航欄 -->
+    <nav class="site-header z-50 px-6 py-6 max-w-7xl mx-auto">
+        <div class="flex w-full flex-col gap-4">
+            <div class="flex items-center justify-between">
+                <a href="/kefu-website/" class="flex items-center gap-2 hover:opacity-90 transition-opacity">
+                    <img src="/kefu-website/icon.png" alt="KeFu" class="w-8 h-8 rounded-lg" />
+                    <span class="text-xl font-bold tracking-tight">KeFu <span
+                            class="text-xs font-normal text-gray-500 ml-1 border border-gray-700 px-1 rounded hidden sm:inline-block">BETA</span></span>
+                </a>
+                <div class="flex items-center gap-6">
+                    <a href="https://line.me/R/ti/p/@304dgdjo" target="_blank" rel="noreferrer"
+                        class="text-sm bg-white/10 border border-white/20 hover:bg-white/15 px-4 py-2 rounded-lg transition-colors text-gray-100 font-semibold shadow-md shadow-indigo-500/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-200/60">
+                        加 LINE 申請封測
+                    </a>
+                </div>
+            </div>
+            <div class="flex items-center justify-center" data-scroll-progress>
+                <div class="w-full max-w-md">
+                    <div
+                        class="flex items-center justify-center gap-2 text-[11px] font-semibold uppercase tracking-[0.3em] text-indigo-200/80">
+                        <span class="text-indigo-300">Beta 進度</span>
+                        <span class="text-indigo-100" data-progress-value>0%</span>
+                    </div>
+                    <div class="mt-2 w-full rounded-full bg-white/10 border border-white/10 overflow-hidden h-2">
+                        <div data-progress-bar
+                            class="h-full w-0 bg-gradient-to-r from-indigo-400 via-purple-400 to-indigo-300 transition-[width] duration-200 ease-out">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="relative z-10">
+        <!-- 1) Hero 首屏 -->
+        <header class="relative pt-16 pb-24 px-6 text-center max-w-5xl mx-auto scroll-reveal">
+            <div
+                class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-300 text-xs font-medium mb-8">
+                🔥 首批 CEO 合夥人封測｜限量 5 家
+            </div>
+
+            <h1 class="scroll-reveal scroll-float font-bold leading-tight mb-6 text-white">
+                <span class="block text-4xl sm:text-5xl md:text-6xl">成為首批 CEO 合夥人</span>
+                <span class="block text-4xl sm:text-5xl md:text-6xl">打造你的虛擬公司</span>
+                <span
+                    class="mt-3 block text-2xl sm:text-3xl md:text-4xl bg-clip-text text-transparent bg-gradient-to-r from-indigo-300 via-indigo-400 to-purple-300">
+                    AI 客服只是第一位員工｜每月擴編新職位
+                </span>
+            </h1>
+            <p class="text-gray-400 max-w-2xl mx-auto mb-6">
+                <span class="block">KeFu 會從聊天紀錄提出建議，並跟著你的回饋每週調整，</span>
+                <span class="block">逐步把虛擬團隊擴變成屬於你專屬的公司。</span>
+            </p>
+            <ul class="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 max-w-3xl mx-auto mb-10">
+                <li
+                    class="rounded-2xl border border-white/10 bg-brand-card/80 px-4 py-3 sm:px-5 sm:py-4 text-left shadow-lg shadow-black/20 backdrop-blur transition hover:-translate-y-1 hover:border-indigo-400/60">
+                    <div class="flex items-center gap-3 text-indigo-200 mb-1 sm:mb-2">
+                        <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-indigo-500/15">
+                            <i data-lucide="headset" class="h-4 w-4"></i>
+                        </span>
+                        <span class="text-sm font-semibold text-indigo-100/90">即時應答</span>
+                    </div>
+                    <p class="text-xs sm:text-base text-gray-200">24/7 接起重複問題</p>
+                </li>
+                <li
+                    class="rounded-2xl border border-white/10 bg-brand-card/80 px-4 py-3 sm:px-5 sm:py-4 text-left shadow-lg shadow-black/20 backdrop-blur transition hover:-translate-y-1 hover:border-indigo-400/60">
+                    <div class="flex items-center gap-3 text-indigo-200 mb-1 sm:mb-2">
+                        <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-indigo-500/15">
+                            <i data-lucide="notebook-text" class="h-4 w-4"></i>
+                        </span>
+                        <span class="text-sm font-semibold text-indigo-100/90">自動整理</span>
+                    </div>
+                    <p class="text-xs sm:text-base text-gray-200">對話自動整理成 FAQ</p>
+                </li>
+                <li
+                    class="col-span-2 rounded-2xl border border-white/10 bg-brand-card/80 px-4 py-3 sm:col-span-1 sm:px-5 sm:py-4 text-left shadow-lg shadow-black/20 backdrop-blur transition hover:-translate-y-1 hover:border-indigo-400/60">
+                    <div class="flex items-center gap-3 text-indigo-200 mb-1 sm:mb-2">
+                        <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-indigo-500/15">
+                            <i data-lucide="sparkles" class="h-4 w-4"></i>
+                        </span>
+                        <span class="text-sm font-semibold text-indigo-100/90">週週優化</span>
+                    </div>
+                    <p class="text-xs sm:text-base text-gray-200">依回饋每週迭代優化流程</p>
+                </li>
+            </ul>
+            <div class="max-w-md mx-auto flex flex-col items-center gap-4">
+                <div class="w-full sm:w-auto">
+                    <p class="text-sm text-indigo-200/80 mb-3">快來領取你的第一位虛擬員工 →</p>
+                    <a href="https://line.me/R/ti/p/@304dgdjo" target="_blank" rel="noreferrer"
+                        class="bg-button-gradient hover:opacity-90 text-white font-semibold px-7 py-3 rounded-xl shadow-xl shadow-indigo-500/30 transition-all transform hover:scale-[1.02] flex items-center justify-center gap-2 w-full sm:w-auto ring-2 ring-indigo-200/40 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-indigo-200/60">
+                        <span>加入 LINE｜申請 CEO 合夥人封測（限量 5 家）</span>
+                        <i data-lucide="sparkles" class="w-4 h-4"></i>
+                    </a>
+                    <div
+                        class="mt-3 rounded-2xl border border-indigo-500/20 bg-indigo-500/10 px-4 py-3 text-left text-xs text-indigo-100/80 shadow-lg shadow-indigo-500/10">
+                        <p>加好友後輸入關鍵字 <strong class="text-indigo-200">「試用」</strong>，填寫商家基本資料即可申請。</p>
+                        <p class="mt-1 text-[11px] text-indigo-200/70">（我們會優先挑選「真的有在經營、願意回饋」的店家）</p>
+                    </div>
+                </div>
+                <a href="https://line.me/ti/g2/EUKFAFOioWdGOSvRXtRO1BtcKDIdPMeV1sajaQ?utm_source=invitation&utm_medium=link_copy&utm_campaign=default"
+                    target="_blank" rel="noreferrer"
+                    class="w-full sm:w-auto border border-indigo-400/40 text-indigo-100 hover:text-white hover:border-indigo-300 bg-white/5 hover:bg-white/10 font-semibold px-7 py-3 rounded-xl transition-all flex items-center justify-center gap-2 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-indigo-200/60">
+                    <i data-lucide="messages-square" class="w-4 h-4"></i>
+                    <span>點我加入社群</span>
+                </a>
+            </div>
+        </header>
+
+        <section id="pain-points" class="relative z-10 section-separator scroll-reveal">
+            <div class="max-w-6xl mx-auto">
+                <div class="section-header scroll-reveal">
+                    <h2 class="scroll-reveal scroll-float text-2xl md:text-3xl font-bold text-white">
+                        為什麼要加入 CEO 合夥人封測？
+                    </h2>
+                    <div class="section-divider" aria-hidden="true"></div>
+                    <p class="scroll-reveal text-gray-400 mt-3">
+                        先解決最耗時間的接待，剩下的我們一起迭代。
+                    </p>
+                </div>
+
+                <div class="card-grid">
+                    <article class="pain-card scroll-reveal">
+                        <div class="pain-iconbox">
+                            <i data-lucide="hourglass" class="text-indigo-300 w-5 h-5"></i>
+                        </div>
+                        <div class="pain-tag">時間負債</div>
+                        <h3 class="pain-card-title line-clamp-1">隱形的時間負債</h3>
+                        <p class="pain-card-lead line-clamp-2">每天多回 1 小時訊息，一年就被偷走 365 小時。</p>
+                        <p class="pain-card-body line-clamp-2">加入封測，把重複問題先交給第一位虛擬員工接起來。</p>
+                    </article>
+
+                    <article class="pain-card scroll-reveal">
+                        <div class="pain-iconbox">
+                            <i data-lucide="user-x" class="text-indigo-300 w-5 h-5"></i>
+                        </div>
+                        <div class="pain-tag">沉默流失</div>
+                        <h3 class="pain-card-title line-clamp-1">沉默流失最可怕</h3>
+                        <p class="pain-card-lead line-clamp-2">多數客人不會抱怨，只會默默離開。</p>
+                        <p class="pain-card-body line-clamp-2">封測期間一起把 FAQ 補齊，讓答案更快、流失更少。</p>
+                    </article>
+
+                    <article class="pain-card scroll-reveal">
+                        <div class="pain-iconbox">
+                            <i data-lucide="trending-up" class="text-indigo-300 w-5 h-5"></i>
+                        </div>
+                        <div class="pain-tag">競爭威脅</div>
+                        <h3 class="pain-card-title line-clamp-1">對手正在用 AI 超越你</h3>
+                        <p class="pain-card-lead line-clamp-2">當你在忙或在睡覺，對手的 AI 仍在接待。</p>
+                        <p class="pain-card-body line-clamp-2">成為首批 CEO 合夥人，先把夜間與忙碌時段守住。</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section id="roi" class="roi-section section-separator">
+            <div class="roi-container">
+                <header class="roi-header">
+                    <h2 class="roi-title">算一筆帳：你每天被訊息偷走多少時間？</h2>
+                    <div class="section-divider" aria-hidden="true"></div>
+                    <p class="roi-subtitle line-clamp-2">CEO 合夥人封測：先把重複接待交給虛擬團隊，時間拿回來做更重要的事。</p>
+                </header>
+
+                <div class="roi-grid">
+                    <article class="roi-card roi-card--manual">
+                        <div class="card-top">
+                            <div class="card-badge">
+                                <i data-lucide="alert-triangle" class="w-4 h-4"></i>
+                                <span>時間流失</span>
+                            </div>
+                        </div>
+                        <h3 class="card-title">傳統真人 / 手動回覆</h3>
+                        <div class="card-metric">
+                            <p class="card-metric-label">現況估算</p>
+                            <p class="card-headline">每月浪費 15–30 小時在回訊息</p>
+                        </div>
+                        <ul class="card-list">
+                            <li class="line-clamp-1">重複問題一多，就被迫一直盯著訊息</li>
+                            <li class="line-clamp-1">客人沒等到回覆，通常不會抱怨就離開</li>
+                            <li class="line-clamp-1">時間被吃掉＝產品、服務、開發都被延後</li>
+                        </ul>
+                    </article>
+
+                    <article class="roi-card roi-card--kefu">
+                        <div class="card-top">
+                            <div class="card-badge card-badge--kefu">
+                                <i data-lucide="sparkles" class="w-4 h-4"></i>
+                                <span>Best Value</span>
+                            </div>
+                        </div>
+                        <h3 class="card-title">KEFU 虛擬團隊</h3>
+                        <div class="card-metric">
+                            <p class="card-metric-label">封測優惠</p>
+                            <p class="card-headline">CEO 合夥人封測：14 天免費</p>
+                        </div>
+                        <ul class="card-list">
+                            <li class="line-clamp-1">24/7 先接住常見問題，減少你重複回覆</li>
+                            <li class="line-clamp-1">回覆語氣依你的 Persona / 禁語規則統一</li>
+                            <li class="line-clamp-1">封測期間共創迭代：把 FAQ 越補越完整</li>
+                        </ul>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- Org Chart Modal -->
+        <div id="org-modal"
+            class="fixed inset-0 z-[70] hidden items-end justify-center bg-black/75 backdrop-blur-sm px-4 pb-4 sm:items-center sm:px-6 sm:pb-10">
+            <div data-org-modal-overlay class="absolute inset-0 bg-black/80"></div>
+            <div
+                class="relative w-full sm:max-w-2xl h-[75vh] sm:h-auto rounded-t-3xl rounded-b-none sm:rounded-2xl border border-transparent sm:border-brand-border/70 bg-brand-card shadow-2xl max-h-[75vh] sm:max-h-[85vh] flex flex-col">
+                <div class="flex justify-center pt-3 sm:hidden">
+                    <span class="h-1.5 w-12 rounded-full bg-white/30"></span>
+                </div>
+                <button type="button" data-org-modal-close
+                    class="absolute right-4 top-4 rounded-full border border-white/10 bg-white/10 p-2 text-gray-200 transition hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-400/80">
+                    <span class="sr-only">關閉視窗</span>
+                    <i data-lucide="x" class="h-4 w-4"></i>
+                </button>
+                <div class="flex items-start gap-4 border-b border-white/10 px-6 py-5 pr-14">
+                    <div data-org-modal-icon
+                        class="flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-white/5 text-indigo-200">
+                    </div>
+                    <div class="min-w-0">
+                        <p class="text-sm uppercase tracking-[0.3em] text-indigo-300">Role Detail</p>
+                        <div class="flex flex-wrap items-center gap-2">
+                            <h3 data-org-modal-title-zh class="text-xl font-bold text-white">角色介紹</h3>
+                            <span data-org-modal-status
+                                class="inline-flex items-center rounded-full border px-2 py-0.5 text-xs font-semibold"></span>
+                        </div>
+                        <p data-org-modal-title-en class="text-base text-gray-400">Role</p>
+                    </div>
+                </div>
+                <div class="flex-1 overflow-y-auto px-6 pb-6 pt-4 space-y-6">
+                    <p data-org-modal-summary class="text-base leading-relaxed text-gray-300">
+                        這裡會顯示角色的職責說明。
+                    </p>
+                    <div class="space-y-2">
+                        <h4 class="text-base font-semibold text-white">工作內容</h4>
+                        <ul data-org-modal-benefits class="space-y-2 text-base text-gray-300 list-disc list-inside">
+                        </ul>
+                    </div>
+                    <p data-org-modal-footer class="text-sm text-gray-400 border-t border-white/10 pt-4">
+                        持續擴編中：每月新增不同職位員工
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Core Solution (Virtual Org Chart) -->
+        <section class="relative z-10 py-24 bg-black/20 section-separator scroll-reveal">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="grid lg:grid-cols-2 gap-16 items-center">
+
+                    <!-- Left: Text -->
+                    <div class="min-w-0 scroll-reveal">
+                        <div
+                            class="scroll-reveal inline-block text-indigo-400 text-sm font-semibold tracking-wider uppercase mb-4">
+                            Your
+                            AI Team Roster</div>
+                        <h2 class="scroll-reveal scroll-float text-3xl md:text-4xl font-bold mb-6">介紹你的新同事：<br><span
+                                class="text-indigo-400">全自動化虛擬團隊</span></h2>
+                        <div class="section-divider" aria-hidden="true"></div>
+
+                        <p class="scroll-reveal text-gray-400 mb-6 text-lg" data-reveal-delay="120">
+                            這不是聊天機器人，這是你專屬的組織架構。Kefu 運用 Agentic Workflow 技術，讓每位 AI 員工各司其職。
+                        </p>
+
+                        <!-- Speed Setup Note -->
+                        <div class="scroll-reveal inline-flex flex-wrap items-center gap-2 bg-green-900/20 border border-green-500/30 rounded-lg px-4 py-2 mb-4"
+                            data-reveal-delay="180">
+                            <i data-lucide="timer" class="w-4 h-4 text-green-400"></i>
+                            <span class="text-green-400 text-sm font-bold">穩健部署：</span>
+                            <span class="text-gray-300 text-sm">建議預留 20-30 分鐘，完成團隊規劃與測試。</span>
+                        </div>
+
+                        <div class="mt-6 space-y-4" data-org-roster>
+                            <div data-role-button data-role-id="root_agent" role="button" tabindex="0"
+                                class="scroll-reveal rounded-2xl border border-indigo-500/30 bg-brand-card/80 p-5 shadow-lg shadow-black/20 transition hover:-translate-y-1 hover:border-indigo-400/70 cursor-pointer">
+                                <div class="flex items-start justify-between gap-4">
+                                    <div class="flex items-start gap-3">
+                                        <span
+                                            class="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-500/15 text-indigo-200">
+                                            <i data-lucide="cpu" class="h-5 w-5"></i>
+                                        </span>
+                                        <div>
+                                            <div class="text-lg font-bold text-white">營運總監</div>
+                                            <div class="text-xs text-gray-400">Root Agent</div>
+                                        </div>
+                                    </div>
+                                    <span
+                                        class="inline-flex items-center rounded-full border border-emerald-400/30 bg-emerald-500/15 px-2 py-0.5 text-[11px] font-semibold text-emerald-200">已上線
+                                        v1</span>
+                                </div>
+                                <p class="mt-3 text-sm text-gray-300">你的指揮中心：決定交給誰處理，並統一回覆語氣。</p>
+                                <div class="mt-4 flex flex-wrap gap-2 text-xs">
+                                    <span class="rounded-full bg-white/5 px-2 py-1 text-gray-300">任務分派</span>
+                                    <span class="rounded-full bg-white/5 px-2 py-1 text-gray-300">語氣人設</span>
+                                    <span class="rounded-full bg-white/5 px-2 py-1 text-gray-300">禁語規則</span>
+                                </div>
+                            </div>
+                            <div data-role-button data-role-id="faq_agent" role="button" tabindex="0"
+                                class="scroll-reveal rounded-2xl border border-emerald-500/30 bg-brand-card/80 p-5 shadow-lg shadow-black/20 transition hover:-translate-y-1 hover:border-emerald-400/70 cursor-pointer"
+                                data-reveal-delay="80">
+                                <div class="flex items-start justify-between gap-4">
+                                    <div class="flex items-start gap-3">
+                                        <span
+                                            class="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/15 text-emerald-200">
+                                            <i data-lucide="message-circle" class="h-5 w-5"></i>
+                                        </span>
+                                        <div>
+                                            <div class="text-lg font-bold text-white">客服部</div>
+                                            <div class="text-xs text-gray-400">FAQ Agent</div>
+                                        </div>
+                                    </div>
+                                    <span
+                                        class="inline-flex items-center rounded-full border border-emerald-400/30 bg-emerald-500/15 px-2 py-0.5 text-[11px] font-semibold text-emerald-200">已上線
+                                        v1</span>
+                                </div>
+                                <p class="mt-3 text-sm text-gray-300">24/7 接起重複問題，讓你不用一直回訊息。</p>
+                                <div class="mt-4 flex flex-wrap gap-2 text-xs">
+                                    <span class="rounded-full bg-white/5 px-2 py-1 text-gray-300">24/7 回覆</span>
+                                    <span class="rounded-full bg-white/5 px-2 py-1 text-gray-300">FAQ 整理</span>
+                                </div>
+                            </div>
+                            <div data-role-button data-role-id="handover_agent" role="button" tabindex="0"
+                                class="scroll-reveal rounded-2xl border border-amber-500/30 bg-brand-card/80 p-5 shadow-lg shadow-black/20 transition hover:-translate-y-1 hover:border-amber-400/70 cursor-pointer"
+                                data-reveal-delay="140">
+                                <div class="flex items-start justify-between gap-4">
+                                    <div class="flex items-start gap-3">
+                                        <span
+                                            class="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-500/15 text-amber-200">
+                                            <i data-lucide="users" class="h-5 w-5"></i>
+                                        </span>
+                                        <div>
+                                            <div class="text-lg font-bold text-white">轉接專員（人機協作）</div>
+                                            <div class="text-xs text-gray-400">Handover Agent</div>
+                                        </div>
+                                    </div>
+                                    <span
+                                        class="inline-flex items-center rounded-full border border-emerald-400/30 bg-emerald-500/15 px-2 py-0.5 text-[11px] font-semibold text-emerald-200">已上線
+                                        v1</span>
+                                </div>
+                                <p class="mt-3 text-sm text-gray-300">將需要真人回覆的對話彙整重點，轉交後續處理。</p>
+                                <div class="mt-4 flex flex-wrap gap-2 text-xs">
+                                    <span class="rounded-full bg-white/5 px-2 py-1 text-gray-300">轉接處理</span>
+                                    <span class="rounded-full bg-white/5 px-2 py-1 text-gray-300">例外情境</span>
+                                    <span class="rounded-full bg-white/5 px-2 py-1 text-gray-300">交接摘要</span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Right: Visual (Org Chart Style) -->
+                    <div data-org-chart data-reveal-delay="160"
+                        class="scroll-reveal relative min-w-0 w-full overflow-hidden bg-brand-card border border-brand-border rounded-2xl p-8 shadow-2xl shadow-indigo-900/20 h-auto min-h-[520px]">
+                        <!-- Decor: Window Header -->
+                        <div class="flex justify-end items-center mb-6 border-b border-gray-700 pb-4">
+                            <div class="flex gap-2">
+                                <div class="w-3 h-3 rounded-full bg-red-500/80"></div>
+                                <div class="w-3 h-3 rounded-full bg-yellow-500/80"></div>
+                                <div class="w-3 h-3 rounded-full bg-green-500/80"></div>
+                            </div>
+                        </div>
+
+                        <!-- Diagram Container (Flex Column) -->
+                        <div class="relative h-full flex flex-col items-center pb-6">
+
+                            <!-- Level 1: CEO -->
+                            <div
+                                class="z-10 w-32 h-12 border border-dashed border-gray-600 rounded-lg flex items-center justify-center bg-brand-card shrink-0 -mt-2 cursor-pointer transition-colors hover:border-indigo-400/70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-400/80">
+                                <span class="text-xs text-gray-500">YOU (CEO)</span>
+                            </div>
+
+                            <!-- Connector 1: Flexible Line -->
+                            <div
+                                class="w-px bg-gray-600 flex-1 min-h-[32px] border-l border-dashed border-gray-600 opacity-50">
+                            </div>
+
+                            <!-- Level 2: COO (Root Agent) -->
+                            <div data-role-button data-role-id="root_agent" role="button" tabindex="0"
+                                class="z-10 w-48 h-16 bg-indigo-600/20 border border-indigo-500 rounded-lg flex flex-col items-center justify-center backdrop-blur-md animate-pulse-slow shadow-lg shadow-indigo-500/20 shrink-0 cursor-pointer transition-colors hover:border-indigo-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-400/80">
+                                <div class="flex items-center gap-2">
+                                    <i data-lucide="cpu" class="text-indigo-300 w-5 h-5"></i>
+                                    <span class="text-base font-bold text-indigo-200">營運總監</span>
+                                </div>
+                                <div class="text-[10px] text-indigo-400 mt-0.5">Root Agent</div>
+                            </div>
+
+                            <!-- Connector 2: Vertical to Branch -->
+                            <div class="w-px bg-indigo-500 h-8 shrink-0"></div>
+
+                            <!-- Connector 3: The Branch (Bracket) -->
+                            <div
+                                class="w-1/2 h-6 border-t-2 border-x-2 border-indigo-500 rounded-t-sm relative shrink-0 z-0">
+                            </div>
+
+                            <!-- Level 3: Sub Agents (Grid) -->
+                            <div class="w-full grid grid-cols-2 gap-8 px-4 mt-[-4px] shrink-0">
+                                <!-- Left: FAQ Agent -->
+                                <div data-role-button data-role-id="faq_agent" role="button" tabindex="0"
+                                    class="bg-emerald-950 border border-emerald-800/70 rounded-xl p-4 shadow-lg flex flex-col items-center gap-3 hover:border-green-500 transition-colors group z-20 cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-green-400/80">
+                                    <div
+                                        class="w-10 h-10 rounded-full bg-green-900/30 flex items-center justify-center group-hover:scale-110 transition-transform">
+                                        <i data-lucide="message-circle" class="text-green-400 w-5 h-5"></i>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="text-sm font-bold text-white">客服部</div>
+                                        <div class="text-xs text-gray-500">FAQ Agent</div>
+                                    </div>
+                                </div>
+
+                                <!-- Right: Handover Agent -->
+                                <div data-role-button data-role-id="handover_agent" role="button" tabindex="0"
+                                    class="bg-amber-950 border border-amber-800/70 rounded-xl p-4 shadow-lg flex flex-col items-center gap-3 hover:border-orange-500 transition-colors group z-20 cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-400/80">
+                                    <div
+                                        class="w-10 h-10 rounded-full bg-orange-900/30 flex items-center justify-center group-hover:scale-110 transition-transform">
+                                        <i data-lucide="users" class="text-orange-400 w-5 h-5"></i>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="text-sm font-bold text-white">轉接專員（人機協作）</div>
+                                        <div class="text-xs text-gray-500">Handover Agent</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mt-8 w-full">
+                                <p class="text-xs uppercase tracking-[0.3em] text-gray-500 text-center">Coming Soon</p>
+                                <div class="mt-4 grid gap-3 sm:grid-cols-3">
+                                    <div
+                                        class="flex flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-gray-600 bg-gray-900/40 px-3 py-4 text-center text-gray-400">
+                                        <i data-lucide="lock" class="h-4 w-4 text-gray-500"></i>
+                                        <div class="text-sm font-semibold text-gray-300">行銷專員</div>
+                                        <div class="text-xs text-gray-500">Marketing Agent</div>
+                                        <span class="text-[10px] text-gray-500">待解鎖</span>
+                                    </div>
+                                    <div
+                                        class="flex flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-gray-600 bg-gray-900/40 px-3 py-4 text-center text-gray-400">
+                                        <i data-lucide="lock" class="h-4 w-4 text-gray-500"></i>
+                                        <div class="text-sm font-semibold text-gray-300">訂單助理</div>
+                                        <div class="text-xs text-gray-500">Order Agent</div>
+                                        <span class="text-[10px] text-gray-500">待解鎖</span>
+                                    </div>
+                                    <div
+                                        class="flex flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-gray-600 bg-gray-900/40 px-3 py-4 text-center text-gray-400">
+                                        <i data-lucide="lock" class="h-4 w-4 text-gray-500"></i>
+                                        <div class="text-sm font-semibold text-gray-300">數據分析專員</div>
+                                        <div class="text-xs text-gray-500">Retention Coach</div>
+                                        <span class="text-[10px] text-gray-500">待解鎖</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+        <section id="why-virtual-employees" class="why-section section-separator scroll-reveal">
+            <div class="why-container">
+                <header class="why-header">
+                    <h2 class="why-title">為什麼你該選擇「虛擬員工」？</h2>
+                    <p class="why-subtitle">比起傳統招聘，KeFu 用更快的上線速度與更清楚的分工。</p>
+                </header>
+
+                <div class="why-grid">
+                    <article class="why-card why-card--1">
+                        <div class="why-iconbox why-iconbox--indigo">
+                            <i data-lucide="zap" class="text-indigo-400 w-5 h-5"></i>
+                        </div>
+                        <div class="why-tag">上線速度</div>
+                        <h3 class="why-card-title line-clamp-1">5 分鐘完成上線</h3>
+                        <p class="why-card-lead line-clamp-2">填完公司設定與 FAQ，虛擬團隊立刻開始運作。</p>
+                        <p class="why-card-body line-clamp-2">不用寫 SOP、不用等訓練，馬上把常見問題交給虛擬員工。</p>
+                    </article>
+
+                    <article class="why-card why-card--2">
+                        <div class="why-iconbox why-iconbox--purple">
+                            <i data-lucide="coffee" class="text-purple-400 w-5 h-5"></i>
+                        </div>
+                        <div class="why-tag">省管理成本</div>
+                        <h3 class="why-card-title line-clamp-1">0 排班、0 訓練、0 盯訊息</h3>
+                        <p class="why-card-lead line-clamp-2">不用教、不用管，24/7 自動回覆。</p>
+                        <p class="why-card-body line-clamp-2">減少漏回與流失，把注意力留給真正重要的事。</p>
+                    </article>
+
+                    <article class="why-card why-card--3">
+                        <div class="why-iconbox why-iconbox--blue">
+                            <i data-lucide="briefcase" class="text-blue-400 w-5 h-5"></i>
+                        </div>
+                        <div class="why-tag">組織化運作</div>
+                        <h3 class="why-card-title line-clamp-1">一人公司，也能有完整部門</h3>
+                        <p class="why-card-lead line-clamp-2">升級成「有分工的組織」：誰處理、怎麼回，都有制度。</p>
+                        <p class="why-card-body line-clamp-2">客服 / 轉接 / 營運各司其職，流程清楚可控。</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section id="beta-rules" class="sr-only">
+            <h2>封測規則</h2>
+        </section>
+
+        <section id="examples" class="sr-only">
+            <h2>範例對話</h2>
+        </section>
+
+        <!-- 2) 5 分鐘設定你的虛擬公司 -->
+        <section class="py-20 px-6 section-separator scroll-reveal">
+            <div class="max-w-6xl mx-auto">
+                <div class="text-center mb-12 scroll-reveal">
+                    <h2 class="scroll-reveal scroll-float text-2xl md:text-3xl font-bold mb-4">5 分鐘上線你的虛擬公司，團隊立刻開工</h2>
+                    <div class="section-divider" aria-hidden="true"></div>
+                </div>
+                <div class="relative max-w-3xl mx-auto">
+                    <div class="absolute left-5 top-0 h-full w-px bg-indigo-500/30"></div>
+                    <div class="space-y-8">
+                        <div class="scroll-reveal relative pl-16 group" data-reveal-delay="120">
+                            <div
+                                class="absolute left-0 top-1 w-10 h-10 rounded-full bg-indigo-500/15 border border-indigo-500/40 flex items-center justify-center text-indigo-300 font-bold">
+                                01
+                            </div>
+                            <div
+                                class="bg-brand-card/70 border border-brand-border rounded-2xl p-6 transition-all duration-300 group-hover:border-indigo-400/60 group-hover:shadow-lg group-hover:shadow-indigo-500/20">
+                                <div class="flex items-center gap-3 mb-3">
+                                    <div class="w-10 h-10 bg-indigo-500/10 rounded-lg flex items-center justify-center">
+                                        <i data-lucide="clipboard-check" class="w-5 h-5 text-indigo-300"></i>
+                                    </div>
+                                    <h3 class="text-lg font-bold text-white">填寫公司設定</h3>
+                                </div>
+                                <p class="text-sm text-gray-400">輸入品牌介紹、FAQ 與服務範圍，AI 立刻理解你的營運需求。</p>
+                                <button type="button" data-product-toggle aria-expanded="false"
+                                    class="mt-4 inline-flex items-center gap-2 rounded-lg border border-indigo-400/40 bg-white/5 px-4 py-2 text-xs font-semibold text-indigo-100 transition hover:border-indigo-300 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-200/60">
+                                    <span data-toggle-label>點擊查看產品畫面</span>
+                                    <i data-lucide="image" class="h-4 w-4"></i>
+                                </button>
+                                <div data-product-panel class="mt-4 hidden space-y-3">
+                                    <div class="rounded-2xl border border-indigo-500/20 bg-brand-card/40 p-3">
+                                        <p class="text-xs text-indigo-200 mb-2">智能問卷設定畫面</p>
+                                        <img src="https://res.cloudinary.com/dvheto44g/image/upload/v1769243874/%E5%9F%BA%E6%9C%AC%E8%A8%AD%E5%AE%9A_ku6ctk.png"
+                                            alt="智能問卷設定畫面" data-lightbox
+                                            class="w-full rounded-xl border border-white/5 bg-black/20 cursor-zoom-in"
+                                            loading="lazy">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="scroll-reveal relative pl-16 group" data-reveal-delay="200">
+                            <div
+                                class="absolute left-0 top-1 w-10 h-10 rounded-full bg-indigo-500/15 border border-indigo-500/40 flex items-center justify-center text-indigo-300 font-bold">
+                                02
+                            </div>
+                            <div
+                                class="bg-brand-card/70 border border-brand-border rounded-2xl p-6 transition-all duration-300 group-hover:border-indigo-400/60 group-hover:shadow-lg group-hover:shadow-indigo-500/20">
+                                <div class="flex items-center gap-3 mb-3">
+                                    <div class="w-10 h-10 bg-indigo-500/10 rounded-lg flex items-center justify-center">
+                                        <i data-lucide="wand-2" class="w-5 h-5 text-indigo-300"></i>
+                                    </div>
+                                    <h3 class="text-lg font-bold text-white">AI 自動編制團隊</h3>
+                                </div>
+                                <p class="text-sm text-gray-400">系統自動建立訊息接待與人機協作轉接角色，並指派各自職責。</p>
+                                <button type="button" data-product-toggle aria-expanded="false"
+                                    class="mt-4 inline-flex items-center gap-2 rounded-lg border border-indigo-400/40 bg-white/5 px-4 py-2 text-xs font-semibold text-indigo-100 transition hover:border-indigo-300 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-200/60">
+                                    <span data-toggle-label>點擊查看產品畫面</span>
+                                    <i data-lucide="image" class="h-4 w-4"></i>
+                                </button>
+                                <div data-product-panel class="mt-4 hidden space-y-3">
+                                    <div class="rounded-2xl border border-indigo-500/20 bg-brand-card/40 p-3">
+                                        <p class="text-xs text-indigo-200 mb-2">虛擬員工設定畫面</p>
+                                        <img src="https://res.cloudinary.com/dvheto44g/image/upload/v1769244271/AI_%E8%87%AA%E5%8B%95%E7%B7%A8%E5%88%B6%E5%9C%98%E9%9A%8A_fcgjyj.png"
+                                            alt="虛擬員工設定畫面" data-lightbox
+                                            class="w-full rounded-xl border border-white/5 bg-black/20 cursor-zoom-in"
+                                            loading="lazy">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="scroll-reveal relative pl-16 group" data-reveal-delay="280">
+                            <div
+                                class="absolute left-0 top-1 w-10 h-10 rounded-full bg-indigo-500/15 border border-indigo-500/40 flex items-center justify-center text-indigo-300 font-bold">
+                                03
+                            </div>
+                            <div
+                                class="bg-brand-card/70 border border-brand-border rounded-2xl p-6 transition-all duration-300 group-hover:border-indigo-400/60 group-hover:shadow-lg group-hover:shadow-indigo-500/20">
+                                <div class="flex items-center gap-3 mb-3">
+                                    <div class="w-10 h-10 bg-indigo-500/10 rounded-lg flex items-center justify-center">
+                                        <i data-lucide="plug" class="w-5 h-5 text-indigo-300"></i>
+                                    </div>
+                                    <h3 class="text-lg font-bold text-white">一鍵串接 LINE 官方帳號</h3>
+                                </div>
+                                <p class="text-sm text-gray-400">訊息即時導入你的 AI 團隊，開始接住重複問題。</p>
+                                <button type="button" data-product-toggle aria-expanded="false"
+                                    class="mt-4 inline-flex items-center gap-2 rounded-lg border border-indigo-400/40 bg-white/5 px-4 py-2 text-xs font-semibold text-indigo-100 transition hover:border-indigo-300 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-200/60">
+                                    <span data-toggle-label>點擊查看產品畫面</span>
+                                    <i data-lucide="image" class="h-4 w-4"></i>
+                                </button>
+                                <div data-product-panel class="mt-4 hidden space-y-3">
+                                    <div class="rounded-2xl border border-indigo-500/20 bg-brand-card/40 p-3">
+                                        <p class="text-xs text-indigo-200 mb-2">LINE 設定畫面</p>
+                                        <img src="https://res.cloudinary.com/dvheto44g/image/upload/v1769244419/%E9%83%A8%E7%BD%B2%E7%95%AB%E9%9D%A2_s66q9t.png"
+                                            alt="LINE 設定畫面" data-lightbox
+                                            class="w-full rounded-xl border border-white/5 bg-black/20 cursor-zoom-in"
+                                            loading="lazy">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="scroll-reveal relative pl-16 group" data-reveal-delay="360">
+                            <div
+                                class="absolute left-0 top-1 w-10 h-10 rounded-full bg-indigo-500/15 border border-indigo-500/40 flex items-center justify-center text-indigo-300 font-bold">
+                                04
+                            </div>
+                            <div
+                                class="bg-brand-card/70 border border-brand-border rounded-2xl p-6 transition-all duration-300 group-hover:border-indigo-400/60 group-hover:shadow-lg group-hover:shadow-indigo-500/20">
+                                <div class="flex items-center gap-3 mb-3">
+                                    <div class="w-10 h-10 bg-indigo-500/10 rounded-lg flex items-center justify-center">
+                                        <i data-lucide="rocket" class="w-5 h-5 text-indigo-300"></i>
+                                    </div>
+                                    <h3 class="text-lg font-bold text-white">立即開始營運</h3>
+                                </div>
+                                <p class="text-sm text-gray-400">AI 全天候接待顧客，你專心做決策與產品迭代。</p>
+                                <button type="button" data-product-toggle aria-expanded="false"
+                                    class="mt-4 inline-flex items-center gap-2 rounded-lg border border-indigo-400/40 bg-white/5 px-4 py-2 text-xs font-semibold text-indigo-100 transition hover:border-indigo-300 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-200/60">
+                                    <span data-toggle-label>點擊查看產品畫面</span>
+                                    <i data-lucide="image" class="h-4 w-4"></i>
+                                </button>
+                                <div data-product-panel class="mt-4 hidden space-y-3">
+                                    <div class="rounded-2xl border border-indigo-500/20 bg-brand-card/40 p-3">
+                                        <p class="text-xs text-indigo-200 mb-2">AI 客服實際畫面</p>
+                                        <img src="https://res.cloudinary.com/dvheto44g/image/upload/v1769244749/IMG_7330_un8lny.png"
+                                            alt="AI 客服實際畫面" data-lightbox
+                                            class="w-full rounded-xl border border-white/5 bg-black/20 cursor-zoom-in"
+                                            loading="lazy">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+
+
+
+        <div id="beta-exchange-modal"
+            class="fixed inset-0 z-[70] hidden items-end justify-center px-4 pb-4 sm:items-center sm:px-6 sm:py-10 bg-black/75 backdrop-blur-sm"
+            role="dialog" aria-modal="true" aria-labelledby="beta-exchange-title">
+            <div
+                class="relative bg-brand-dark/95 border border-brand-border/70 rounded-t-3xl rounded-b-none sm:rounded-2xl w-full max-w-2xl shadow-2xl shadow-black/40">
+                <div class="flex justify-center pt-3 sm:hidden">
+                    <span class="h-1.5 w-12 rounded-full bg-white/30"></span>
+                </div>
+                <button type="button" data-modal-close="beta-exchange"
+                    class="absolute right-4 top-4 rounded-full border border-white/10 bg-white/10 p-2 text-gray-200 hover:text-white transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-200/60">
+                    <span class="sr-only">關閉視窗</span>
+                    <i data-lucide="x" class="h-4 w-4"></i>
+                </button>
+                <div class="flex items-start justify-between gap-4 border-b border-white/10 px-6 py-4 pr-12">
+                    <div>
+                        <h3 id="beta-exchange-title" class="text-xl font-semibold text-white">封測交換條件</h3>
+                        <p class="text-base text-gray-400 mt-1">你給真實回饋，我給你更長試用與早鳥權益。</p>
+                    </div>
+                </div>
+                <div class="p-6 space-y-4">
+                    <div class="bg-white/5 rounded-xl p-4">
+                        <p class="text-base text-gray-200 font-semibold">🎁 +7 天延長試用</p>
+                        <p class="text-sm text-gray-400 mt-1">完成 D14 回饋即符合</p>
+                    </div>
+                    <div class="bg-white/5 rounded-xl p-4">
+                        <p class="text-base text-gray-200 font-semibold">🎁 優先加入 waitlist</p>
+                        <p class="text-sm text-gray-400 mt-1">公測第一批通知</p>
+                    </div>
+                    <div class="bg-white/5 rounded-xl p-4">
+                        <p class="text-base text-gray-200 font-semibold">🎁 公測贈送 KeFu 點數</p>
+                        <p class="text-sm text-gray-400 mt-1">協助你更快擴編虛擬團隊</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="beta-rules-modal"
+            class="fixed inset-0 z-[70] hidden items-end justify-center px-4 pb-4 sm:items-center sm:px-6 sm:py-10 bg-black/75 backdrop-blur-sm"
+            role="dialog" aria-modal="true" aria-labelledby="beta-rules-title">
+            <div
+                class="relative bg-brand-dark/95 border border-brand-border/70 rounded-t-3xl rounded-b-none sm:rounded-2xl w-full max-w-3xl shadow-2xl shadow-black/40">
+                <div class="flex justify-center pt-3 sm:hidden">
+                    <span class="h-1.5 w-12 rounded-full bg-white/30"></span>
+                </div>
+                <button type="button" data-modal-close="beta-rules"
+                    class="absolute right-4 top-4 rounded-full border border-white/10 bg-white/10 p-2 text-gray-200 hover:text-white transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-200/60">
+                    <span class="sr-only">關閉視窗</span>
+                    <i data-lucide="x" class="h-4 w-4"></i>
+                </button>
+                <div class="flex items-start justify-between gap-4 border-b border-white/10 px-6 py-4 pr-12">
+                    <div>
+                        <h3 id="beta-rules-title" class="text-xl font-semibold text-white">封測規則（透明公開，公平使用）</h3>
+                        <p class="text-base text-gray-400 mt-1">封測方案卡</p>
+                    </div>
+                </div>
+                <div class="max-h-[70vh] overflow-y-auto p-6">
+                    <div
+                        class="flex gap-6 overflow-x-auto snap-x snap-mandatory pb-4 -mx-2 px-2 sm:overflow-visible sm:pb-0 sm:px-0 sm:flex-row">
+                        <div
+                            class="min-w-[260px] w-[85vw] snap-center bg-white/5 rounded-2xl p-5 space-y-3 sm:w-auto sm:flex-1">
+                            <div class="flex items-center gap-3">
+                                <i data-lucide="users" class="w-5 h-5 text-indigo-300"></i>
+                                <p class="text-base text-gray-300">名額：限量 <strong>5 名</strong></p>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <i data-lucide="calendar" class="w-5 h-5 text-indigo-300"></i>
+                                <p class="text-base text-gray-300">期限：啟用日起 <strong>14 天</strong></p>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <i data-lucide="message-circle" class="w-5 h-5 text-indigo-300"></i>
+                                <p class="text-base text-gray-300">用量：每日 <strong>50 則自動回覆</strong> 上限</p>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <i data-lucide="alert-triangle" class="w-5 h-5 text-indigo-300 mt-1"></i>
+                                <p class="text-base text-gray-300">超額處理：當日達上限後暫停自動回覆，隔日恢復，並發出保底提示訊息。</p>
+                            </div>
+                        </div>
+                        <div
+                            class="min-w-[260px] w-[85vw] snap-center bg-white/5 rounded-2xl p-5 space-y-3 sm:w-auto sm:flex-1">
+                            <div class="flex items-start gap-3">
+                                <i data-lucide="layers" class="w-5 h-5 text-indigo-300 mt-1"></i>
+                                <p class="text-base text-gray-300">封測範圍：只開放 <strong>智能問卷 + 虛擬團隊後台（接待/轉接）</strong></p>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <i data-lucide="link" class="w-5 h-5 text-indigo-300 mt-1"></i>
+                                <p class="text-base text-gray-300">支援渠道：目前僅支援 <strong>LINE 官方帳號</strong></p>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <i data-lucide="life-buoy" class="w-5 h-5 text-indigo-300 mt-1"></i>
+                                <p class="text-base text-gray-300">支援方式：封測群／LINE 一對一（以能做到的程度為主）</p>
+                            </div>
+                            <div class="text-sm text-gray-500 border-t border-white/10 pt-4">
+                                啟用日定義：「完成 LINE 串接並開始接收訊息的那天，算啟用日。」
+                            </div>
+                            <ul class="text-sm text-gray-500 space-y-1">
+                                <li>每日上限以「自動回覆則數」計算（不含你在後台調整設定）</li>
+                                <li>封測為限量共創計畫，非正式 SLA 服務</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- FAQ Section (已更新並加入 Icon) -->
+        <section class="relative z-10 py-20 px-6 bg-brand-dark/50 section-separator scroll-reveal">
+            <div class="max-w-3xl mx-auto">
+                <!-- Header -->
+                <div class="text-center mb-12">
+                    <h2 class="scroll-reveal scroll-float text-2xl md:text-3xl font-bold mb-4 text-white">常見問題 (FAQ)
+                    </h2>
+                    <div class="section-divider" aria-hidden="true"></div>
+                    <p class="text-gray-400">關於虛擬公司的運作，CEO 們最想知道的事</p>
+                </div>
+
+                <!-- Questions -->
+                <div class="space-y-4">
+
+                    <!-- Q1 -->
+                    <details
+                        class="scroll-reveal group bg-brand-card border border-brand-border rounded-xl p-6 open:bg-brand-card/80 transition-all hover:border-indigo-500/30"
+                        data-reveal-delay="120">
+                        <summary
+                            class="flex items-center justify-between cursor-pointer list-none font-bold text-lg text-white">
+                            <span class="flex items-center gap-3">
+                                <div
+                                    class="flex-shrink-0 w-8 h-8 rounded-lg bg-indigo-500/10 flex items-center justify-center">
+                                    <i data-lucide="help-circle" class="text-indigo-400 w-5 h-5"></i>
+                                </div>
+                                <span>虛擬員工真的能取代真人客服嗎？</span>
+                            </span>
+                            <i data-lucide="chevron-down"
+                                class="w-5 h-5 text-gray-500 group-open:rotate-180 transition-transform duration-300"></i>
+                        </summary>
+                        <p class="mt-4 text-gray-400 leading-relaxed pl-[44px]">
+                            Kefu 能為您處理 <strong>90% 的重複性問題</strong>（如訂單查詢、規格說明、退款流程）。對於極少數需要複雜情感判斷的個案，營運總監 (Root Agent)
+                            會自動標記並轉交給您處理，讓您只需花費原本 10% 的時間專注於決策。
+                        </p>
+                    </details>
+
+                    <!-- Q2 -->
+                    <details
+                        class="scroll-reveal group bg-brand-card border border-brand-border rounded-xl p-6 open:bg-brand-card/80 transition-all hover:border-indigo-500/30"
+                        data-reveal-delay="180">
+                        <summary
+                            class="flex items-center justify-between cursor-pointer list-none font-bold text-lg text-white">
+                            <span class="flex items-center gap-3">
+                                <div
+                                    class="flex-shrink-0 w-8 h-8 rounded-lg bg-indigo-500/10 flex items-center justify-center">
+                                    <i data-lucide="help-circle" class="text-indigo-400 w-5 h-5"></i>
+                                </div>
+                                <span>設定很麻煩嗎？需要寫程式嗎？</span>
+                            </span>
+                            <i data-lucide="chevron-down"
+                                class="w-5 h-5 text-gray-500 group-open:rotate-180 transition-transform duration-300"></i>
+                        </summary>
+                        <p class="mt-4 text-gray-400 leading-relaxed pl-[44px]">
+                            <strong>完全不需要。</strong> 您只要依照引導填寫品牌介紹與基本 FAQ，Kefu 就能立即開始運作。大多數商家都能在喝完一杯咖啡的時間內完成虛擬團隊的建置。
+                        </p>
+                    </details>
+
+                    <!-- Q3 -->
+                    <details
+                        class="scroll-reveal group bg-brand-card border border-brand-border rounded-xl p-6 open:bg-brand-card/80 transition-all hover:border-indigo-500/30"
+                        data-reveal-delay="240">
+                        <summary
+                            class="flex items-center justify-between cursor-pointer list-none font-bold text-lg text-white">
+                            <span class="flex items-center gap-3">
+                                <div
+                                    class="flex-shrink-0 w-8 h-8 rounded-lg bg-indigo-500/10 flex items-center justify-center">
+                                    <i data-lucide="help-circle" class="text-indigo-400 w-5 h-5"></i>
+                                </div>
+                                <span>如果我什麼都還沒準備好，也可以用嗎？</span>
+                            </span>
+                            <i data-lucide="chevron-down"
+                                class="w-5 h-5 text-gray-500 group-open:rotate-180 transition-transform duration-300"></i>
+                        </summary>
+                        <p class="mt-4 text-gray-400 leading-relaxed pl-[44px]">
+                            <strong>沒問題。</strong> 即使您只提供一句簡單的品牌介紹，Kefu 的生成式 AI 也能先為您產生一組基礎 FAQ
+                            架構。您可以先讓團隊上線，之後再隨時補充或調整策略。
+                        </p>
+                    </details>
+
+                    <!-- Q4 -->
+                    <details
+                        class="scroll-reveal group bg-brand-card border border-brand-border rounded-xl p-6 open:bg-brand-card/80 transition-all hover:border-indigo-500/30"
+                        data-reveal-delay="300">
+                        <summary
+                            class="flex items-center justify-between cursor-pointer list-none font-bold text-lg text-white">
+                            <span class="flex items-center gap-3">
+                                <div
+                                    class="flex-shrink-0 w-8 h-8 rounded-lg bg-indigo-500/10 flex items-center justify-center">
+                                    <i data-lucide="help-circle" class="text-indigo-400 w-5 h-5"></i>
+                                </div>
+                                <span>目前支援串接到哪些平台？</span>
+                            </span>
+                            <i data-lucide="chevron-down"
+                                class="w-5 h-5 text-gray-500 group-open:rotate-180 transition-transform duration-300"></i>
+                        </summary>
+                        <p class="mt-4 text-gray-400 leading-relaxed pl-[44px]">
+                            目前原生支援 <strong>LINE 官方帳號</strong>，這是台灣市場滲透率最高的渠道。我們後續將陸續開放 Instagram 與 Facebook Messenger
+                            的整合功能。
+                        </p>
+                    </details>
+
+                    <!-- Q5 -->
+                    <details
+                        class="scroll-reveal group bg-brand-card border border-brand-border rounded-xl p-6 open:bg-brand-card/80 transition-all hover:border-indigo-500/30"
+                        data-reveal-delay="360">
+                        <summary
+                            class="flex items-center justify-between cursor-pointer list-none font-bold text-lg text-white">
+                            <span class="flex items-center gap-3">
+                                <div
+                                    class="flex-shrink-0 w-8 h-8 rounded-lg bg-indigo-500/10 flex items-center justify-center">
+                                    <i data-lucide="help-circle" class="text-indigo-400 w-5 h-5"></i>
+                                </div>
+                                <span>我的客戶資料安全嗎？</span>
+                            </span>
+                            <i data-lucide="chevron-down"
+                                class="w-5 h-5 text-gray-500 group-open:rotate-180 transition-transform duration-300"></i>
+                        </summary>
+                        <p class="mt-4 text-gray-400 leading-relaxed pl-[44px]">
+                            絕對安全。Kefu
+                            嚴格遵守資料隱私規範，您的資料<strong>僅用於訓練您專屬的虛擬員工</strong>，絕不會分享給其他商家或第三方。您擁有資料的完整控制權，可隨時在後台管理或刪除。
+                        </p>
+                    </details>
+
+                    <!-- Q6 -->
+                    <details
+                        class="scroll-reveal group bg-brand-card border border-brand-border rounded-xl p-6 open:bg-brand-card/80 transition-all hover:border-indigo-500/30"
+                        data-reveal-delay="420">
+                        <summary
+                            class="flex items-center justify-between cursor-pointer list-none font-bold text-lg text-white">
+                            <span class="flex items-center gap-3">
+                                <div
+                                    class="flex-shrink-0 w-8 h-8 rounded-lg bg-indigo-500/10 flex items-center justify-center">
+                                    <i data-lucide="help-circle" class="text-indigo-400 w-5 h-5"></i>
+                                </div>
+                                <span>Kefu 有免費方案嗎？</span>
+                            </span>
+                            <i data-lucide="chevron-down"
+                                class="w-5 h-5 text-gray-500 group-open:rotate-180 transition-transform duration-300"></i>
+                        </summary>
+                        <p class="mt-4 text-gray-400 leading-relaxed pl-[44px]">
+                            有的。目前 Kefu 提供<strong>基礎功能體驗</strong>，讓您可以建立 FAQ 並測試 AI 的回覆效果。我們希望您親自見證效率提升後，再決定是否擴大規模。
+                        </p>
+                    </details>
+
+                    <!-- Q7 -->
+                    <details
+                        class="scroll-reveal group bg-brand-card border border-brand-border rounded-xl p-6 open:bg-brand-card/80 transition-all hover:border-indigo-500/30"
+                        data-reveal-delay="480">
+                        <summary
+                            class="flex items-center justify-between cursor-pointer list-none font-bold text-lg text-white">
+                            <span class="flex items-center gap-3">
+                                <div
+                                    class="flex-shrink-0 w-8 h-8 rounded-lg bg-indigo-500/10 flex items-center justify-center">
+                                    <i data-lucide="help-circle" class="text-indigo-400 w-5 h-5"></i>
+                                </div>
+                                <span>未來會怎麼收費？</span>
+                            </span>
+                            <i data-lucide="chevron-down"
+                                class="w-5 h-5 text-gray-500 group-open:rotate-180 transition-transform duration-300"></i>
+                        </summary>
+                        <p class="mt-4 text-gray-400 leading-relaxed pl-[44px]">
+                            未來的收費模式將以<strong>「使用量或功能等級」</strong>為彈性依據。我們的目標是確保小型一人商家也能輕鬆負擔，而大型商家則能依需求靈活擴充算力。
+                        </p>
+                    </details>
+
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div id="image-preview-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 px-4 py-8">
+        <div class="relative max-h-full max-w-5xl w-full">
+            <button type="button" data-image-preview-close
+                class="absolute -top-4 right-0 translate-y-[-100%] rounded-full border border-white/20 bg-black/70 p-2 text-white transition hover:bg-black/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+                aria-label="關閉圖片預覽">
+                <i data-lucide="x" class="h-4 w-4"></i>
+            </button>
+            <img data-image-preview
+                class="w-full max-h-[80vh] object-contain rounded-2xl border border-white/10 shadow-2xl" alt="">
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="relative z-10 py-12 text-center border-t border-brand-border/50 bg-brand-dark mt-auto">
+        <div class="flex justify-center gap-6 mb-4 text-sm text-gray-400">
+            <a href="https://line.me/R/ti/p/@304dgdjo" target="_blank" rel="noreferrer"
+                class="hover:text-white transition-colors">聯絡客服</a>
+        </div>
+        <p class="text-sm text-gray-600">© 2026 Kefu. All rights reserved.</p>
+    </footer>
+
+    <script src="/kefu-website/assets/site.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script>
+        const setupModal = (name) => {
+            const modal = document.getElementById(`${name}-modal`);
+            if (!modal) return;
+
+            const openButtons = document.querySelectorAll(`[data-modal-open="${name}"]`);
+            const closeButtons = document.querySelectorAll(`[data-modal-close="${name}"]`);
+
+            const openModal = () => {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            };
+
+            const closeModal = () => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            };
+
+            openButtons.forEach((button) => button.addEventListener('click', openModal));
+            closeButtons.forEach((button) => button.addEventListener('click', closeModal));
+
+            modal.addEventListener('click', (event) => {
+                if (event.target === modal) {
+                    closeModal();
+                }
+            });
+
+            document.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape') {
+                    closeModal();
+                }
+            });
+        };
+
+        setupModal('beta-rules');
+        setupModal('beta-exchange');
+
+        const orgChart = document.querySelector('[data-org-chart]');
+        const orgModal = document.querySelector('#org-modal');
+        const orgModalTitleZh = document.querySelector('[data-org-modal-title-zh]');
+        const orgModalTitleEn = document.querySelector('[data-org-modal-title-en]');
+        const orgModalStatus = document.querySelector('[data-org-modal-status]');
+        const orgModalSummary = document.querySelector('[data-org-modal-summary]');
+        const orgModalBenefits = document.querySelector('[data-org-modal-benefits]');
+        const orgModalFooter = document.querySelector('[data-org-modal-footer]');
+        const orgModalIcon = document.querySelector('[data-org-modal-icon]');
+        const orgModalOverlay = document.querySelector('[data-org-modal-overlay]');
+        const orgModalClose = document.querySelector('[data-org-modal-close]');
+
+        const orgRoles = {
+            root_agent: {
+                title_zh: '營運總監',
+                title_en: 'Root Agent',
+                status: '已上線 v1',
+                summary: '你的指揮中心：決定交給誰處理，並統一回覆語氣。',
+                benefits: [
+                    '判斷訊息類型並分派給對應員工（客服部 / 人機協作）',
+                    '套用你設定的語氣與人設（親切、專業、像朋友…）',
+                    '遵守你的禁語規則（例如：不要用簡體、不要太油）',
+                ],
+                triggers: [],
+                icon: 'cpu',
+            },
+            faq_agent: {
+                title_zh: '客服部',
+                title_en: 'FAQ Agent',
+                status: '已上線 v1',
+                summary: '24/7 接起重複問題，讓你不用一直回訊息。',
+                benefits: [
+                    '回答常見問題與基本流程詢問（例如：價格、時間、服務內容）',
+                    '依照設定的內容回覆',
+                    '回覆語氣會套用 營運總監所訂的規則（語氣人設與禁語規則）',
+                ],
+                triggers: [],
+                icon: 'message-circle',
+            },
+            handover_agent: {
+                title_zh: '轉接專員（人機協作）',
+                title_en: 'Handover Agent',
+                status: '已上線 v1',
+                summary: '將需要真人回覆的對話彙整重點，轉交後續處理。',
+                benefits: [
+                    '接手「非 FAQ」或較複雜的訊息，判斷是否需要轉給真人處理',
+                    '轉接前先整理對話脈絡與重點',
+                ],
+                triggers: [],
+                icon: 'users',
+            },
+            marketing_agent: {
+                title_zh: '行銷專員',
+                title_en: 'Marketing Agent',
+                status: '待解鎖',
+                summary: '這個職位即將上工。你加入封測的回饋，會直接影響下一位員工的優先順序。',
+                benefits: [
+                    '每月新增不同職位，逐步擴編成你的公司',
+                    '依聊天紀錄與回饋持續迭代',
+                    '優先解鎖新職位的體驗資格',
+                ],
+                triggers: [
+                    '需要你決定下一個最該擴編的職位',
+                    '需要你提供流程/素材（商品、規則、話術）',
+                    '每週迭代回報與建議確認',
+                ],
+                icon: 'megaphone',
+            },
+            order_agent: {
+                title_zh: '訂單助理',
+                title_en: 'Order Agent',
+                status: '待解鎖',
+                summary: '這個職位即將上工。你加入封測的回饋，會直接影響下一位員工的優先順序。',
+                benefits: [
+                    '每月新增不同職位，逐步擴編成你的公司',
+                    '依聊天紀錄與回饋持續迭代',
+                    '優先解鎖新職位的體驗資格',
+                ],
+                triggers: [
+                    '需要你決定下一個最該擴編的職位',
+                    '需要你提供流程/素材（商品、規則、話術）',
+                    '每週迭代回報與建議確認',
+                ],
+                icon: 'clipboard-list',
+            },
+            retention_coach: {
+                title_zh: '數據分析專員',
+                title_en: 'Data Analyst',
+                status: '待解鎖',
+                summary: '這個職位即將上工。你加入封測的回饋，會直接影響下一位員工的優先順序。',
+                benefits: [
+                    '每月新增不同職位，逐步擴編成你的公司',
+                    '依聊天紀錄與回饋持續迭代',
+                    '優先解鎖新職位的體驗資格',
+                ],
+                triggers: [
+                    '需要你決定下一個最該擴編的職位',
+                    '需要你提供流程/素材（商品、規則、話術）',
+                    '每週迭代回報與建議確認',
+                ],
+                icon: 'repeat',
+            },
+        };
+
+        const statusClasses = {
+            '已上線 v1': 'border-emerald-400/30 bg-emerald-500/15 text-emerald-200',
+            Beta: 'border-amber-400/30 bg-amber-500/15 text-amber-200',
+            '待解鎖': 'border-slate-400/30 bg-slate-500/20 text-slate-200',
+        };
+
+        const setActiveRole = (roleId) => {
+            if (!orgChart) return;
+            const nodes = orgChart.querySelectorAll('[data-role-id]');
+            nodes.forEach((node) => {
+                node.classList.toggle('is-active', node.dataset.roleId === roleId);
+            });
+            orgChart.classList.add('is-modal-open');
+        };
+
+        const renderRoleList = (items = []) => items.map((item) => `<li>${item}</li>`).join('');
+
+        const openOrgModal = (roleId) => {
+            const role = orgRoles[roleId];
+            if (!orgModal || !role) return;
+            if (orgModalTitleZh) orgModalTitleZh.textContent = role.title_zh;
+            if (orgModalTitleEn) orgModalTitleEn.textContent = role.title_en;
+            if (orgModalStatus) {
+                const statusClass = statusClasses[role.status] || 'border-white/20 bg-white/10 text-gray-200';
+                orgModalStatus.className = `inline-flex items-center rounded-full border px-2 py-0.5 text-[11px] font-semibold ${statusClass}`;
+                orgModalStatus.textContent = role.status;
+            }
+            if (orgModalSummary) orgModalSummary.textContent = role.summary;
+            if (orgModalBenefits) orgModalBenefits.innerHTML = renderRoleList(role.benefits);
+            if (orgModalFooter) {
+                orgModalFooter.textContent = '持續擴編中：每月新增不同職位員工';
+            }
+            if (orgModalIcon) {
+                orgModalIcon.innerHTML = `<i data-lucide="${role.icon}" class="h-5 w-5"></i>`;
+                lucide.createIcons();
+            }
+            orgModal.classList.remove('hidden');
+            orgModal.classList.add('flex');
+            document.body.classList.add('overflow-hidden');
+            document.body.classList.add('is-org-modal-open');
+            setActiveRole(roleId);
+        };
+
+        const closeOrgModal = () => {
+            if (!orgModal) return;
+            orgModal.classList.add('hidden');
+            orgModal.classList.remove('flex');
+            document.body.classList.remove('overflow-hidden');
+            document.body.classList.remove('is-org-modal-open');
+            if (orgChart) {
+                orgChart.classList.remove('is-modal-open');
+                orgChart.querySelectorAll('[data-role-id]').forEach((node) => node.classList.remove('is-active'));
+            }
+        };
+
+        const roleButtons = document.querySelectorAll('[data-role-button][data-role-id]');
+        roleButtons.forEach((button) => {
+            button.addEventListener('click', () => openOrgModal(button.dataset.roleId));
+            button.addEventListener('keydown', (event) => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    openOrgModal(button.dataset.roleId);
+                }
+            });
+        });
+
+        if (orgModalOverlay) {
+            orgModalOverlay.addEventListener('click', closeOrgModal);
+        }
+
+        if (orgModalClose) {
+            orgModalClose.addEventListener('click', closeOrgModal);
+        }
+
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape' && orgModal && !orgModal.classList.contains('hidden')) {
+                closeOrgModal();
+            }
+        });
+
+        const progressBar = document.querySelector('[data-progress-bar]');
+        const progressValue = document.querySelector('[data-progress-value]');
+        let progressTicking = false;
+
+        const updateScrollProgress = () => {
+            const scrollTop = window.scrollY || window.pageYOffset;
+            const documentHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const progress = documentHeight > 0 ? (scrollTop / documentHeight) * 100 : 100;
+            const roundedProgress = Math.min(100, Math.max(0, Math.round(progress)));
+            if (progressBar) {
+                progressBar.style.width = `${roundedProgress}%`;
+            }
+            if (progressValue) {
+                progressValue.textContent = `${roundedProgress}%`;
+            }
+            progressTicking = false;
+        };
+
+        const requestProgressUpdate = () => {
+            if (!progressTicking) {
+                progressTicking = true;
+                window.requestAnimationFrame(updateScrollProgress);
+            }
+        };
+
+        window.addEventListener('scroll', requestProgressUpdate, { passive: true });
+        window.addEventListener('resize', requestProgressUpdate);
+        updateScrollProgress();
+
+        const feedbackSwiperEl = document.querySelector('.feedback-swiper');
+        if (feedbackSwiperEl && window.Swiper) {
+            const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            const feedbackSwiper = new window.Swiper(feedbackSwiperEl, {
+                loop: true,
+                slidesPerView: 'auto',
+                spaceBetween: 24,
+                grabCursor: true,
+                autoplay: prefersReducedMotion
+                    ? false
+                    : {
+                        delay: 4000,
+                        disableOnInteraction: false,
+                        pauseOnMouseEnter: true,
+                    },
+                navigation: {
+                    nextEl: '.feedback-hint-right',
+                    prevEl: '.feedback-hint-left',
+                },
+                keyboard: {
+                    enabled: true,
+                    onlyInViewport: true,
+                },
+            });
+
+            const handleFocusIn = () => {
+                if (!prefersReducedMotion && feedbackSwiper.autoplay) {
+                    feedbackSwiper.autoplay.stop();
+                }
+            };
+
+            const handleFocusOut = () => {
+                if (!prefersReducedMotion && feedbackSwiper.autoplay) {
+                    feedbackSwiper.autoplay.start();
+                }
+            };
+
+            feedbackSwiperEl.addEventListener('focusin', handleFocusIn);
+            feedbackSwiperEl.addEventListener('focusout', handleFocusOut);
+        }
+
+        const productToggles = document.querySelectorAll('[data-product-toggle]');
+
+        productToggles.forEach((toggle) => {
+            const productPanel = toggle.parentElement?.querySelector('[data-product-panel]');
+            const productToggleLabel = toggle.querySelector('[data-toggle-label]');
+
+            if (!productPanel) {
+                return;
+            }
+
+            toggle.addEventListener('click', () => {
+                const isExpanded = toggle.getAttribute('aria-expanded') === 'true';
+                toggle.setAttribute('aria-expanded', String(!isExpanded));
+                productPanel.classList.toggle('hidden', isExpanded);
+                if (productToggleLabel) {
+                    productToggleLabel.textContent = isExpanded ? '點擊查看產品畫面' : '點擊收合圖片';
+                }
+            });
+        });
+
+        const imagePreviewModal = document.getElementById('image-preview-modal');
+        const imagePreview = document.querySelector('[data-image-preview]');
+        const imagePreviewClose = document.querySelector('[data-image-preview-close]');
+        const lightboxImages = document.querySelectorAll('[data-lightbox]');
+
+        const openImagePreview = (image) => {
+            if (!imagePreviewModal || !imagePreview) return;
+            imagePreview.src = image.src;
+            imagePreview.alt = image.alt || '';
+            imagePreviewModal.classList.remove('hidden');
+            imagePreviewModal.classList.add('flex');
+            document.body.classList.add('overflow-hidden');
+        };
+
+        const closeImagePreview = () => {
+            if (!imagePreviewModal || !imagePreview) return;
+            imagePreviewModal.classList.add('hidden');
+            imagePreviewModal.classList.remove('flex');
+            imagePreview.src = '';
+            imagePreview.alt = '';
+            document.body.classList.remove('overflow-hidden');
+        };
+
+        lightboxImages.forEach((image) => {
+            image.addEventListener('click', () => openImagePreview(image));
+        });
+
+        if (imagePreviewModal) {
+            imagePreviewModal.addEventListener('click', (event) => {
+                if (event.target === imagePreviewModal) {
+                    closeImagePreview();
+                }
+            });
+        }
+
+        if (imagePreviewClose) {
+            imagePreviewClose.addEventListener('click', closeImagePreview);
+        }
+
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape') {
+                closeOrgModal();
+                closeImagePreview();
+            }
+        });
+
+        lucide.createIcons();
+    </script>
+</body>
+
+</html>
