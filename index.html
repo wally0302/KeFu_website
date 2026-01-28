@@ -1581,9 +1581,12 @@
 
         const faqItems = document.querySelectorAll('[data-faq-item]');
         faqItems.forEach((item) => {
-            item.addEventListener('click', () => {
-                if (item.open) return;
-                item.open = true;
+            const summary = item.querySelector('summary');
+            if (!summary) return;
+
+            summary.addEventListener('click', (event) => {
+                event.preventDefault();
+                item.open = !item.open;
             });
         });
 
