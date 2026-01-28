@@ -1364,7 +1364,7 @@
                 <div class="space-y-4">
 
                     <!-- Q1 -->
-                    <details
+                    <details data-faq-item
                         class="scroll-reveal group bg-brand-card border border-brand-border rounded-xl p-6 open:bg-brand-card/80 transition-all hover:border-indigo-500/30"
                         data-reveal-delay="120">
                         <summary
@@ -1386,7 +1386,7 @@
                     </details>
 
                     <!-- Q2 -->
-                    <details
+                    <details data-faq-item
                         class="scroll-reveal group bg-brand-card border border-brand-border rounded-xl p-6 open:bg-brand-card/80 transition-all hover:border-indigo-500/30"
                         data-reveal-delay="180">
                         <summary
@@ -1407,7 +1407,7 @@
                     </details>
 
                     <!-- Q3 -->
-                    <details
+                    <details data-faq-item
                         class="scroll-reveal group bg-brand-card border border-brand-border rounded-xl p-6 open:bg-brand-card/80 transition-all hover:border-indigo-500/30"
                         data-reveal-delay="240">
                         <summary
@@ -1429,7 +1429,7 @@
                     </details>
 
                     <!-- Q4 -->
-                    <details
+                    <details data-faq-item
                         class="scroll-reveal group bg-brand-card border border-brand-border rounded-xl p-6 open:bg-brand-card/80 transition-all hover:border-indigo-500/30"
                         data-reveal-delay="300">
                         <summary
@@ -1451,7 +1451,7 @@
                     </details>
 
                     <!-- Q5 -->
-                    <details
+                    <details data-faq-item
                         class="scroll-reveal group bg-brand-card border border-brand-border rounded-xl p-6 open:bg-brand-card/80 transition-all hover:border-indigo-500/30"
                         data-reveal-delay="360">
                         <summary
@@ -1473,7 +1473,7 @@
                     </details>
 
                     <!-- Q6 -->
-                    <details
+                    <details data-faq-item
                         class="scroll-reveal group bg-brand-card border border-brand-border rounded-xl p-6 open:bg-brand-card/80 transition-all hover:border-indigo-500/30"
                         data-reveal-delay="420">
                         <summary
@@ -1494,7 +1494,7 @@
                     </details>
 
                     <!-- Q7 -->
-                    <details
+                    <details data-faq-item
                         class="scroll-reveal group bg-brand-card border border-brand-border rounded-xl p-6 open:bg-brand-card/80 transition-all hover:border-indigo-500/30"
                         data-reveal-delay="480">
                         <summary
@@ -1578,6 +1578,14 @@
 
         setupModal('beta-rules');
         setupModal('beta-exchange');
+
+        const faqItems = document.querySelectorAll('[data-faq-item]');
+        faqItems.forEach((item) => {
+            item.addEventListener('click', () => {
+                if (item.open) return;
+                item.open = true;
+            });
+        });
 
         const orgChart = document.querySelector('[data-org-chart]');
         const orgModal = document.querySelector('#org-modal');
