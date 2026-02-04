@@ -19,11 +19,11 @@
 
     <link rel="icon" type="image/png" href="./icon.png" />
 
-    <!-- Google Fonts: Inter (英文) & Noto Sans TC (中文) -->
+    <!-- Google Fonts: Plus Jakarta Sans (EN) & Noto Sans TC (中文) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap"
         rel="stylesheet">
 
     <link rel="stylesheet" href="./assets/site.css">
@@ -34,6 +34,9 @@
         window.setTailwindConfig({
             theme: {
                 extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', '"Noto Sans TC"', 'sans-serif'],
+                    },
                     backgroundImage: {
                         'hero-gradient': 'radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.15) 0%, rgba(11, 15, 25, 0) 50%)',
                     },
@@ -110,6 +113,22 @@
             pointer-events: none;
         }
 
+        .cta-glow {
+            position: relative;
+            isolation: isolate;
+        }
+
+        .cta-glow::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: 16px;
+            background: linear-gradient(120deg, rgba(99, 102, 241, 0.55), rgba(139, 92, 246, 0.45), rgba(59, 130, 246, 0.4));
+            opacity: 0.45;
+            filter: blur(18px);
+            z-index: -1;
+        }
+
         .product-image {
             width: 100%;
             aspect-ratio: 16 / 9;
@@ -121,7 +140,7 @@
         }
 
         #pain-points {
-            padding: 72px 64px;
+            padding: 88px 64px;
         }
 
         #pain-points .section-header {
@@ -139,9 +158,10 @@
             min-height: 280px;
             padding: 26px;
             border-radius: 24px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.25);
-            box-shadow: 0 16px 30px rgba(0, 0, 0, 0.25);
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.92), rgba(15, 23, 42, 0.65));
+            border: 1px solid rgba(148, 163, 184, 0.22);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+            backdrop-filter: blur(12px);
             cursor: default;
             display: flex;
             flex-direction: column;
@@ -154,7 +174,8 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            background: rgba(79, 70, 229, 0.25);
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.35), rgba(59, 130, 246, 0.18));
+            border: 1px solid rgba(99, 102, 241, 0.35);
         }
 
         #pain-points .pain-tag {
@@ -216,7 +237,7 @@
         }
 
         #roi {
-            padding: 80px 64px;
+            padding: 96px 64px;
         }
 
         #roi .roi-container {
@@ -234,6 +255,7 @@
             font-weight: 700;
             line-height: 1.2;
             color: #ffffff;
+            letter-spacing: -0.01em;
         }
 
         #roi .roi-subtitle {
@@ -241,7 +263,7 @@
             font-size: 16px;
             font-weight: 400;
             line-height: 1.8;
-            color: rgba(255, 255, 255, 0.72);
+            color: rgba(226, 232, 240, 0.78);
         }
 
         #roi .roi-grid {
@@ -255,9 +277,9 @@
             min-height: 360px;
             padding: 28px;
             border-radius: 28px;
-            border: 1px solid rgba(255, 255, 255, 0.16);
-            background: rgba(11, 15, 25, 0.78);
-            box-shadow: 0 24px 40px rgba(0, 0, 0, 0.35);
+            border: 1px solid rgba(148, 163, 184, 0.18);
+            background: linear-gradient(160deg, rgba(15, 23, 42, 0.92), rgba(15, 23, 42, 0.6));
+            box-shadow: 0 26px 44px rgba(0, 0, 0, 0.4);
             cursor: default;
             backdrop-filter: blur(18px);
             display: flex;
@@ -323,8 +345,8 @@
         #roi .card-metric {
             padding: 16px 18px;
             border-radius: 18px;
-            border: 1px solid rgba(148, 163, 184, 0.25);
-            background: rgba(15, 23, 42, 0.65);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.5));
             box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.03);
         }
 
@@ -386,7 +408,7 @@
         }
 
         #why-virtual-employees {
-            padding: 72px 0;
+            padding: 88px 0;
         }
 
         #why-virtual-employees .why-container {
@@ -405,6 +427,7 @@
             font-weight: 700;
             line-height: 1.2;
             color: #ffffff;
+            letter-spacing: -0.01em;
         }
 
         #why-virtual-employees .why-subtitle {
@@ -412,7 +435,7 @@
             font-size: 16px;
             font-weight: 400;
             line-height: 1.8;
-            color: rgba(255, 255, 255, 0.75);
+            color: rgba(226, 232, 240, 0.8);
         }
 
         #why-virtual-employees .why-grid {
@@ -425,8 +448,10 @@
             min-height: 220px;
             padding: 24px;
             border-radius: 24px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.18);
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.55));
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            box-shadow: 0 18px 32px rgba(0, 0, 0, 0.32);
+            backdrop-filter: blur(10px);
             cursor: default;
             display: flex;
             flex-direction: column;
@@ -439,6 +464,7 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
+            border: 1px solid rgba(255, 255, 255, 0.08);
         }
 
         #why-virtual-employees .why-iconbox--indigo {
@@ -502,11 +528,22 @@
         }
 
         .section-divider {
-            display: none;
+            display: block;
+            width: 140px;
+            height: 2px;
+            margin: 16px auto 0;
+            border-radius: 999px;
+            background: linear-gradient(90deg, rgba(99, 102, 241, 0) 0%, rgba(99, 102, 241, 0.85) 50%, rgba(99, 102, 241, 0) 100%);
+            box-shadow: 0 0 24px rgba(99, 102, 241, 0.35);
+        }
+
+        .section-divider--left {
+            margin-left: 0;
+            margin-right: auto;
         }
 
         .section-separator {
-            border-top: 1px solid rgba(255, 255, 255, 0.22);
+            border-top: 1px solid rgba(148, 163, 184, 0.2);
         }
 
         @media (min-width: 768px) {
@@ -519,7 +556,7 @@
 
         @media (max-width: 1023px) {
             #pain-points {
-                padding: 64px 32px;
+                padding: 72px 32px;
             }
 
             #pain-points .card-grid {
@@ -528,7 +565,7 @@
             }
 
             #roi {
-                padding: 72px 32px;
+                padding: 80px 32px;
             }
 
             #roi .roi-grid {
@@ -551,7 +588,7 @@
 
         @media (max-width: 767px) {
             #pain-points {
-                padding: 56px 20px;
+                padding: 64px 20px;
             }
 
             #pain-points .card-grid {
@@ -564,7 +601,7 @@
             }
 
             #roi {
-                padding: 64px 20px;
+                padding: 72px 20px;
             }
 
             #roi .roi-grid {
@@ -600,10 +637,13 @@
     </style>
 </head>
 
-<body class="relative overflow-x-hidden">
+<body class="relative overflow-x-hidden font-sans antialiased">
     <!-- 背景裝飾 -->
     <div class="fixed inset-0 pointer-events-none z-0">
         <div class="absolute top-0 left-0 w-full h-full bg-grid"></div>
+        <div
+            class="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(99,102,241,0.2)_0%,_rgba(11,15,25,0)_55%)]">
+        </div>
         <div
             class="animate-blob absolute top-[-10%] left-[20%] w-[500px] h-[500px] bg-brand-primary/10 rounded-full blur-[120px] mix-blend-screen">
         </div>
@@ -623,7 +663,7 @@
                 </a>
                 <div class="flex items-center gap-6">
                     <a href="https://line.me/R/ti/p/@304dgdjo" target="_blank" rel="noreferrer"
-                        class="text-sm bg-white/10 border border-white/20 hover:bg-white/15 px-4 py-2 rounded-lg transition-colors text-gray-100 font-semibold shadow-md shadow-indigo-500/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-200/60">
+                        class="text-sm bg-white/10 border border-indigo-300/30 hover:bg-white/15 px-4 py-2 rounded-full transition-colors text-gray-100 font-semibold shadow-[0_10px_24px_rgba(99,102,241,0.2)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-200/60">
                         加 LINE 申請封測
                     </a>
                 </div>
@@ -648,12 +688,24 @@
     <main class="relative z-10">
         <!-- 1) Hero 首屏 -->
         <header class="relative pt-16 pb-24 px-6 text-center max-w-5xl mx-auto scroll-reveal">
+            <div class="pointer-events-none absolute inset-0 -z-10">
+                <div
+                    class="absolute left-1/2 top-[-20%] h-[420px] w-[420px] -translate-x-1/2 rounded-full bg-indigo-500/20 blur-[120px]">
+                </div>
+                <div
+                    class="absolute right-[-10%] top-[20%] h-[280px] w-[280px] rounded-full bg-purple-500/15 blur-[100px]">
+                </div>
+            </div>
             <div
                 class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-300 text-xs font-medium mb-8">
-                🔥 首批 CEO 合夥人封測｜限量 5 家
+                <span class="flex h-6 w-6 items-center justify-center rounded-full bg-amber-500/20 text-amber-300">
+                    <i data-lucide="flame" class="h-3.5 w-3.5"></i>
+                </span>
+                <span>首批 CEO 合夥人封測｜限量 5 家</span>
             </div>
 
-            <h1 class="scroll-reveal scroll-float font-bold leading-tight mb-6 text-white">
+            <h1
+                class="scroll-reveal scroll-float font-bold tracking-tight leading-tight mb-6 text-white drop-shadow-[0_16px_40px_rgba(15,23,42,0.6)]">
                 <span class="mt-2 block text-4xl sm:text-5xl md:text-6xl">打造你的 AI 團隊</span>
                 <span class="block text-3xl sm:text-4xl md:text-3xl">讓一人公司高效經營</span>
                 <span
@@ -661,47 +713,47 @@
                     AI 客服只是第一位員工｜每月擴編新職位
                 </span>
             </h1>
-            <p class="text-gray-400 max-w-2xl mx-auto mb-6">
+            <p class="text-slate-300 max-w-2xl mx-auto mb-6">
                 <span class="block">KeFu 會從聊天紀錄提出建議，並跟著你的回饋每週調整，</span>
                 <span class="block">逐步把虛擬團隊擴變成屬於你專屬的公司。</span>
             </p>
             <ul class="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 max-w-3xl mx-auto mb-10">
                 <li
-                    class="rounded-2xl border border-white/10 bg-brand-card/80 px-4 py-3 sm:px-5 sm:py-4 text-left shadow-lg shadow-black/20 backdrop-blur transition hover:-translate-y-1 hover:border-indigo-400/60">
+                    class="rounded-2xl border border-white/15 bg-[linear-gradient(145deg,_rgba(15,23,42,0.95),_rgba(15,23,42,0.6))] px-4 py-3 sm:px-5 sm:py-4 text-left shadow-[0_18px_32px_rgba(15,23,42,0.45)] backdrop-blur transition hover:-translate-y-1 hover:border-indigo-400/70 hover:shadow-[0_22px_40px_rgba(15,23,42,0.6)]">
                     <div class="flex items-center gap-3 text-indigo-200 mb-1 sm:mb-2">
                         <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-indigo-500/15">
                             <i data-lucide="headset" class="h-4 w-4"></i>
                         </span>
                         <span class="text-sm font-semibold text-indigo-100/90">即時應答</span>
                     </div>
-                    <p class="text-xs sm:text-base text-gray-200">24/7 接起重複問題</p>
+                    <p class="text-xs sm:text-base text-slate-200">24/7 接起重複問題</p>
                 </li>
                 <li
-                    class="rounded-2xl border border-white/10 bg-brand-card/80 px-4 py-3 sm:px-5 sm:py-4 text-left shadow-lg shadow-black/20 backdrop-blur transition hover:-translate-y-1 hover:border-indigo-400/60">
+                    class="rounded-2xl border border-white/15 bg-[linear-gradient(145deg,_rgba(15,23,42,0.95),_rgba(15,23,42,0.6))] px-4 py-3 sm:px-5 sm:py-4 text-left shadow-[0_18px_32px_rgba(15,23,42,0.45)] backdrop-blur transition hover:-translate-y-1 hover:border-indigo-400/70 hover:shadow-[0_22px_40px_rgba(15,23,42,0.6)]">
                     <div class="flex items-center gap-3 text-indigo-200 mb-1 sm:mb-2">
                         <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-indigo-500/15">
                             <i data-lucide="notebook-text" class="h-4 w-4"></i>
                         </span>
                         <span class="text-sm font-semibold text-indigo-100/90">自動整理</span>
                     </div>
-                    <p class="text-xs sm:text-base text-gray-200">對話自動整理成 FAQ</p>
+                    <p class="text-xs sm:text-base text-slate-200">對話自動整理成 FAQ</p>
                 </li>
                 <li
-                    class="col-span-2 rounded-2xl border border-white/10 bg-brand-card/80 px-4 py-3 sm:col-span-1 sm:px-5 sm:py-4 text-left shadow-lg shadow-black/20 backdrop-blur transition hover:-translate-y-1 hover:border-indigo-400/60">
+                    class="col-span-2 rounded-2xl border border-white/15 bg-[linear-gradient(145deg,_rgba(15,23,42,0.95),_rgba(15,23,42,0.6))] px-4 py-3 sm:col-span-1 sm:px-5 sm:py-4 text-left shadow-[0_18px_32px_rgba(15,23,42,0.45)] backdrop-blur transition hover:-translate-y-1 hover:border-indigo-400/70 hover:shadow-[0_22px_40px_rgba(15,23,42,0.6)]">
                     <div class="flex items-center gap-3 text-indigo-200 mb-1 sm:mb-2">
                         <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-indigo-500/15">
                             <i data-lucide="sparkles" class="h-4 w-4"></i>
                         </span>
                         <span class="text-sm font-semibold text-indigo-100/90">週週優化</span>
                     </div>
-                    <p class="text-xs sm:text-base text-gray-200">依回饋每週迭代優化流程</p>
+                    <p class="text-xs sm:text-base text-slate-200">依回饋每週迭代優化流程</p>
                 </li>
             </ul>
             <div class="max-w-md mx-auto flex flex-col items-center gap-4">
                 <div class="w-full sm:w-auto">
                     <p class="text-sm text-indigo-200/80 mb-3">快來領取你的第一位虛擬員工 →</p>
                     <a href="https://line.me/R/ti/p/@304dgdjo" target="_blank" rel="noreferrer"
-                        class="bg-button-gradient hover:opacity-90 text-white font-semibold px-7 py-3 rounded-xl shadow-xl shadow-indigo-500/30 transition-all transform hover:scale-[1.02] flex items-center justify-center gap-2 w-full sm:w-auto ring-2 ring-indigo-200/40 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-indigo-200/60">
+                        class="cta-glow bg-button-gradient hover:opacity-95 text-white font-semibold px-7 py-3 rounded-xl shadow-[0_18px_40px_rgba(99,102,241,0.35)] transition-shadow hover:shadow-[0_22px_46px_rgba(99,102,241,0.45)] flex items-center justify-center gap-2 w-full sm:w-auto ring-2 ring-indigo-200/40 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-indigo-200/60">
                         <span>加入 LINE｜申請 CEO 合夥人封測（限量 5 家）</span>
                         <i data-lucide="sparkles" class="w-4 h-4"></i>
                     </a>
@@ -723,11 +775,11 @@
         <section id="pain-points" class="relative z-10 section-separator scroll-reveal">
             <div class="max-w-6xl mx-auto">
                 <div class="section-header scroll-reveal">
-                    <h2 class="scroll-reveal scroll-float text-2xl md:text-3xl font-bold text-white">
+                    <h2 class="scroll-reveal scroll-float text-2xl md:text-3xl font-bold tracking-tight text-white">
                         為什麼要加入？
                     </h2>
                     <div class="section-divider" aria-hidden="true"></div>
-                    <p class="scroll-reveal text-gray-400 mt-3">
+                    <p class="scroll-reveal text-slate-300 mt-3">
                         先解決最耗時間的接待，剩下的我們一起迭代。
                     </p>
                 </div>
@@ -791,19 +843,19 @@
                             <span data-org-modal-status
                                 class="inline-flex items-center rounded-full border px-2 py-0.5 text-xs font-semibold"></span>
                         </div>
-                        <p data-org-modal-title-en class="text-base text-gray-400">Role</p>
+                        <p data-org-modal-title-en class="text-base text-slate-300">Role</p>
                     </div>
                 </div>
                 <div class="flex-1 overflow-y-auto px-6 pb-6 pt-4 space-y-6">
-                    <p data-org-modal-summary class="text-base leading-relaxed text-gray-300">
+                    <p data-org-modal-summary class="text-base leading-relaxed text-slate-300">
                         這裡會顯示角色的職責說明。
                     </p>
                     <div class="space-y-2">
                         <h4 class="text-base font-semibold text-white">工作內容</h4>
-                        <ul data-org-modal-benefits class="space-y-2 text-base text-gray-300 list-disc list-inside">
+                        <ul data-org-modal-benefits class="space-y-2 text-base text-slate-300 list-disc list-inside">
                         </ul>
                     </div>
-                    <p data-org-modal-footer class="text-sm text-gray-400 border-t border-white/10 pt-4">
+                    <p data-org-modal-footer class="text-sm text-slate-300 border-t border-white/10 pt-4">
                         持續擴編中：每月新增不同職位員工
                     </p>
                 </div>
@@ -811,7 +863,8 @@
         </div>
 
         <!-- Core Solution (Virtual Org Chart) -->
-        <section class="relative z-10 py-24 bg-black/20 section-separator scroll-reveal">
+        <section
+            class="relative z-10 py-24 bg-[linear-gradient(180deg,_rgba(15,23,42,0.55),_rgba(15,23,42,0.15))] section-separator scroll-reveal">
             <div class="max-w-7xl mx-auto px-6">
                 <div class="grid lg:grid-cols-2 gap-16 items-center">
 
@@ -823,15 +876,15 @@
                             AI Team Roster</div>
                         <h2 class="scroll-reveal scroll-float text-3xl md:text-4xl font-bold mb-6">介紹你的新同事：<br><span
                                 class="text-indigo-400">全自動化虛擬團隊</span></h2>
-                        <div class="section-divider" aria-hidden="true"></div>
+                        <div class="section-divider section-divider--left" aria-hidden="true"></div>
 
-                        <p class="scroll-reveal text-gray-400 mb-6 text-lg" data-reveal-delay="120">
+                        <p class="scroll-reveal text-slate-300 mb-6 text-lg" data-reveal-delay="120">
                             這不是聊天機器人，這是你專屬的組織架構，讓每位 AI 員工各司其職。
                         </p>
 
                         <div class="mt-6 space-y-4" data-org-roster>
                             <div data-role-button data-role-id="root_agent" role="button" tabindex="0"
-                                class="scroll-reveal rounded-2xl border border-indigo-500/30 bg-brand-card/80 p-5 shadow-lg shadow-black/20 transition hover:-translate-y-1 hover:border-indigo-400/70 cursor-pointer">
+                                class="scroll-reveal rounded-2xl border border-indigo-500/30 bg-[linear-gradient(145deg,_rgba(15,23,42,0.95),_rgba(15,23,42,0.6))] p-5 shadow-[0_18px_36px_rgba(15,23,42,0.4)] transition hover:-translate-y-1 hover:border-indigo-400/70 hover:shadow-[0_22px_42px_rgba(15,23,42,0.55)] cursor-pointer">
                                 <div class="flex items-start justify-between gap-4">
                                     <div class="flex items-start gap-3">
                                         <span
@@ -840,22 +893,22 @@
                                         </span>
                                         <div>
                                             <div class="text-lg font-bold text-white">營運總監</div>
-                                            <div class="text-xs text-gray-400">Root Agent</div>
+                                            <div class="text-xs text-slate-300">Root Agent</div>
                                         </div>
                                     </div>
                                     <span
                                         class="inline-flex items-center rounded-full border border-emerald-400/30 bg-emerald-500/15 px-2 py-0.5 text-[11px] font-semibold text-emerald-200">已上線
                                         v1</span>
                                 </div>
-                                <p class="mt-3 text-sm text-gray-300">你的指揮中心：決定交給誰處理，並統一回覆語氣。</p>
+                                <p class="mt-3 text-sm text-slate-300">你的指揮中心：決定交給誰處理，並統一回覆語氣。</p>
                                 <div class="mt-4 flex flex-wrap gap-2 text-xs">
-                                    <span class="rounded-full bg-white/5 px-2 py-1 text-gray-300">任務分派</span>
-                                    <span class="rounded-full bg-white/5 px-2 py-1 text-gray-300">語氣人設</span>
-                                    <span class="rounded-full bg-white/5 px-2 py-1 text-gray-300">禁語規則</span>
+                                    <span class="rounded-full bg-white/5 px-2 py-1 text-slate-300">任務分派</span>
+                                    <span class="rounded-full bg-white/5 px-2 py-1 text-slate-300">語氣人設</span>
+                                    <span class="rounded-full bg-white/5 px-2 py-1 text-slate-300">禁語規則</span>
                                 </div>
                             </div>
                             <div data-role-button data-role-id="faq_agent" role="button" tabindex="0"
-                                class="scroll-reveal rounded-2xl border border-emerald-500/30 bg-brand-card/80 p-5 shadow-lg shadow-black/20 transition hover:-translate-y-1 hover:border-emerald-400/70 cursor-pointer"
+                                class="scroll-reveal rounded-2xl border border-emerald-500/30 bg-[linear-gradient(145deg,_rgba(15,23,42,0.95),_rgba(15,23,42,0.6))] p-5 shadow-[0_18px_36px_rgba(15,23,42,0.4)] transition hover:-translate-y-1 hover:border-emerald-400/70 hover:shadow-[0_22px_42px_rgba(15,23,42,0.55)] cursor-pointer"
                                 data-reveal-delay="80">
                                 <div class="flex items-start justify-between gap-4">
                                     <div class="flex items-start gap-3">
@@ -865,21 +918,21 @@
                                         </span>
                                         <div>
                                             <div class="text-lg font-bold text-white">客服專員</div>
-                                            <div class="text-xs text-gray-400">FAQ Agent</div>
+                                            <div class="text-xs text-slate-300">FAQ Agent</div>
                                         </div>
                                     </div>
                                     <span
                                         class="inline-flex items-center rounded-full border border-emerald-400/30 bg-emerald-500/15 px-2 py-0.5 text-[11px] font-semibold text-emerald-200">已上線
                                         v1</span>
                                 </div>
-                                <p class="mt-3 text-sm text-gray-300">24/7 接起重複問題，讓你不用一直回訊息。</p>
+                                <p class="mt-3 text-sm text-slate-300">24/7 接起重複問題，讓你不用一直回訊息。</p>
                                 <div class="mt-4 flex flex-wrap gap-2 text-xs">
-                                    <span class="rounded-full bg-white/5 px-2 py-1 text-gray-300">24/7 回覆</span>
-                                    <span class="rounded-full bg-white/5 px-2 py-1 text-gray-300">FAQ 整理</span>
+                                    <span class="rounded-full bg-white/5 px-2 py-1 text-slate-300">24/7 回覆</span>
+                                    <span class="rounded-full bg-white/5 px-2 py-1 text-slate-300">FAQ 整理</span>
                                 </div>
                             </div>
                             <div data-role-button data-role-id="handover_agent" role="button" tabindex="0"
-                                class="scroll-reveal rounded-2xl border border-amber-500/30 bg-brand-card/80 p-5 shadow-lg shadow-black/20 transition hover:-translate-y-1 hover:border-amber-400/70 cursor-pointer"
+                                class="scroll-reveal rounded-2xl border border-amber-500/30 bg-[linear-gradient(145deg,_rgba(15,23,42,0.95),_rgba(15,23,42,0.6))] p-5 shadow-[0_18px_36px_rgba(15,23,42,0.4)] transition hover:-translate-y-1 hover:border-amber-400/70 hover:shadow-[0_22px_42px_rgba(15,23,42,0.55)] cursor-pointer"
                                 data-reveal-delay="140">
                                 <div class="flex items-start justify-between gap-4">
                                     <div class="flex items-start gap-3">
@@ -889,18 +942,18 @@
                                         </span>
                                         <div>
                                             <div class="text-lg font-bold text-white">協作專員</div>
-                                            <div class="text-xs text-gray-400">Handover Agent</div>
+                                            <div class="text-xs text-slate-300">Handover Agent</div>
                                         </div>
                                     </div>
                                     <span
                                         class="inline-flex items-center rounded-full border border-emerald-400/30 bg-emerald-500/15 px-2 py-0.5 text-[11px] font-semibold text-emerald-200">已上線
                                         v1</span>
                                 </div>
-                                <p class="mt-3 text-sm text-gray-300">將需要真人回覆的對話彙整重點，轉交後續處理。</p>
+                                <p class="mt-3 text-sm text-slate-300">將需要真人回覆的對話彙整重點，轉交後續處理。</p>
                                 <div class="mt-4 flex flex-wrap gap-2 text-xs">
-                                    <span class="rounded-full bg-white/5 px-2 py-1 text-gray-300">轉接處理</span>
-                                    <span class="rounded-full bg-white/5 px-2 py-1 text-gray-300">例外情境</span>
-                                    <span class="rounded-full bg-white/5 px-2 py-1 text-gray-300">交接摘要</span>
+                                    <span class="rounded-full bg-white/5 px-2 py-1 text-slate-300">轉接處理</span>
+                                    <span class="rounded-full bg-white/5 px-2 py-1 text-slate-300">例外情境</span>
+                                    <span class="rounded-full bg-white/5 px-2 py-1 text-slate-300">交接摘要</span>
                                 </div>
                             </div>
                         </div>
@@ -957,7 +1010,7 @@
                                 <div data-role-button data-role-id="faq_agent" role="button" tabindex="0"
                                     class="bg-emerald-950 border border-emerald-800/70 rounded-xl p-4 shadow-lg flex flex-col items-center gap-3 hover:border-green-500 transition-colors group z-20 cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-green-400/80">
                                     <div
-                                        class="w-10 h-10 rounded-full bg-green-900/30 flex items-center justify-center group-hover:scale-110 transition-transform">
+                                        class="w-10 h-10 rounded-full bg-green-900/30 flex items-center justify-center group-hover:bg-green-900/45 transition-colors">
                                         <i data-lucide="message-circle" class="text-green-400 w-5 h-5"></i>
                                     </div>
                                     <div class="text-center">
@@ -970,7 +1023,7 @@
                                 <div data-role-button data-role-id="handover_agent" role="button" tabindex="0"
                                     class="bg-amber-950 border border-amber-800/70 rounded-xl p-4 shadow-lg flex flex-col items-center gap-3 hover:border-orange-500 transition-colors group z-20 cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-400/80">
                                     <div
-                                        class="w-10 h-10 rounded-full bg-orange-900/30 flex items-center justify-center group-hover:scale-110 transition-transform">
+                                        class="w-10 h-10 rounded-full bg-orange-900/30 flex items-center justify-center group-hover:bg-orange-900/45 transition-colors">
                                         <i data-lucide="users" class="text-orange-400 w-5 h-5"></i>
                                     </div>
                                     <div class="text-center">
@@ -984,23 +1037,23 @@
                                 <p class="text-xs uppercase tracking-[0.3em] text-gray-500 text-center">Coming Soon</p>
                                 <div class="mt-4 grid gap-3 sm:grid-cols-3">
                                     <div
-                                        class="flex flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-gray-600 bg-gray-900/40 px-3 py-4 text-center text-gray-400">
+                                        class="flex flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-gray-600 bg-gray-900/40 px-3 py-4 text-center text-slate-400">
                                         <i data-lucide="lock" class="h-4 w-4 text-gray-500"></i>
-                                        <div class="text-sm font-semibold text-gray-300">行銷專員</div>
+                                        <div class="text-sm font-semibold text-slate-300">行銷專員</div>
                                         <div class="text-xs text-gray-500">Marketing Agent</div>
                                         <span class="text-[10px] text-gray-500">待解鎖</span>
                                     </div>
                                     <div
-                                        class="flex flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-gray-600 bg-gray-900/40 px-3 py-4 text-center text-gray-400">
+                                        class="flex flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-gray-600 bg-gray-900/40 px-3 py-4 text-center text-slate-400">
                                         <i data-lucide="lock" class="h-4 w-4 text-gray-500"></i>
-                                        <div class="text-sm font-semibold text-gray-300">訂單助理</div>
+                                        <div class="text-sm font-semibold text-slate-300">訂單助理</div>
                                         <div class="text-xs text-gray-500">Order Agent</div>
                                         <span class="text-[10px] text-gray-500">待解鎖</span>
                                     </div>
                                     <div
-                                        class="flex flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-gray-600 bg-gray-900/40 px-3 py-4 text-center text-gray-400">
+                                        class="flex flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-gray-600 bg-gray-900/40 px-3 py-4 text-center text-slate-400">
                                         <i data-lucide="lock" class="h-4 w-4 text-gray-500"></i>
-                                        <div class="text-sm font-semibold text-gray-300">數據分析專員</div>
+                                        <div class="text-sm font-semibold text-slate-300">數據分析專員</div>
                                         <div class="text-xs text-gray-500">Retention Coach</div>
                                         <span class="text-[10px] text-gray-500">待解鎖</span>
                                     </div>
@@ -1063,10 +1116,10 @@
         </section>
 
         <!-- 2) 5 分鐘設定你的虛擬公司 -->
-        <section class="py-20 px-6 section-separator scroll-reveal">
+        <section class="py-24 px-6 section-separator scroll-reveal">
             <div class="max-w-6xl mx-auto">
                 <div class="text-center mb-12 scroll-reveal">
-                    <h2 class="scroll-reveal scroll-float text-2xl md:text-3xl font-bold mb-4">5 分鐘上線你的虛擬公司，團隊立刻開工</h2>
+                    <h2 class="scroll-reveal scroll-float text-2xl md:text-3xl font-bold tracking-tight mb-4 text-white">5 分鐘上線你的虛擬公司，團隊立刻開工</h2>
                     <div class="section-divider" aria-hidden="true"></div>
                 </div>
                 <div class="relative max-w-3xl mx-auto">
@@ -1078,14 +1131,14 @@
                                 01
                             </div>
                             <div
-                                class="bg-brand-card/70 border border-brand-border rounded-2xl p-6 transition-all duration-300 group-hover:border-indigo-400/60 group-hover:shadow-lg group-hover:shadow-indigo-500/20">
+                                class="bg-[linear-gradient(145deg,_rgba(15,23,42,0.95),_rgba(15,23,42,0.65))] border border-white/15 rounded-2xl p-6 transition-all duration-300 group-hover:border-indigo-400/70 group-hover:shadow-[0_20px_40px_rgba(99,102,241,0.25)]">
                                 <div class="flex items-center gap-3 mb-3">
                                     <div class="w-10 h-10 bg-indigo-500/10 rounded-lg flex items-center justify-center">
                                         <i data-lucide="clipboard-check" class="w-5 h-5 text-indigo-300"></i>
                                     </div>
                                     <h3 class="text-lg font-bold text-white">填寫公司設定</h3>
                                 </div>
-                                <p class="text-sm text-gray-400">輸入品牌介紹、FAQ 與服務範圍，AI 立刻理解你的營運需求。</p>
+                                <p class="text-sm text-slate-300">輸入品牌介紹、FAQ 與服務範圍，AI 立刻理解你的營運需求。</p>
                                 <div class="mt-4 space-y-3">
                                     <div class="rounded-2xl border border-indigo-500/20 bg-brand-card/40 p-3">
                                         <p class="text-xs text-indigo-200 mb-2">智能問卷設定畫面</p>
@@ -1105,14 +1158,14 @@
                                 02
                             </div>
                             <div
-                                class="bg-brand-card/70 border border-brand-border rounded-2xl p-6 transition-all duration-300 group-hover:border-indigo-400/60 group-hover:shadow-lg group-hover:shadow-indigo-500/20">
+                                class="bg-[linear-gradient(145deg,_rgba(15,23,42,0.95),_rgba(15,23,42,0.65))] border border-white/15 rounded-2xl p-6 transition-all duration-300 group-hover:border-indigo-400/70 group-hover:shadow-[0_20px_40px_rgba(99,102,241,0.25)]">
                                 <div class="flex items-center gap-3 mb-3">
                                     <div class="w-10 h-10 bg-indigo-500/10 rounded-lg flex items-center justify-center">
                                         <i data-lucide="wand-2" class="w-5 h-5 text-indigo-300"></i>
                                     </div>
                                     <h3 class="text-lg font-bold text-white">AI 自動編制團隊</h3>
                                 </div>
-                                <p class="text-sm text-gray-400">系統自動建立訊息接待與人機協作轉接角色，並指派各自職責。</p>
+                                <p class="text-sm text-slate-300">系統自動建立訊息接待與人機協作轉接角色，並指派各自職責。</p>
                                 <div class="mt-4 space-y-3">
                                     <div class="rounded-2xl border border-indigo-500/20 bg-brand-card/40 p-3">
                                         <p class="text-xs text-indigo-200 mb-2">虛擬員工設定畫面</p>
@@ -1132,14 +1185,14 @@
                                 03
                             </div>
                             <div
-                                class="bg-brand-card/70 border border-brand-border rounded-2xl p-6 transition-all duration-300 group-hover:border-indigo-400/60 group-hover:shadow-lg group-hover:shadow-indigo-500/20">
+                                class="bg-[linear-gradient(145deg,_rgba(15,23,42,0.95),_rgba(15,23,42,0.65))] border border-white/15 rounded-2xl p-6 transition-all duration-300 group-hover:border-indigo-400/70 group-hover:shadow-[0_20px_40px_rgba(99,102,241,0.25)]">
                                 <div class="flex items-center gap-3 mb-3">
                                     <div class="w-10 h-10 bg-indigo-500/10 rounded-lg flex items-center justify-center">
                                         <i data-lucide="plug" class="w-5 h-5 text-indigo-300"></i>
                                     </div>
                                     <h3 class="text-lg font-bold text-white">一鍵串接 LINE 官方帳號</h3>
                                 </div>
-                                <p class="text-sm text-gray-400">訊息即時導入你的 AI 團隊，開始接住重複問題。</p>
+                                <p class="text-sm text-slate-300">訊息即時導入你的 AI 團隊，開始接住重複問題。</p>
                                 <div class="mt-4 space-y-3">
                                     <div class="rounded-2xl border border-indigo-500/20 bg-brand-card/40 p-3">
                                         <p class="text-xs text-indigo-200 mb-2">LINE 設定畫面</p>
@@ -1159,14 +1212,14 @@
                                 04
                             </div>
                             <div
-                                class="bg-brand-card/70 border border-brand-border rounded-2xl p-6 transition-all duration-300 group-hover:border-indigo-400/60 group-hover:shadow-lg group-hover:shadow-indigo-500/20">
+                                class="bg-[linear-gradient(145deg,_rgba(15,23,42,0.95),_rgba(15,23,42,0.65))] border border-white/15 rounded-2xl p-6 transition-all duration-300 group-hover:border-indigo-400/70 group-hover:shadow-[0_20px_40px_rgba(99,102,241,0.25)]">
                                 <div class="flex items-center gap-3 mb-3">
                                     <div class="w-10 h-10 bg-indigo-500/10 rounded-lg flex items-center justify-center">
                                         <i data-lucide="rocket" class="w-5 h-5 text-indigo-300"></i>
                                     </div>
                                     <h3 class="text-lg font-bold text-white">立即開始營運</h3>
                                 </div>
-                                <p class="text-sm text-gray-400">AI 全天候接待顧客，你專心做決策與產品迭代。</p>
+                                <p class="text-sm text-slate-300">AI 全天候接待顧客，你專心做決策與產品迭代。</p>
                                 <div class="mt-4 space-y-3">
                                     <div class="rounded-2xl border border-indigo-500/20 bg-brand-card/40 p-3">
                                         <p class="text-xs text-indigo-200 mb-2">AI 客服實際畫面</p>
@@ -1204,21 +1257,39 @@
                 <div class="flex items-start justify-between gap-4 border-b border-white/10 px-6 py-4 pr-12">
                     <div>
                         <h3 id="beta-exchange-title" class="text-xl font-semibold text-white">封測交換條件</h3>
-                        <p class="text-base text-gray-400 mt-1">你給真實回饋，我給你更長試用與早鳥權益。</p>
+                        <p class="text-base text-slate-300 mt-1">你給真實回饋，我給你更長試用與早鳥權益。</p>
                     </div>
                 </div>
                 <div class="p-6 space-y-4">
-                    <div class="bg-white/5 rounded-xl p-4">
-                        <p class="text-base text-gray-200 font-semibold">🎁 +7 天延長試用</p>
-                        <p class="text-sm text-gray-400 mt-1">完成 D14 回饋即符合</p>
+                    <div class="bg-white/5 rounded-xl p-4 flex items-start gap-3">
+                        <span
+                            class="mt-0.5 flex h-8 w-8 items-center justify-center rounded-lg bg-amber-500/10 text-amber-300">
+                            <i data-lucide="gift" class="h-4 w-4"></i>
+                        </span>
+                        <div>
+                            <p class="text-base text-gray-200 font-semibold">+7 天延長試用</p>
+                            <p class="text-sm text-slate-300 mt-1">完成 D14 回饋即符合</p>
+                        </div>
                     </div>
-                    <div class="bg-white/5 rounded-xl p-4">
-                        <p class="text-base text-gray-200 font-semibold">🎁 優先加入 waitlist</p>
-                        <p class="text-sm text-gray-400 mt-1">公測第一批通知</p>
+                    <div class="bg-white/5 rounded-xl p-4 flex items-start gap-3">
+                        <span
+                            class="mt-0.5 flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-500/10 text-indigo-200">
+                            <i data-lucide="users" class="h-4 w-4"></i>
+                        </span>
+                        <div>
+                            <p class="text-base text-gray-200 font-semibold">優先加入 waitlist</p>
+                            <p class="text-sm text-slate-300 mt-1">公測第一批通知</p>
+                        </div>
                     </div>
-                    <div class="bg-white/5 rounded-xl p-4">
-                        <p class="text-base text-gray-200 font-semibold">🎁 公測贈送 KeFu 點數</p>
-                        <p class="text-sm text-gray-400 mt-1">協助你更快擴編虛擬團隊</p>
+                    <div class="bg-white/5 rounded-xl p-4 flex items-start gap-3">
+                        <span
+                            class="mt-0.5 flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-200">
+                            <i data-lucide="sparkles" class="h-4 w-4"></i>
+                        </span>
+                        <div>
+                            <p class="text-base text-gray-200 font-semibold">公測贈送 KeFu 點數</p>
+                            <p class="text-sm text-slate-300 mt-1">協助你更快擴編虛擬團隊</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1240,7 +1311,7 @@
                 <div class="flex items-start justify-between gap-4 border-b border-white/10 px-6 py-4 pr-12">
                     <div>
                         <h3 id="beta-rules-title" class="text-xl font-semibold text-white">封測規則（透明公開，公平使用）</h3>
-                        <p class="text-base text-gray-400 mt-1">封測方案卡</p>
+                        <p class="text-base text-slate-300 mt-1">封測方案卡</p>
                     </div>
                 </div>
                 <div class="max-h-[70vh] overflow-y-auto p-6">
@@ -1250,34 +1321,34 @@
                             class="min-w-[260px] w-[85vw] snap-center bg-white/5 rounded-2xl p-5 space-y-3 sm:w-auto sm:flex-1">
                             <div class="flex items-center gap-3">
                                 <i data-lucide="users" class="w-5 h-5 text-indigo-300"></i>
-                                <p class="text-base text-gray-300">名額：限量 <strong>5 名</strong></p>
+                                <p class="text-base text-slate-300">名額：限量 <strong>5 名</strong></p>
                             </div>
                             <div class="flex items-center gap-3">
                                 <i data-lucide="calendar" class="w-5 h-5 text-indigo-300"></i>
-                                <p class="text-base text-gray-300">期限：啟用日起 <strong>14 天</strong></p>
+                                <p class="text-base text-slate-300">期限：啟用日起 <strong>14 天</strong></p>
                             </div>
                             <div class="flex items-center gap-3">
                                 <i data-lucide="message-circle" class="w-5 h-5 text-indigo-300"></i>
-                                <p class="text-base text-gray-300">用量：每日 <strong>50 則自動回覆</strong> 上限</p>
+                                <p class="text-base text-slate-300">用量：每日 <strong>50 則自動回覆</strong> 上限</p>
                             </div>
                             <div class="flex items-start gap-3">
                                 <i data-lucide="alert-triangle" class="w-5 h-5 text-indigo-300 mt-1"></i>
-                                <p class="text-base text-gray-300">超額處理：當日達上限後暫停自動回覆，隔日恢復，並發出保底提示訊息。</p>
+                                <p class="text-base text-slate-300">超額處理：當日達上限後暫停自動回覆，隔日恢復，並發出保底提示訊息。</p>
                             </div>
                         </div>
                         <div
                             class="min-w-[260px] w-[85vw] snap-center bg-white/5 rounded-2xl p-5 space-y-3 sm:w-auto sm:flex-1">
                             <div class="flex items-start gap-3">
                                 <i data-lucide="layers" class="w-5 h-5 text-indigo-300 mt-1"></i>
-                                <p class="text-base text-gray-300">封測範圍：只開放 <strong>智能問卷 + 虛擬團隊後台（接待/轉接）</strong></p>
+                                <p class="text-base text-slate-300">封測範圍：只開放 <strong>智能問卷 + 虛擬團隊後台（接待/轉接）</strong></p>
                             </div>
                             <div class="flex items-start gap-3">
                                 <i data-lucide="link" class="w-5 h-5 text-indigo-300 mt-1"></i>
-                                <p class="text-base text-gray-300">支援渠道：目前僅支援 <strong>LINE 官方帳號</strong></p>
+                                <p class="text-base text-slate-300">支援渠道：目前僅支援 <strong>LINE 官方帳號</strong></p>
                             </div>
                             <div class="flex items-start gap-3">
                                 <i data-lucide="life-buoy" class="w-5 h-5 text-indigo-300 mt-1"></i>
-                                <p class="text-base text-gray-300">支援方式：封測群／LINE 一對一（以能做到的程度為主）</p>
+                                <p class="text-base text-slate-300">支援方式：封測群／LINE 一對一（以能做到的程度為主）</p>
                             </div>
                             <div class="text-sm text-gray-500 border-t border-white/10 pt-4">
                                 啟用日定義：「完成 LINE 串接並開始接收訊息的那天，算啟用日。」
@@ -1302,7 +1373,7 @@
                         先把重複接待交給虛擬員工，時間拿回來做更重要的事。
                     </p>
                     <a href="https://line.me/R/ti/p/@304dgdjo" target="_blank" rel="noreferrer"
-                        class="mt-6 inline-flex items-center justify-center rounded-xl border border-indigo-300/60 bg-gradient-to-r from-indigo-500/90 via-purple-500/90 to-indigo-500/90 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-indigo-500/30 transition hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-200/70 scroll-reveal"
+                        class="cta-glow mt-6 inline-flex items-center justify-center rounded-xl border border-indigo-300/60 bg-gradient-to-r from-indigo-500/90 via-purple-500/90 to-indigo-500/90 px-5 py-2.5 text-sm font-semibold text-white shadow-[0_16px_34px_rgba(99,102,241,0.35)] transition hover:-translate-y-0.5 hover:shadow-[0_20px_40px_rgba(99,102,241,0.45)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-200/70 scroll-reveal"
                         data-reveal-delay="180">
                         加 LINE 申請封測
                     </a>
@@ -1351,14 +1422,14 @@
         </section>
 
         <!-- FAQ Section (已更新並加入 Icon) -->
-        <section class="relative z-10 py-20 px-6 bg-brand-dark/50 section-separator scroll-reveal">
+        <section class="relative z-10 py-24 px-6 bg-brand-dark/50 section-separator scroll-reveal">
             <div class="max-w-3xl mx-auto">
                 <!-- Header -->
                 <div class="text-center mb-12 scroll-reveal">
-                    <h2 class="scroll-reveal scroll-float text-2xl md:text-3xl font-bold mb-4 text-white">常見問題 (FAQ)
+                    <h2 class="scroll-reveal scroll-float text-2xl md:text-3xl font-bold tracking-tight mb-4 text-white">常見問題 (FAQ)
                     </h2>
                     <div class="section-divider scroll-reveal" aria-hidden="true" data-reveal-delay="80"></div>
-                    <p class="text-gray-400 scroll-reveal" data-reveal-delay="120">關於虛擬公司的運作，CEO 們最想知道的事</p>
+                    <p class="text-slate-300 scroll-reveal" data-reveal-delay="120">關於虛擬公司的運作，CEO 們最想知道的事</p>
                 </div>
 
                 <!-- Questions -->
@@ -1366,7 +1437,7 @@
 
                     <!-- Q1 -->
                     <details data-faq-item
-                        class="scroll-reveal group bg-brand-card border border-brand-border rounded-xl p-6 open:bg-brand-card/80 transition-all hover:border-indigo-500/30"
+                        class="scroll-reveal group bg-[linear-gradient(160deg,_rgba(15,23,42,0.95),_rgba(15,23,42,0.6))] border border-white/15 rounded-xl p-6 transition-all hover:border-indigo-400/60 hover:shadow-[0_18px_36px_rgba(15,23,42,0.45)] open:border-indigo-400/60 open:shadow-[0_18px_36px_rgba(99,102,241,0.22)]"
                         data-reveal-delay="120">
                         <summary
                             class="flex items-center justify-between cursor-pointer list-none font-bold text-lg text-white">
@@ -1380,14 +1451,14 @@
                             <i data-lucide="chevron-down"
                                 class="w-5 h-5 text-gray-500 group-open:rotate-180 transition-transform duration-300"></i>
                         </summary>
-                        <p class="mt-4 text-gray-400 leading-relaxed pl-[44px]">
+                        <p class="mt-4 text-slate-300 leading-relaxed pl-[44px]">
                             目前封測採「白名單」開通。請先加入官方 LINE，然後回覆「試用」即可開始申請。
                         </p>
                     </details>
 
                     <!-- Q2 -->
                     <details data-faq-item
-                        class="scroll-reveal group bg-brand-card border border-brand-border rounded-xl p-6 open:bg-brand-card/80 transition-all hover:border-indigo-500/30"
+                        class="scroll-reveal group bg-[linear-gradient(160deg,_rgba(15,23,42,0.95),_rgba(15,23,42,0.6))] border border-white/15 rounded-xl p-6 transition-all hover:border-indigo-400/60 hover:shadow-[0_18px_36px_rgba(15,23,42,0.45)] open:border-indigo-400/60 open:shadow-[0_18px_36px_rgba(99,102,241,0.22)]"
                         data-reveal-delay="180">
                         <summary
                             class="flex items-center justify-between cursor-pointer list-none font-bold text-lg text-white">
@@ -1401,14 +1472,14 @@
                             <i data-lucide="chevron-down"
                                 class="w-5 h-5 text-gray-500 group-open:rotate-180 transition-transform duration-300"></i>
                         </summary>
-                        <p class="mt-4 text-gray-400 leading-relaxed pl-[44px]">
+                        <p class="mt-4 text-slate-300 leading-relaxed pl-[44px]">
                             因為封測是限量開通，我們用 LINE userID 當作你的識別碼來開通權限與辨識試用狀態。userID 只用於封測開通與服務運作。
                         </p>
                     </details>
 
                     <!-- Q3 -->
                     <details data-faq-item
-                        class="scroll-reveal group bg-brand-card border border-brand-border rounded-xl p-6 open:bg-brand-card/80 transition-all hover:border-indigo-500/30"
+                        class="scroll-reveal group bg-[linear-gradient(160deg,_rgba(15,23,42,0.95),_rgba(15,23,42,0.6))] border border-white/15 rounded-xl p-6 transition-all hover:border-indigo-400/60 hover:shadow-[0_18px_36px_rgba(15,23,42,0.45)] open:border-indigo-400/60 open:shadow-[0_18px_36px_rgba(99,102,241,0.22)]"
                         data-reveal-delay="240">
                         <summary
                             class="flex items-center justify-between cursor-pointer list-none font-bold text-lg text-white">
@@ -1422,14 +1493,14 @@
                             <i data-lucide="chevron-down"
                                 class="w-5 h-5 text-gray-500 group-open:rotate-180 transition-transform duration-300"></i>
                         </summary>
-                        <p class="mt-4 text-gray-400 leading-relaxed pl-[44px]">
+                        <p class="mt-4 text-slate-300 leading-relaxed pl-[44px]">
                             為了讓使用者有更好的體驗，先進行封測進行測試，再根據回饋進行調整。封測期間可以有完整的體驗。
                         </p>
                     </details>
 
                     <!-- Q4 -->
                     <details data-faq-item
-                        class="scroll-reveal group bg-brand-card border border-brand-border rounded-xl p-6 open:bg-brand-card/80 transition-all hover:border-indigo-500/30"
+                        class="scroll-reveal group bg-[linear-gradient(160deg,_rgba(15,23,42,0.95),_rgba(15,23,42,0.6))] border border-white/15 rounded-xl p-6 transition-all hover:border-indigo-400/60 hover:shadow-[0_18px_36px_rgba(15,23,42,0.45)] open:border-indigo-400/60 open:shadow-[0_18px_36px_rgba(99,102,241,0.22)]"
                         data-reveal-delay="300">
                         <summary
                             class="flex items-center justify-between cursor-pointer list-none font-bold text-lg text-white">
@@ -1443,14 +1514,14 @@
                             <i data-lucide="chevron-down"
                                 class="w-5 h-5 text-gray-500 group-open:rotate-180 transition-transform duration-300"></i>
                         </summary>
-                        <p class="mt-4 text-gray-400 leading-relaxed pl-[44px]">
+                        <p class="mt-4 text-slate-300 leading-relaxed pl-[44px]">
                             是的，封測期間免費體驗核心功能（建立 FAQ、測試 AI 回覆、轉人工）。封測結束後再決定是否升級正式方案。
                         </p>
                     </details>
 
                     <!-- Q5 -->
                     <details data-faq-item
-                        class="scroll-reveal group bg-brand-card border border-brand-border rounded-xl p-6 open:bg-brand-card/80 transition-all hover:border-indigo-500/30"
+                        class="scroll-reveal group bg-[linear-gradient(160deg,_rgba(15,23,42,0.95),_rgba(15,23,42,0.6))] border border-white/15 rounded-xl p-6 transition-all hover:border-indigo-400/60 hover:shadow-[0_18px_36px_rgba(15,23,42,0.45)] open:border-indigo-400/60 open:shadow-[0_18px_36px_rgba(99,102,241,0.22)]"
                         data-reveal-delay="360">
                         <summary
                             class="flex items-center justify-between cursor-pointer list-none font-bold text-lg text-white">
@@ -1464,14 +1535,14 @@
                             <i data-lucide="chevron-down"
                                 class="w-5 h-5 text-gray-500 group-open:rotate-180 transition-transform duration-300"></i>
                         </summary>
-                        <p class="mt-4 text-gray-400 leading-relaxed pl-[44px]">
+                        <p class="mt-4 text-slate-300 leading-relaxed pl-[44px]">
                             目前先以封測為主。正式版會提供「基礎可體驗」的方案與付費方案（依使用量或功能等級），我們會在封測結束前公告清楚。
                         </p>
                     </details>
 
                     <!-- Q6 -->
                     <details data-faq-item
-                        class="scroll-reveal group bg-brand-card border border-brand-border rounded-xl p-6 open:bg-brand-card/80 transition-all hover:border-indigo-500/30"
+                        class="scroll-reveal group bg-[linear-gradient(160deg,_rgba(15,23,42,0.95),_rgba(15,23,42,0.6))] border border-white/15 rounded-xl p-6 transition-all hover:border-indigo-400/60 hover:shadow-[0_18px_36px_rgba(15,23,42,0.45)] open:border-indigo-400/60 open:shadow-[0_18px_36px_rgba(99,102,241,0.22)]"
                         data-reveal-delay="420">
                         <summary
                             class="flex items-center justify-between cursor-pointer list-none font-bold text-lg text-white">
@@ -1485,14 +1556,14 @@
                             <i data-lucide="chevron-down"
                                 class="w-5 h-5 text-gray-500 group-open:rotate-180 transition-transform duration-300"></i>
                         </summary>
-                        <p class="mt-4 text-gray-400 leading-relaxed pl-[44px]">
+                        <p class="mt-4 text-slate-300 leading-relaxed pl-[44px]">
                             封測結束後您可以選擇升級正式方案；不升級也不會影響您原本的客服渠道（只會停止 KeFu 的自動回覆功能）。
                         </p>
                     </details>
 
                     <!-- Q7 -->
                     <details data-faq-item
-                        class="scroll-reveal group bg-brand-card border border-brand-border rounded-xl p-6 open:bg-brand-card/80 transition-all hover:border-indigo-500/30"
+                        class="scroll-reveal group bg-[linear-gradient(160deg,_rgba(15,23,42,0.95),_rgba(15,23,42,0.6))] border border-white/15 rounded-xl p-6 transition-all hover:border-indigo-400/60 hover:shadow-[0_18px_36px_rgba(15,23,42,0.45)] open:border-indigo-400/60 open:shadow-[0_18px_36px_rgba(99,102,241,0.22)]"
                         data-reveal-delay="480">
                         <summary
                             class="flex items-center justify-between cursor-pointer list-none font-bold text-lg text-white">
@@ -1506,14 +1577,14 @@
                             <i data-lucide="chevron-down"
                                 class="w-5 h-5 text-gray-500 group-open:rotate-180 transition-transform duration-300"></i>
                         </summary>
-                        <p class="mt-4 text-gray-400 leading-relaxed pl-[44px]">
+                        <p class="mt-4 text-slate-300 leading-relaxed pl-[44px]">
                             完全不需要。你只要填寫品牌介紹與基本 FAQ 或是直接上傳官方網站，5 分鐘內就能開始運作。
                         </p>
                     </details>
 
                     <!-- Q8 -->
                     <details data-faq-item
-                        class="scroll-reveal group bg-brand-card border border-brand-border rounded-xl p-6 open:bg-brand-card/80 transition-all hover:border-indigo-500/30"
+                        class="scroll-reveal group bg-[linear-gradient(160deg,_rgba(15,23,42,0.95),_rgba(15,23,42,0.6))] border border-white/15 rounded-xl p-6 transition-all hover:border-indigo-400/60 hover:shadow-[0_18px_36px_rgba(15,23,42,0.45)] open:border-indigo-400/60 open:shadow-[0_18px_36px_rgba(99,102,241,0.22)]"
                         data-reveal-delay="540">
                         <summary
                             class="flex items-center justify-between cursor-pointer list-none font-bold text-lg text-white">
@@ -1527,14 +1598,14 @@
                             <i data-lucide="chevron-down"
                                 class="w-5 h-5 text-gray-500 group-open:rotate-180 transition-transform duration-300"></i>
                         </summary>
-                        <p class="mt-4 text-gray-400 leading-relaxed pl-[44px]">
+                        <p class="mt-4 text-slate-300 leading-relaxed pl-[44px]">
                             綁定完成後即可生效；也提供「測試模式」（只回覆給管理員/指定測試對象）確認沒問題再開啟全量自動回覆。
                         </p>
                     </details>
 
                     <!-- Q9 -->
                     <details data-faq-item
-                        class="scroll-reveal group bg-brand-card border border-brand-border rounded-xl p-6 open:bg-brand-card/80 transition-all hover:border-indigo-500/30"
+                        class="scroll-reveal group bg-[linear-gradient(160deg,_rgba(15,23,42,0.95),_rgba(15,23,42,0.6))] border border-white/15 rounded-xl p-6 transition-all hover:border-indigo-400/60 hover:shadow-[0_18px_36px_rgba(15,23,42,0.45)] open:border-indigo-400/60 open:shadow-[0_18px_36px_rgba(99,102,241,0.22)]"
                         data-reveal-delay="600">
                         <summary
                             class="flex items-center justify-between cursor-pointer list-none font-bold text-lg text-white">
@@ -1548,14 +1619,14 @@
                             <i data-lucide="chevron-down"
                                 class="w-5 h-5 text-gray-500 group-open:rotate-180 transition-transform duration-300"></i>
                         </summary>
-                        <p class="mt-4 text-gray-400 leading-relaxed pl-[44px]">
+                        <p class="mt-4 text-slate-300 leading-relaxed pl-[44px]">
                             可以自訂。你可以設定遇到特定關鍵字（例如：退費/客訴/付款）、或 AI 判斷不確定時就自動轉人工。轉人工後會在 LINE 和後台通知提示你接手處理。
                         </p>
                     </details>
 
                     <!-- Q10 -->
                     <details data-faq-item
-                        class="scroll-reveal group bg-brand-card border border-brand-border rounded-xl p-6 open:bg-brand-card/80 transition-all hover:border-indigo-500/30"
+                        class="scroll-reveal group bg-[linear-gradient(160deg,_rgba(15,23,42,0.95),_rgba(15,23,42,0.6))] border border-white/15 rounded-xl p-6 transition-all hover:border-indigo-400/60 hover:shadow-[0_18px_36px_rgba(15,23,42,0.45)] open:border-indigo-400/60 open:shadow-[0_18px_36px_rgba(99,102,241,0.22)]"
                         data-reveal-delay="660">
                         <summary
                             class="flex items-center justify-between cursor-pointer list-none font-bold text-lg text-white">
@@ -1569,14 +1640,14 @@
                             <i data-lucide="chevron-down"
                                 class="w-5 h-5 text-gray-500 group-open:rotate-180 transition-transform duration-300"></i>
                         </summary>
-                        <p class="mt-4 text-gray-400 leading-relaxed pl-[44px]">
+                        <p class="mt-4 text-slate-300 leading-relaxed pl-[44px]">
                             目前原生支援 LINE 官方帳號，這是台灣市場滲透率最高的渠道。我們後續將陸續開放 Instagram 與 Facebook Messenger 的整合功能。
                         </p>
                     </details>
 
                     <!-- Q11 -->
                     <details data-faq-item
-                        class="scroll-reveal group bg-brand-card border border-brand-border rounded-xl p-6 open:bg-brand-card/80 transition-all hover:border-indigo-500/30"
+                        class="scroll-reveal group bg-[linear-gradient(160deg,_rgba(15,23,42,0.95),_rgba(15,23,42,0.6))] border border-white/15 rounded-xl p-6 transition-all hover:border-indigo-400/60 hover:shadow-[0_18px_36px_rgba(15,23,42,0.45)] open:border-indigo-400/60 open:shadow-[0_18px_36px_rgba(99,102,241,0.22)]"
                         data-reveal-delay="720">
                         <summary
                             class="flex items-center justify-between cursor-pointer list-none font-bold text-lg text-white">
@@ -1590,7 +1661,7 @@
                             <i data-lucide="chevron-down"
                                 class="w-5 h-5 text-gray-500 group-open:rotate-180 transition-transform duration-300"></i>
                         </summary>
-                        <p class="mt-4 text-gray-400 leading-relaxed pl-[44px]">
+                        <p class="mt-4 text-slate-300 leading-relaxed pl-[44px]">
                             正式版會以「使用量或功能等級」計費，讓小型一人商家也能負擔；需要更大規模的商家也能彈性擴充。我們會在封測結束前提供明確方案與價格說明。
                         </p>
                     </details>
@@ -1614,7 +1685,7 @@
 
     <!-- Footer -->
     <footer class="relative z-10 py-12 text-center border-t border-brand-border/50 bg-brand-dark mt-auto">
-        <div class="flex justify-center gap-6 mb-4 text-sm text-gray-400">
+        <div class="flex justify-center gap-6 mb-4 text-sm text-slate-400">
             <a href="https://line.me/R/ti/p/@304dgdjo" target="_blank" rel="noreferrer"
                 class="hover:text-white transition-colors">聯絡客服</a>
         </div>
