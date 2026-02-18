@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>射龍門神算子 - 新春賀歲版</title>
+
+    <!-- 引入 Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- 設定 Tailwind 字型與基本樣式 -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@700;900&display=swap');
+
+        /* 觸控優化：禁止雙擊縮放延遲 
+           這能讓手機點擊卡片時反應更即時 
+        */
+        * {
+            touch-action: manipulation;
+        }
+
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            /* 避免 iOS Safari 下拉重新整理影響遊戲體驗 */
+            overscroll-behavior-y: none;
+        }
+
+        .font-serif {
+            font-family: 'Noto Serif TC', serif;
+        }
+    </style>
+
+    <!-- 這是讓瀏覽器可以直接看懂 React/JSX 的魔法 -->
+    <script type="importmap">
+    {
+        "imports": {
+            "react": "https://esm.sh/react@18.2.0",
+            "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
+            "lucide-react": "https://esm.sh/lucide-react@0.263.1"
+        }
+    }
+    </script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+
+<body>
+    <div id="root"></div>
+
+    <!-- 這裡是 React 程式碼邏輯 -->
+    <script type="text/babel" data-type="module">
+        import React, { useState, useEffect, useMemo } from 'react';
+        import ReactDOM from 'react-dom/client';
+        import {
+            RefreshCcw, Trash2, HelpCircle, Eye, EyeOff, Layers, TrendingUp,
+            AlertTriangle, Target, Coins, ArrowRightCircle, PlayCircle,
+            ArrowUpCircle, ArrowDownCircle, X, Info
+        } from 'lucide-react';
+
+        // --- Constants ---
+        const RANKS = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
+        const RANK_VALUES = {
+            'A': 1, '2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7,
+            '8': 8, '9': 9, '10': 10, 'J': 11, 'Q': 12, 'K': 13
+        };
+
+        // --- Sub-Component: Card ---
+        const Card = ({ rank, onClick, type = 'normal', count = 0, maxCount = 4, mode }) => {
+            const baseStyle = "relative flex items-center justify-center w-full aspect-[3/4] rounded-lg border-2 font-black cursor-pointer transition-all duration-150 select-none shadow-sm active:scale-95";
+
+            let stateStyle = "";
+            if (type === 'gate') {
+                stateStyle = "bg-yellow-100 border-yellow-600 text-red-900 ring-4 ring-yellow-500/50 ring-offset-2 ring-offset-red-900 scale-105 z-20 shadow-[0_0_20px_rgba(234,179,8,0.8)]";
+            } else if (type === 'dead') {
+                stateStyle = "bg-[#2a0505] border-[#3f0707] text-[#5c0e0e] opacity-40 grayscale scale-95";
+            } else {
+                if (mode === 'count') {
+                    stateStyle = "bg-white border-red-200 text-red-700 hover:bg-gray-100 hover:scale-95 transition-transform";
+                } else {
+                    stateStyle = "bg-white border-red-200 text-red-700 hover:border-yellow-400 hover:shadow-[0_0_15px_rgba(250,204,21,0.6)] hover:-translate-y-1";
+                }
+            }
+
+            const deadCount = maxCount - count;
+
+            return (
+                <div onClick={() => onClick(rank)} className={`${baseStyle} ${stateStyle}`}>
+                    <span className="text-xl md:text-3xl font-serif">{rank}</span>
+                    {type !== 'gate' && deadCount > 0 && (
+                        <div className={`absolute -top-2 -right-2 text-[10px] rounded-full w-5 h-5 flex items-center justify-center border shadow-sm z-10 font-bold transition-all ${type === 'dead'
+                                ? 'bg-gray-800 text-gray-400 border-gray-600'
+                                : 'bg-red-900 text-yellow-400 border-yellow-600'
+                            }`}>
+                            -{deadCount}
+                        </div>
+                    )}
+                    {type !== 'dead' && (
+                        <div className="absolute bottom-1 right-0 left-0 text-[10px] text-center text-red-300/80 font-medium">
+                            剩{count}
+                        </div>
+                    )}
+                </div>
+            );
+        };
+
+        // --- Main Component ---
+        function DragonGateCNY() {
+            const [numDecks, setNumDecks] = useState(1);
+            const [deckCounts, setDeckCounts] = useState({});
+            const [gateCards, setGateCards] = useState([]);
+            const [mode, setMode] = useState('count');
+            const [isInitialized, setIsInitialized] = useState(false);
+            const [showResetModal, setShowResetModal] = useState(false);
+            const [showEVInfoModal, setShowEVInfoModal] = useState(false);
+            const [pendingNumDecks, setPendingNumDecks] = useState(null);
+
+            useEffect(() => {
+                resetGame(numDecks);
+            }, []);
+
+            const resetGame = (decks = numDecks) => {
+                const initial = {};
+                for (let i = 1; i <= 13; i++) initial[i] = 4 * decks;
+                setDeckCounts(initial);
+                setGateCards([]);
+                setMode('count');
+                setIsInitialized(true);
+            };
+
+            const handleDeckChange = (e) => {
+                const newDecks = parseInt(e.target.value, 10);
+                setPendingNumDecks(newDecks);
+                setShowResetModal(true);
+            };
+
+            const requestReset = () => {
+                setPendingNumDecks(null);
+                setShowResetModal(true);
+            };
+
+            const confirmReset = () => {
+                const targetDecks = pendingNumDecks || numDecks;
+                if (pendingNumDecks) {
+                    setNumDecks(pendingNumDecks);
+                }
+                resetGame(targetDecks);
+                setShowResetModal(false);
+                setPendingNumDecks(null);
+            };
+
+            // Logic: Clear gates and return to count mode
+            const nextRound = () => {
+                setGateCards([]);
+                setMode('count');
+            };
+
+            const handleGateRemove = (indexToRemove) => {
+                const removedRankVal = gateCards[indexToRemove];
+                const newGates = gateCards.filter((_, idx) => idx !== indexToRemove);
+                setGateCards(newGates);
+                setDeckCounts(prev => ({ ...prev, [removedRankVal]: prev[removedRankVal] + 1 }));
+            };
+
+            const handleCardClick = (rankStr) => {
+                const rankVal = RANK_VALUES[rankStr];
+                if (mode === 'play') {
+                    if (gateCards.length < 2) {
+                        if (deckCounts[rankVal] > 0) {
+                            setDeckCounts(prev => ({ ...prev, [rankVal]: prev[rankVal] - 1 }));
+                            setGateCards(prev => [...prev, rankVal]);
+                        }
+                    } else {
+                        // Allow clicking a card to deselect it even if full
+                        if (gateCards.includes(rankVal)) {
+                            const idx = gateCards.indexOf(rankVal);
+                            if (idx > -1) {
+                                handleGateRemove(idx);
+                            }
+                        }
+                    }
+                } else {
+                    if (deckCounts[rankVal] > 0) {
+                        setDeckCounts(prev => ({ ...prev, [rankVal]: prev[rankVal] - 1 }));
+                    } else {
+                        // Undo logic: Reset to max if clicked when 0
+                        setDeckCounts(prev => ({ ...prev, [rankVal]: 4 * numDecks }));
+                    }
+                }
+            };
+
+            const stats = useMemo(() => {
+                if (gateCards.length !== 2) return null;
+                const c1 = gateCards[0];
+                const c2 = gateCards[1];
+                let totalRemaining = 0;
+                for (let i = 1; i <= 13; i++) totalRemaining += deckCounts[i];
+                if (totalRemaining === 0) return { error: "沒牌啦！" };
+
+                let winCount = 0;
+                let loseCount = 0;
+                let postCount = 0;
+                let isPair = c1 === c2;
+                let highWinCount = 0;
+                let lowWinCount = 0;
+
+                if (isPair) {
+                    postCount = deckCounts[c1];
+                    for (let i = 1; i <= 13; i++) {
+                        if (i > c1) highWinCount += deckCounts[i];
+                        if (i < c1) lowWinCount += deckCounts[i];
+                    }
+                    winCount = Math.max(highWinCount, lowWinCount);
+                    loseCount = totalRemaining - winCount - postCount;
+                } else {
+                    const min = Math.min(c1, c2);
+                    const max = Math.max(c1, c2);
+                    for (let i = min + 1; i < max; i++) {
+                        winCount += deckCounts[i];
+                    }
+                    postCount = deckCounts[min] + deckCounts[max];
+                    loseCount = totalRemaining - winCount - postCount;
+                }
+
+                const winRate = (winCount / totalRemaining);
+                const postRate = (postCount / totalRemaining);
+                const loseRate = (loseCount / totalRemaining);
+                const postMultiplier = isPair ? 3 : 2;
+                const ev = (winRate * 1) - (loseRate * 1) - (postRate * postMultiplier);
+
+                return {
+                    winCount, loseCount, postCount, totalRemaining,
+                    winRate, loseRate, postRate, ev, isPair,
+                    gap: isPair ? 0 : Math.abs(c1 - c2),
+                    highWinCount, lowWinCount
+                };
+            }, [gateCards, deckCounts]);
+
+            const getActionAdvice = (ev, gap) => {
+                if (!stats) return { text: "請選兩張門柱", color: "text-yellow-200", bg: "bg-red-900" };
+                if (stats.ev > 0.25) return { text: "🀄️ 大吉大利！重注發財 🀄️", color: "text-yellow-300", bg: "bg-gradient-to-r from-red-800 to-red-700 border-yellow-500" };
+                if (stats.ev > 0.05) return { text: "💰 恭喜發財！建議下注 💰", color: "text-yellow-200", bg: "bg-red-800 border-yellow-600/50" };
+                if (stats.ev > 0) return { text: "🧧 小賭怡情，可以試試 🧧", color: "text-white", bg: "bg-red-900/80 border-red-700" };
+                if (Math.abs(stats.ev) < 0.05 && gap === 8) return { text: "🤐 歲歲平安 (雞肋局)", color: "text-gray-300", bg: "bg-gray-800 border-gray-600" };
+                if (gap <= 7 && !stats.isPair) return { text: "🧨 絕對陷阱！快跑！ 🧨", color: "text-red-200", bg: "bg-red-950 border-red-900" };
+                return { text: "👋 棄牌保平安", color: "text-orange-200", bg: "bg-red-900/50 border-red-800" };
+            };
+
+            const advice = getActionAdvice(stats?.ev, stats?.gap);
+
+            if (!isInitialized) return null;
+
+            return (
+                <div className="min-h-screen bg-gradient-to-b from-[#4a0404] via-[#7f1d1d] to-[#450a0a] text-amber-50 font-sans p-4 md:p-6 pb-20 md:pb-8">
+
+                    {/* Reset Modal */}
+                    {showResetModal && (
+                        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-in fade-in duration-200" onClick={() => setShowResetModal(false)}>
+                            <div className="bg-[#5c0e0e] border-2 border-[#b45309] rounded-2xl p-6 max-w-sm w-full shadow-2xl transform scale-100 animate-in zoom-in-95 duration-200" onClick={e => e.stopPropagation()}>
+                                <h3 className="text-xl font-black text-yellow-400 mb-2 flex items-center gap-2">
+                                    <Trash2 size={24} />
+                                    {pendingNumDecks ? "換新牌局？" : "重新開始？"}
+                                </h3>
+                                <p className="text-red-200 mb-6 font-medium">
+                                    {pendingNumDecks
+                                        ? `確定要切換為 ${pendingNumDecks} 副牌嗎？`
+                                        : "確定要清空當前所有數據並重置嗎？"}
+                                    <br /><span className="text-red-400 text-sm">所有記牌紀錄將會消失。</span>
+                                </p>
+                                <div className="flex gap-3 justify-end">
+                                    <button
+                                        onClick={() => { setShowResetModal(false); setPendingNumDecks(null); }}
+                                        className="px-4 py-2 text-red-300 font-bold hover:text-white transition-colors"
+                                    >
+                                        取消
+                                    </button>
+                                    <button
+                                        onClick={confirmReset}
+                                        className="bg-gradient-to-r from-yellow-600 to-yellow-500 text-red-900 px-5 py-2 rounded-lg font-black shadow-lg hover:brightness-110 transition-all border border-yellow-400"
+                                    >
+                                        確定重置
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* EV Info Modal */}
+                    {showEVInfoModal && (
+                        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-in fade-in duration-200" onClick={() => setShowEVInfoModal(false)}>
+                            <div className="bg-[#5c0e0e] border-2 border-[#b45309] rounded-2xl p-6 max-w-md w-full shadow-2xl relative animate-in zoom-in-95 duration-200" onClick={e => e.stopPropagation()}>
+                                <button onClick={() => setShowEVInfoModal(false)} className="absolute top-4 right-4 text-red-300 hover:text-white">
+                                    <X size={24} />
+                                </button>
+                                <h3 className="text-xl font-black text-yellow-400 mb-4 flex items-center gap-2">
+                                    <TrendingUp size={24} /> 期望值 (EV) 公式
+                                </h3>
+                                <div className="space-y-4 text-red-100 text-sm">
+                                    <p>期望值 (Expected Value) 是指長期下注後的平均獲利。本程式計算公式如下：</p>
+                                    <div className="bg-black/30 p-3 rounded-lg font-mono text-yellow-300 text-center border border-yellow-600/30 text-xs md:text-sm">
+                                        EV = (勝率×1) - (敗率×1) - (撞柱率×賠率)
+                                    </div>
+                                    <div className="grid grid-cols-1 gap-2 text-sm">
+                                        <div className="flex items-center gap-2">
+                                            <div className="w-2 h-2 rounded-full bg-emerald-400"></div>
+                                            <span className="text-emerald-300 font-bold">勝 (Win)</span>：獲得 1 倍注金。
+                                        </div>
+                                        <div className="flex items-center gap-2">
+                                            <div className="w-2 h-2 rounded-full bg-slate-400"></div>
+                                            <span className="text-slate-300 font-bold">敗 (Lose)</span>：損失 1 倍注金。
+                                        </div>
+                                        <div className="flex items-center gap-2">
+                                            <div className="w-2 h-2 rounded-full bg-red-500"></div>
+                                            <span className="text-red-300 font-bold">撞柱 (Hit)</span>：損失 <span className="text-yellow-400 font-bold">2倍</span> (對子賠3倍)。
+                                        </div>
+                                    </div>
+                                    <div className="p-3 bg-yellow-900/20 border border-yellow-600/30 rounded-lg mt-2">
+                                        <h4 className="font-bold text-yellow-500 mb-1 text-xs uppercase tracking-wider">如何解讀？</h4>
+                                        <ul className="space-y-1 text-xs">
+                                            <li><span className="text-blue-300 font-bold">EV &gt; 0</span>：正期望值，長期玩下來平均會賺錢。</li>
+                                            <li><span className="text-red-300 font-bold">EV &lt; 0</span>：負期望值，長期玩下來平均會賠錢。</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    <div className="max-w-6xl mx-auto space-y-6">
+                        <div className="flex flex-col md:flex-row justify-between items-center bg-[#5c0e0e] p-4 rounded-2xl shadow-2xl border-2 border-[#b45309] gap-4 relative overflow-hidden">
+                            <div className="absolute -top-10 -right-10 w-32 h-32 rounded-full bg-yellow-500/10 blur-xl"></div>
+
+                            <div className="flex items-center gap-4 z-10 w-full md:w-auto justify-between md:justify-start">
+                                <div className="flex items-center gap-4">
+                                    <div className="bg-gradient-to-br from-yellow-500 to-amber-700 p-2 rounded-xl shadow-lg border border-yellow-300">
+                                        <Coins className="text-white" size={24} />
+                                    </div>
+                                    <div>
+                                        <h1 className="text-2xl font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-yellow-100 to-yellow-300 drop-shadow-sm">
+                                            射龍門神算子
+                                        </h1>
+                                        <p className="text-[10px] text-yellow-500/80 font-bold tracking-widest uppercase">✨ 新春賀歲版 ✨</p>
+                                    </div>
+                                </div>
+
+                                <div className="flex items-center gap-2 md:hidden">
+                                    <div className="flex items-center px-2 py-1 border border-red-800/50 rounded bg-[#3f0707]/60">
+                                        <select
+                                            value={numDecks}
+                                            onChange={handleDeckChange}
+                                            className="bg-transparent font-bold text-yellow-400 focus:outline-none cursor-pointer text-xs"
+                                        >
+                                            {[1, 2, 3, 4, 5, 6, 8].map(n => <option key={n} value={n} className="bg-red-900">{n} 副</option>)}
+                                        </select>
+                                    </div>
+                                    <button
+                                        onClick={requestReset}
+                                        className="p-1.5 bg-[#3f0707]/60 border border-red-800/50 rounded text-red-400 hover:text-red-200 hover:bg-red-900/50 transition-colors"
+                                        title="重置"
+                                    >
+                                        <Trash2 size={16} />
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div className="flex items-center gap-3 z-10 hidden md:flex">
+                                <div className="flex items-center px-3 py-1.5 border-r border-red-800/50 mr-2">
+                                    <span className="text-xs text-red-300 mr-2 font-bold">幾副牌</span>
+                                    <select
+                                        value={numDecks}
+                                        onChange={handleDeckChange}
+                                        className="bg-transparent font-bold text-yellow-400 focus:outline-none cursor-pointer text-sm"
+                                    >
+                                        {[1, 2, 3, 4, 5, 6, 8].map(n => <option key={n} value={n} className="bg-red-900 text-yellow-100">{n} 副</option>)}
+                                    </select>
+                                </div>
+                                <button
+                                    onClick={requestReset}
+                                    className="p-2 text-red-400 hover:text-red-200 transition-colors flex gap-2 text-sm font-bold"
+                                >
+                                    <Trash2 size={18} /> 重置
+                                </button>
+                            </div>
+                        </div>
+
+                        <div className="sticky top-2 z-30 shadow-2xl">
+                            {mode === 'count' ? (
+                                <div className="bg-[#3f0707] border-2 border-yellow-900/50 p-3 rounded-xl flex justify-between items-center shadow-lg animate-in fade-in">
+                                    <div className="flex items-center gap-3">
+                                        <div className="bg-yellow-900/30 p-2 rounded-full">
+                                            <EyeOff className="text-yellow-500" size={20} />
+                                        </div>
+                                        <div>
+                                            <div className="font-bold text-yellow-100 text-lg">觀戰記牌中...</div>
+                                            <div className="text-xs text-yellow-500/80">請點擊場上出現的廢牌</div>
+                                        </div>
+                                    </div>
+                                    <button
+                                        onClick={() => setMode('play')}
+                                        className="bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 text-white px-6 py-3 rounded-lg font-black shadow-lg transform hover:scale-105 transition-all flex items-center gap-2 border border-red-400"
+                                    >
+                                        <Target size={20} />
+                                        輪到我了！
+                                    </button>
+                                </div>
+                            ) : (
+                                <div className="bg-red-900 border-2 border-yellow-500 p-3 rounded-xl flex justify-between items-center shadow-lg shadow-red-900/50 animate-in slide-in-from-top-2">
+                                    <div className="flex items-center gap-3">
+                                        <div className="bg-red-950 p-2 rounded-full border border-red-800">
+                                            <Target className="text-white" size={20} />
+                                        </div>
+                                        <div>
+                                            <div className="font-bold text-white text-lg">進攻時刻！</div>
+                                            <div className="text-xs text-red-200">連續點選兩次相同牌可選對子</div>
+                                        </div>
+                                    </div>
+                                    <div className="flex gap-2">
+                                        <button
+                                            onClick={() => { setGateCards([]); setMode('count'); }}
+                                            className="px-4 py-2 text-red-300 text-sm font-bold hover:text-white"
+                                        >
+                                            取消
+                                        </button>
+                                        <button
+                                            onClick={nextRound}
+                                            className="bg-yellow-500 hover:bg-yellow-400 text-red-900 px-6 py-3 rounded-lg font-black shadow-lg transform hover:scale-105 transition-all flex items-center gap-2 border border-yellow-300"
+                                        >
+                                            <ArrowRightCircle size={20} />
+                                            本局結束
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+
+                        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                            <div className="lg:col-span-7 space-y-4">
+                                <div className={`p-6 rounded-2xl shadow-inner border-2 transition-colors duration-300 ${mode === 'count'
+                                        ? 'bg-[#2a0505] border-[#4a0a0a]'
+                                        : 'bg-[#3f0707] border-red-900/50 shadow-[0_0_30px_rgba(220,38,38,0.1)]'
+                                    }`}>
+                                    <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-7 gap-3 sm:gap-4">
+                                        {RANKS.map((rank) => {
+                                            const val = RANK_VALUES[rank];
+                                            const count = deckCounts[val] || 0;
+                                            const isGate = gateCards.includes(val);
+                                            let type = 'normal';
+                                            if (mode === 'play' && isGate) type = 'gate';
+                                            else if (count === 0) type = 'dead';
+
+                                            return (
+                                                <Card
+                                                    key={rank}
+                                                    rank={rank}
+                                                    count={count}
+                                                    maxCount={4 * numDecks}
+                                                    type={type}
+                                                    mode={mode}
+                                                    onClick={() => handleCardClick(rank)}
+                                                />
+                                            );
+                                        })}
+                                    </div>
+                                </div>
+
+                                <div className={`transition-all duration-300 ${mode === 'play' ? 'opacity-100 translate-y-0' : 'opacity-60 grayscale'
+                                    }`}>
+                                    <div className="bg-[#3f0707]/80 p-6 rounded-2xl border-2 border-dashed border-red-900/50 flex justify-center items-center gap-8 min-h-[140px]">
+                                        {gateCards.length === 0 && <span className="text-red-400/50 text-sm font-bold animate-pulse">
+                                            {mode === 'play' ? '👇 請點擊上方牌面設定第一張門柱' : '🀄️ 目前為記牌模式，點擊「輪到我了」開始進攻'}
+                                        </span>}
+
+                                        {gateCards.map((val, idx) => (
+                                            <div
+                                                key={idx}
+                                                onClick={() => mode === 'play' && handleGateRemove(idx)}
+                                                className={`flex flex-col items-center animate-in zoom-in duration-300 group ${mode === 'play' ? 'cursor-pointer hover:-translate-y-2 transition-transform' : ''}`}
+                                                title={mode === 'play' ? "點擊移除此門柱" : ""}
+                                            >
+                                                <div className="w-20 h-28 bg-gradient-to-br from-yellow-50 to-yellow-100 border-4 border-yellow-600 rounded-xl flex items-center justify-center text-4xl font-black shadow-[0_0_20px_rgba(234,179,8,0.3)] text-red-900 relative">
+                                                    {Object.keys(RANK_VALUES).find(key => RANK_VALUES[key] === val)}
+                                                    {mode === 'play' && (
+                                                        <div className="absolute inset-0 bg-red-900/80 rounded-lg flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                                            <X className="text-white" size={32} />
+                                                        </div>
+                                                    )}
+                                                </div>
+                                                <span className="text-[10px] mt-3 font-bold text-yellow-500 uppercase tracking-wider bg-[#2a0505] px-2 py-0.5 rounded-full border border-yellow-900">門柱 {idx + 1}</span>
+                                            </div>
+                                        ))}
+
+                                        {gateCards.length === 1 && (
+                                            <div className="w-20 h-28 border-2 border-dashed border-red-500 rounded-xl flex items-center justify-center opacity-50 animate-pulse">
+                                                <span className="text-red-400 text-sm font-bold">選擇第二張</span>
+                                            </div>
+                                        )}
+                                    </div>
+                                    {mode === 'play' && gateCards.length > 0 && (
+                                        <div className="text-center mt-2 text-xs text-red-400/50 font-medium">
+                                            (點擊下方門柱卡片可移除)
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+
+                            <div className="lg:col-span-5 flex flex-col gap-4">
+                                <div className={`transition-all duration-500 ${mode === 'play' ? 'opacity-100' : 'opacity-40 blur-[1px]'}`}>
+                                    <div className={`p-6 rounded-2xl shadow-xl border-2 transition-all duration-500 flex flex-col justify-center min-h-[160px] relative overflow-hidden ${!stats ? 'bg-[#3f0707] border-[#5c0e0e]' : advice.bg
+                                        }`}>
+                                        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-yellow-500 to-transparent"></div>
+
+                                        {!stats ? (
+                                            <div className="flex flex-col items-center text-red-400/40 gap-3 z-10">
+                                                <HelpCircle size={48} className="opacity-50" />
+                                                <p className="text-sm font-bold">{mode === 'count' ? '觀戰中...' : '等待設定門柱...'}</p>
+                                            </div>
+                                        ) : (
+                                            <div className="text-center animate-in slide-in-from-bottom-4 z-10 relative">
+                                                <h2 className={`text-2xl md:text-3xl font-black mb-3 drop-shadow-md ${advice.color}`}>
+                                                    {advice.text}
+                                                </h2>
+                                                <div className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-black bg-black/20 backdrop-blur-sm border border-white/10 ${stats.ev > 0 ? 'text-yellow-300' : 'text-red-300'}`}>
+                                                    <TrendingUp size={16} />
+                                                    期望值 (EV): {stats.ev > 0 ? '+' : ''}{stats.ev.toFixed(3)}
+                                                    <button
+                                                        onClick={(e) => { e.stopPropagation(); setShowEVInfoModal(true); }}
+                                                        className="ml-1 p-1 rounded-full hover:bg-white/20 transition-colors"
+                                                        title="查看計算公式"
+                                                    >
+                                                        <Info size={14} className="text-yellow-100/70" />
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    {stats && (
+                                        <div className="bg-[#2a0505] p-6 rounded-2xl shadow-xl border-2 border-[#5c0e0e] space-y-6 mt-4 relative animate-in fade-in">
+                                            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-1 bg-[#5c0e0e] rounded-b-lg"></div>
+                                            <div className="space-y-4 mt-2">
+                                                <div>
+                                                    <div className="flex justify-between text-xs uppercase text-yellow-600/70 font-bold mb-1">
+                                                        <span>勝率 (Win)</span>
+                                                        <span>{stats.winCount} 張</span>
+                                                    </div>
+                                                    <div className="flex items-center gap-3">
+                                                        <div className="flex-1 h-4 bg-[#1a0202] rounded-full overflow-hidden border border-[#3f0707]">
+                                                            <div className="h-full bg-gradient-to-r from-emerald-600 to-emerald-400" style={{ width: `${stats.winRate * 100}%` }}></div>
+                                                        </div>
+                                                        <span className="w-12 text-right font-mono font-bold text-emerald-400">{(stats.winRate * 100).toFixed(0)}%</span>
+                                                    </div>
+                                                </div>
+
+                                                <div>
+                                                    <div className="flex justify-between text-xs uppercase text-yellow-600/70 font-bold mb-1">
+                                                        <span>敗率 (Lose)</span>
+                                                        <span>{stats.loseCount} 張</span>
+                                                    </div>
+                                                    <div className="flex items-center gap-3">
+                                                        <div className="flex-1 h-4 bg-[#1a0202] rounded-full overflow-hidden border border-[#3f0707]">
+                                                            <div className="h-full bg-slate-600" style={{ width: `${stats.loseRate * 100}%` }}></div>
+                                                        </div>
+                                                        <span className="w-12 text-right font-mono font-bold text-slate-400">{(stats.loseRate * 100).toFixed(0)}%</span>
+                                                    </div>
+                                                </div>
+
+                                                <div>
+                                                    <div className="flex justify-between text-xs uppercase text-yellow-600/70 font-bold mb-1">
+                                                        <span className="text-red-400 flex items-center gap-1">
+                                                            撞柱 (Hit Post) <AlertTriangle size={12} />
+                                                        </span>
+                                                        <span className="text-red-400">{stats.postCount} 張</span>
+                                                    </div>
+                                                    <div className="flex items-center gap-3">
+                                                        <div className="flex-1 h-4 bg-[#1a0202] rounded-full overflow-hidden border border-[#3f0707]">
+                                                            <div className="h-full bg-gradient-to-r from-red-600 to-red-500" style={{ width: `${stats.postRate * 100}%` }}></div>
+                                                        </div>
+                                                        <span className="w-12 text-right font-mono font-bold text-red-500">{(stats.postRate * 100).toFixed(0)}%</span>
+                                                    </div>
+                                                    <div className="text-[10px] text-right text-red-500/50 mt-1 font-bold">
+                                                        賠 {stats.isPair ? '3' : '2'} 倍罰金
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className="h-px bg-[#5c0e0e]"></div>
+
+                                            <div className="grid grid-cols-2 gap-4">
+                                                <div className="bg-[#3f0707] p-3 rounded-xl border border-[#5c0e0e] text-center">
+                                                    <div className="text-xs text-yellow-600/60 uppercase font-bold">間距 (Gap)</div>
+                                                    <div className="text-2xl font-black text-yellow-100">{stats.gap}</div>
+                                                </div>
+                                                <div className="bg-[#3f0707] p-3 rounded-xl border border-[#5c0e0e] text-center">
+                                                    <div className="text-xs text-yellow-600/60 uppercase font-bold">剩餘牌數</div>
+                                                    <div className="text-2xl font-black text-yellow-100">{stats.totalRemaining}</div>
+                                                </div>
+                                            </div>
+
+                                            {stats.isPair && (
+                                                <div className="bg-yellow-900/20 border-2 border-yellow-600/50 rounded-xl p-4 mt-2">
+                                                    <h3 className="font-black text-yellow-500 mb-3 flex items-center gap-2 text-sm uppercase">
+                                                        <Target size={16} /> 對子策略分析
+                                                    </h3>
+                                                    <div className="grid grid-cols-2 gap-3">
+                                                        <div className={`p-3 rounded-lg border flex flex-col items-center ${stats.highWinCount >= stats.lowWinCount
+                                                                ? 'bg-emerald-900/30 border-emerald-500/50 text-emerald-300'
+                                                                : 'bg-red-900/20 border-red-900/30 text-red-400 opacity-60'
+                                                            }`}>
+                                                            <div className="text-[10px] uppercase font-bold mb-1">比大 ({'>'}{gateCards[0]})</div>
+                                                            <div className="text-2xl font-black">{stats.highWinCount}</div>
+                                                            <div className="text-[10px]">張牌</div>
+                                                            {stats.highWinCount >= stats.lowWinCount && <div className="mt-2 text-xs font-bold bg-emerald-800 px-2 py-0.5 rounded flex items-center gap-1"><ArrowUpCircle size={12} /> 推薦</div>}
+                                                        </div>
+
+                                                        <div className={`p-3 rounded-lg border flex flex-col items-center ${stats.lowWinCount > stats.highWinCount
+                                                                ? 'bg-emerald-900/30 border-emerald-500/50 text-emerald-300'
+                                                                : 'bg-red-900/20 border-red-900/30 text-red-400 opacity-60'
+                                                            }`}>
+                                                            <div className="text-[10px] uppercase font-bold mb-1">比小 ({'<'}{gateCards[0]})</div>
+                                                            <div className="text-2xl font-black">{stats.lowWinCount}</div>
+                                                            <div className="text-[10px]">張牌</div>
+                                                            {stats.lowWinCount > stats.highWinCount && <div className="mt-2 text-xs font-bold bg-emerald-800 px-2 py-0.5 rounded flex items-center gap-1"><ArrowDownCircle size={12} /> 推薦</div>}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            )}
+                                        </div>
+                                    )}
+                                </div>
+
+                                {mode === 'count' && (
+                                    <div className="bg-yellow-900/10 border border-yellow-900/30 p-4 rounded-xl text-center text-yellow-600 text-sm italic">
+                                        👆 記牌模式：請點擊上方牌面，將場上出現的牌扣除。
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<DragonGateCNY />);
+    </script>
+</body>
+
+</html>
