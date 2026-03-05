@@ -1,0 +1,1715 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KeFu — 打造你的虛擬團隊組織</title>
+
+  <!-- === FONTS: Clash Display + Satoshi from Fontshare === -->
+  <link rel="preconnect" href="https://api.fontshare.com" />
+  <link
+    href="https://api.fontshare.com/v2/css?f[]=clash-display@600,700&f[]=satoshi@300,400,500,700&display=swap"
+    rel="stylesheet" />
+
+  <style>
+    /* ===========================================
+       CSS CUSTOM PROPERTIES — NEON CYBER THEME
+       Modify these variables to change the look
+       =========================================== */
+    :root {
+      --bg-primary: #0a0f1c;
+      --bg-secondary: #0d1426;
+      --bg-card: rgba(255, 255, 255, 0.04);
+      --bg-card-hover: rgba(0, 255, 204, 0.06);
+      --text-primary: #ffffff;
+      --text-secondary: rgba(255, 255, 255, 0.5);
+      --text-muted: rgba(255, 255, 255, 0.25);
+      --accent-cyan: #00ffcc;
+      --accent-magenta: #ff00aa;
+      --accent-blue: #4361ff;
+      --glow-cyan: rgba(0, 255, 204, 0.4);
+      --glow-magenta: rgba(255, 0, 170, 0.35);
+      --border-subtle: rgba(0, 255, 204, 0.12);
+      --border-active: rgba(0, 255, 204, 0.45);
+
+      /* Typography */
+      --font-display: 'Clash Display', sans-serif;
+      --font-body: 'Satoshi', sans-serif;
+
+      /* Spacing — all use clamp() for responsive scaling */
+      --slide-padding: clamp(2rem, 5vw, 5rem);
+      --content-gap: clamp(0.75rem, 2vw, 1.75rem);
+      --element-gap: clamp(0.4rem, 1vw, 1rem);
+
+      /* Title sizes — all use clamp() */
+      --title-size: clamp(2rem, 6vw, 5.5rem);
+      --h2-size: clamp(1.4rem, 3.5vw, 3rem);
+      --h3-size: clamp(1rem, 2.2vw, 1.75rem);
+      --body-size: clamp(0.75rem, 1.3vw, 1rem);
+      --small-size: clamp(0.6rem, 1vw, 0.8rem);
+
+      /* Easing */
+      --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* ===========================================
+       VIEWPORT BASE — MANDATORY (from viewport-base.css)
+       These ensure every slide fits exactly in 100vh
+       =========================================== */
+    html, body {
+      height: 100%;
+      overflow-x: hidden;
+    }
+
+    html {
+      scroll-snap-type: y mandatory;
+      scroll-behavior: smooth;
+    }
+
+    .slide {
+      width: 100vw;
+      height: 100vh;
+      height: 100dvh;
+      overflow: hidden;
+      scroll-snap-align: start;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .slide-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      max-height: 100%;
+      overflow: hidden;
+      padding: var(--slide-padding);
+    }
+
+    img, .image-container {
+      max-width: 100%;
+      max-height: min(50vh, 400px);
+      object-fit: contain;
+    }
+
+    /* Short viewport adjustments */
+    @media (max-height: 700px) {
+      :root {
+        --slide-padding: clamp(1rem, 3vw, 2.5rem);
+        --content-gap: clamp(0.5rem, 1.5vw, 1rem);
+        --title-size: clamp(1.5rem, 5vw, 3rem);
+        --h2-size: clamp(1.2rem, 3vw, 2rem);
+      }
+    }
+
+    @media (max-height: 600px) {
+      :root {
+        --slide-padding: clamp(0.75rem, 2.5vw, 1.75rem);
+        --content-gap: clamp(0.35rem, 1vw, 0.75rem);
+        --title-size: clamp(1.25rem, 4vw, 2.2rem);
+        --body-size: clamp(0.65rem, 1.1vw, 0.88rem);
+      }
+      .nav-dots, .keyboard-hint, .decorative { display: none; }
+    }
+
+    @media (max-height: 500px) {
+      :root {
+        --slide-padding: clamp(0.5rem, 2vw, 1rem);
+        --title-size: clamp(1rem, 3.5vw, 1.6rem);
+        --h2-size: clamp(0.9rem, 2.5vw, 1.3rem);
+        --body-size: clamp(0.6rem, 1vw, 0.8rem);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.2s !important;
+      }
+      html { scroll-behavior: auto; }
+    }
+
+    /* ===========================================
+       GLOBAL BASE STYLES
+       =========================================== */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      cursor: none;
+    }
+
+    /* ===========================================
+       CUSTOM CURSOR — Neon Cyber style
+       =========================================== */
+    .cursor {
+      position: fixed;
+      width: 8px;
+      height: 8px;
+      background: var(--accent-cyan);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      box-shadow: 0 0 10px var(--glow-cyan);
+      transform: translate(-50%, -50%);
+      transition: width 0.2s, height 0.2s, background 0.2s;
+    }
+
+    .cursor-ring {
+      position: fixed;
+      width: 30px;
+      height: 30px;
+      border: 1px solid rgba(0, 255, 204, 0.5);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%, -50%);
+      transition: left 0.12s ease, top 0.12s ease;
+    }
+
+    /* ===========================================
+       PROGRESS BAR
+       =========================================== */
+    .progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 2px;
+      width: 0%;
+      background: linear-gradient(90deg, var(--accent-cyan), var(--accent-magenta));
+      z-index: 1000;
+      box-shadow: 0 0 8px var(--glow-cyan);
+      transition: width 0.3s var(--ease-expo);
+    }
+
+    /* ===========================================
+       NAVIGATION DOTS
+       =========================================== */
+    .nav-dots {
+      position: fixed;
+      right: clamp(1rem, 2.5vw, 2rem);
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 500;
+      display: flex;
+      flex-direction: column;
+      gap: clamp(0.4rem, 0.8vh, 0.75rem);
+    }
+
+    .nav-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      border: 1px solid rgba(0, 255, 204, 0.4);
+      background: transparent;
+      cursor: pointer;
+      transition: background 0.3s, box-shadow 0.3s, transform 0.3s;
+    }
+
+    .nav-dot.active {
+      background: var(--accent-cyan);
+      box-shadow: 0 0 8px var(--glow-cyan);
+      transform: scale(1.4);
+    }
+
+    /* ===========================================
+       GLOBAL BACKGROUND ELEMENTS
+       (Grid pattern shown on all slides)
+       =========================================== */
+    .global-grid {
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0, 255, 204, 0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 255, 204, 0.035) 1px, transparent 1px);
+      background-size: clamp(35px, 5vw, 65px) clamp(35px, 5vw, 65px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ===========================================
+       CORNER BRACKET DECORATION
+       Used across slides
+       =========================================== */
+    .corner-bracket {
+      position: absolute;
+      width: clamp(14px, 2vw, 22px);
+      height: clamp(14px, 2vw, 22px);
+      pointer-events: none;
+      z-index: 2;
+    }
+    .corner-bracket--tl { top: clamp(1rem, 2.5vw, 2.5rem); left: clamp(1rem, 2.5vw, 2.5rem); border-top: 1px solid var(--accent-cyan); border-left: 1px solid var(--accent-cyan); }
+    .corner-bracket--tr { top: clamp(1rem, 2.5vw, 2.5rem); right: clamp(1rem, 2.5vw, 2.5rem); border-top: 1px solid var(--accent-cyan); border-right: 1px solid var(--accent-cyan); }
+    .corner-bracket--bl { bottom: clamp(1rem, 2.5vw, 2.5rem); left: clamp(1rem, 2.5vw, 2.5rem); border-bottom: 1px solid var(--accent-cyan); border-left: 1px solid var(--accent-cyan); }
+    .corner-bracket--br { bottom: clamp(1rem, 2.5vw, 2.5rem); right: clamp(1rem, 2.5vw, 2.5rem); border-bottom: 1px solid var(--accent-cyan); border-right: 1px solid var(--accent-cyan); }
+
+    /* ===========================================
+       PAGE COUNTER
+       =========================================== */
+    .page-num {
+      position: absolute;
+      bottom: clamp(1rem, 2.5vw, 2rem);
+      right: clamp(1.5rem, 3.5vw, 3.5rem);
+      font-family: var(--font-body);
+      font-size: var(--small-size);
+      color: var(--text-muted);
+      letter-spacing: 0.2em;
+      z-index: 2;
+    }
+
+    /* ===========================================
+       REVEAL ANIMATIONS
+       .reveal class — triggered by .visible on parent slide
+       =========================================== */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.7s var(--ease-expo), transform 0.7s var(--ease-expo);
+    }
+
+    .slide.visible .reveal { opacity: 1; transform: translateY(0); }
+
+    /* Staggered delays for sequential reveal */
+    .reveal:nth-child(1) { transition-delay: 0.05s; }
+    .reveal:nth-child(2) { transition-delay: 0.15s; }
+    .reveal:nth-child(3) { transition-delay: 0.25s; }
+    .reveal:nth-child(4) { transition-delay: 0.35s; }
+    .reveal:nth-child(5) { transition-delay: 0.45s; }
+    .reveal:nth-child(6) { transition-delay: 0.55s; }
+
+    .reveal-left {
+      opacity: 0;
+      transform: translateX(-30px);
+      transition: opacity 0.7s var(--ease-expo), transform 0.7s var(--ease-expo);
+    }
+    .slide.visible .reveal-left { opacity: 1; transform: translateX(0); }
+
+    .reveal-scale {
+      opacity: 0;
+      transform: scale(0.92);
+      transition: opacity 0.7s var(--ease-expo), transform 0.7s var(--ease-expo);
+    }
+    .slide.visible .reveal-scale { opacity: 1; transform: scale(1); }
+
+    /* ===========================================
+       SHARED COMPONENT: TAG / BADGE
+       =========================================== */
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6em;
+      font-family: var(--font-body);
+      font-size: var(--small-size);
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent-cyan);
+      border: 1px solid rgba(0, 255, 204, 0.3);
+      padding: 0.4em 1.1em;
+      margin-bottom: var(--content-gap);
+      width: fit-content;
+    }
+
+    .tag::before {
+      content: '';
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--accent-cyan);
+      box-shadow: 0 0 8px var(--glow-cyan);
+      flex-shrink: 0;
+      animation: blink 1.8s step-end infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    /* ===========================================
+       SHARED COMPONENT: NEON DIVIDER
+       =========================================== */
+    .neon-line {
+      height: 1px;
+      background: linear-gradient(90deg, var(--accent-cyan), transparent);
+      box-shadow: 0 0 6px rgba(0, 255, 204, 0.5);
+      margin: var(--element-gap) 0;
+    }
+
+    /* ===========================================
+       SLIDE 1 — TITLE SLIDE
+       =========================================== */
+    .slide-title {
+      background: var(--bg-primary);
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    .slide-title .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(70px);
+      pointer-events: none;
+      animation: orb-drift 12s ease-in-out infinite alternate;
+    }
+
+    .slide-title .orb-1 {
+      width: clamp(200px, 40vw, 600px);
+      height: clamp(200px, 40vw, 600px);
+      background: radial-gradient(circle, rgba(0, 255, 204, 0.18), transparent 65%);
+      top: -20%;
+      right: -10%;
+    }
+
+    .slide-title .orb-2 {
+      width: clamp(150px, 30vw, 450px);
+      height: clamp(150px, 30vw, 450px);
+      background: radial-gradient(circle, rgba(255, 0, 170, 0.14), transparent 65%);
+      bottom: -10%;
+      left: -5%;
+      animation-delay: -4s;
+      animation-direction: alternate-reverse;
+    }
+
+    @keyframes orb-drift {
+      from { transform: translate(0, 0) scale(1); }
+      to { transform: translate(20px, -20px) scale(1.05); }
+    }
+
+    /* Scan line animation */
+    .scanline {
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent 10%, rgba(0, 255, 204, 0.25) 50%, transparent 90%);
+      animation: scan 5s linear infinite;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    @keyframes scan {
+      from { top: -2px; }
+      to { top: 100%; }
+    }
+
+    .title-eyebrow {
+      font-family: var(--font-body);
+      font-size: var(--small-size);
+      font-weight: 500;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--accent-cyan);
+      margin-bottom: clamp(0.75rem, 2vw, 1.75rem);
+      display: flex;
+      align-items: center;
+      gap: 0.7em;
+    }
+
+    .title-eyebrow::before {
+      content: '';
+      display: inline-block;
+      width: clamp(20px, 3vw, 35px);
+      height: 1px;
+      background: var(--accent-cyan);
+      box-shadow: 0 0 6px var(--glow-cyan);
+      flex-shrink: 0;
+    }
+
+    h1.hero-title {
+      font-family: var(--font-display);
+      font-size: var(--title-size);
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 0.95;
+      letter-spacing: -0.03em;
+    }
+
+    h1.hero-title .cyan {
+      color: var(--accent-cyan);
+      text-shadow: 0 0 30px var(--glow-cyan), 0 0 60px rgba(0, 255, 204, 0.2);
+    }
+
+    h1.hero-title .magenta {
+      color: var(--accent-magenta);
+      text-shadow: 0 0 30px var(--glow-magenta), 0 0 60px rgba(255, 0, 170, 0.2);
+    }
+
+    .hero-desc {
+      font-family: var(--font-body);
+      font-size: var(--body-size);
+      color: var(--text-secondary);
+      line-height: 1.7;
+      max-width: min(520px, 80vw);
+      margin-top: var(--content-gap);
+    }
+
+    .hero-stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: clamp(0.75rem, 2vw, 1.5rem);
+      margin-top: var(--content-gap);
+    }
+
+    .hero-stat {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2em;
+      border-left: 2px solid rgba(0, 255, 204, 0.4);
+      padding-left: clamp(0.6rem, 1.5vw, 1.2rem);
+    }
+
+    .hero-stat-val {
+      font-family: var(--font-display);
+      font-size: clamp(1.2rem, 2.8vw, 2.4rem);
+      font-weight: 700;
+      color: var(--accent-cyan);
+      text-shadow: 0 0 20px var(--glow-cyan);
+      line-height: 1;
+    }
+
+    .hero-stat-lbl {
+      font-size: var(--small-size);
+      color: var(--text-muted);
+      letter-spacing: 0.08em;
+    }
+
+    /* Logo area top left */
+    .slide-logo {
+      position: absolute;
+      top: clamp(1.5rem, 3.5vw, 3rem);
+      left: clamp(2rem, 5vw, 4.5rem);
+      font-family: var(--font-display);
+      font-size: clamp(1rem, 2vw, 1.6rem);
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: 0.05em;
+      z-index: 3;
+    }
+
+    .slide-logo span {
+      color: var(--accent-cyan);
+    }
+
+    /* ===========================================
+       SLIDE 2 — PROBLEM SLIDE
+       =========================================== */
+    .slide-problem {
+      background: var(--bg-primary);
+    }
+
+    .problem-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(2rem, 5vw, 5rem);
+      align-items: center;
+      height: 100%;
+      padding: var(--slide-padding);
+    }
+
+    .problem-left h2 {
+      font-family: var(--font-display);
+      font-size: var(--h2-size);
+      font-weight: 700;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+    }
+
+    .problem-left h2 .highlight {
+      color: var(--accent-magenta);
+      text-shadow: 0 0 20px var(--glow-magenta);
+    }
+
+    .problem-left p {
+      font-size: var(--body-size);
+      color: var(--text-secondary);
+      line-height: 1.75;
+      margin-top: var(--content-gap);
+      max-width: 420px;
+    }
+
+    .pain-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: var(--element-gap);
+    }
+
+    .pain-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.8em;
+      padding: clamp(0.6rem, 1.5vw, 1rem) clamp(0.8rem, 2vw, 1.4rem);
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      font-size: var(--body-size);
+      color: var(--text-secondary);
+      line-height: 1.5;
+      transition: border-color 0.3s, background 0.3s;
+    }
+
+    .pain-item:hover {
+      border-color: var(--border-active);
+      background: var(--bg-card-hover);
+    }
+
+    .pain-icon {
+      color: var(--accent-magenta);
+      font-size: clamp(0.8rem, 1.5vw, 1.1rem);
+      flex-shrink: 0;
+      margin-top: 0.1em;
+    }
+
+    @media (max-width: 700px) {
+      .problem-inner { grid-template-columns: 1fr; gap: var(--content-gap); }
+    }
+
+    /* ===========================================
+       SLIDE 3 — WHAT IS KEFU (Solution)
+       =========================================== */
+    .slide-solution {
+      background: var(--bg-primary);
+    }
+
+    .solution-inner {
+      display: flex;
+      flex-direction: column;
+      gap: var(--content-gap);
+      padding: var(--slide-padding);
+      max-width: min(900px, 90vw);
+      margin: 0 auto;
+      justify-content: center;
+      height: 100%;
+    }
+
+    .solution-inner h2 {
+      font-family: var(--font-display);
+      font-size: var(--h2-size);
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+    }
+
+    .solution-inner h2 .cyan { color: var(--accent-cyan); text-shadow: 0 0 25px var(--glow-cyan); }
+
+    .org-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: clamp(0.6rem, 1.5vw, 1.2rem);
+      margin-top: clamp(0.5rem, 1.5vw, 1rem);
+    }
+
+    .org-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      padding: clamp(0.8rem, 2vw, 1.5rem);
+      display: flex;
+      flex-direction: column;
+      gap: 0.5em;
+      transition: border-color 0.3s, background 0.3s, transform 0.3s;
+      cursor: default;
+    }
+
+    .org-card:hover {
+      border-color: var(--border-active);
+      background: var(--bg-card-hover);
+      transform: translateY(-2px);
+    }
+
+    .org-card--active {
+      border-color: rgba(0, 255, 204, 0.5);
+      background: rgba(0, 255, 204, 0.06);
+    }
+
+    .org-card--coming {
+      border-color: rgba(255, 255, 255, 0.08);
+      opacity: 0.5;
+    }
+
+    .org-role {
+      font-family: var(--font-body);
+      font-size: var(--small-size);
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent-cyan);
+    }
+
+    .org-card--coming .org-role { color: var(--text-muted); }
+
+    .org-name {
+      font-family: var(--font-display);
+      font-size: clamp(0.9rem, 1.8vw, 1.4rem);
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1.2;
+    }
+
+    .org-desc {
+      font-size: var(--small-size);
+      color: var(--text-secondary);
+      line-height: 1.55;
+    }
+
+    .org-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4em;
+      font-size: var(--small-size);
+      padding: 0.25em 0.7em;
+      background: rgba(0, 255, 204, 0.1);
+      border: 1px solid rgba(0, 255, 204, 0.25);
+      color: var(--accent-cyan);
+      margin-top: 0.3em;
+      width: fit-content;
+    }
+
+    .org-badge--coming {
+      background: rgba(255, 255, 255, 0.04);
+      border-color: rgba(255, 255, 255, 0.1);
+      color: var(--text-muted);
+    }
+
+    @media (max-width: 600px) {
+      .org-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    /* ===========================================
+       SLIDE 4 — WHY KEFU (3 advantages)
+       =========================================== */
+    .slide-why {
+      background: var(--bg-primary);
+    }
+
+    .why-inner {
+      padding: var(--slide-padding);
+      display: flex;
+      flex-direction: column;
+      gap: var(--content-gap);
+      justify-content: center;
+      height: 100%;
+    }
+
+    .why-inner h2 {
+      font-family: var(--font-display);
+      font-size: var(--h2-size);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .why-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: clamp(0.6rem, 1.5vw, 1.2rem);
+    }
+
+    .why-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      padding: clamp(1rem, 2.5vw, 2rem);
+      display: flex;
+      flex-direction: column;
+      gap: var(--element-gap);
+      transition: border-color 0.3s, transform 0.3s;
+    }
+
+    .why-card:hover {
+      border-color: var(--border-active);
+      transform: translateY(-3px);
+    }
+
+    .why-num {
+      font-family: var(--font-display);
+      font-size: clamp(1.8rem, 4vw, 3.5rem);
+      font-weight: 700;
+      color: var(--accent-cyan);
+      text-shadow: 0 0 20px var(--glow-cyan);
+      line-height: 1;
+      opacity: 0.8;
+    }
+
+    .why-card h3 {
+      font-family: var(--font-display);
+      font-size: clamp(0.85rem, 1.6vw, 1.2rem);
+      font-weight: 700;
+      line-height: 1.3;
+      color: var(--text-primary);
+    }
+
+    .why-card p {
+      font-size: var(--small-size);
+      color: var(--text-secondary);
+      line-height: 1.65;
+    }
+
+    @media (max-width: 700px) {
+      .why-grid { grid-template-columns: 1fr; }
+      .why-card { flex-direction: row; align-items: flex-start; gap: 1rem; }
+      .why-num { font-size: clamp(1.4rem, 5vw, 2rem); }
+    }
+
+    /* ===========================================
+       SLIDE 5 — 4 STEPS
+       =========================================== */
+    .slide-steps {
+      background: var(--bg-primary);
+    }
+
+    .steps-inner {
+      padding: var(--slide-padding);
+      display: flex;
+      flex-direction: column;
+      gap: var(--content-gap);
+      justify-content: center;
+      height: 100%;
+    }
+
+    .steps-inner h2 {
+      font-family: var(--font-display);
+      font-size: var(--h2-size);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: clamp(0.5rem, 1.2vw, 1rem);
+    }
+
+    .step-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      padding: clamp(0.8rem, 2vw, 1.6rem);
+      display: flex;
+      flex-direction: column;
+      gap: var(--element-gap);
+      position: relative;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+
+    .step-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent-cyan), transparent);
+      box-shadow: 0 0 6px var(--glow-cyan);
+    }
+
+    .step-card:hover {
+      border-color: var(--border-active);
+      transform: translateY(-2px);
+    }
+
+    .step-num {
+      font-family: var(--font-display);
+      font-size: clamp(1.8rem, 3.5vw, 3rem);
+      font-weight: 700;
+      color: rgba(0, 255, 204, 0.2);
+      line-height: 1;
+    }
+
+    .step-title {
+      font-family: var(--font-display);
+      font-size: clamp(0.75rem, 1.4vw, 1.05rem);
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1.3;
+    }
+
+    .step-desc {
+      font-size: var(--small-size);
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    @media (max-width: 700px) {
+      .steps-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    /* ===========================================
+       SLIDE 6 — JOURNEY / STORY
+       =========================================== */
+    .slide-journey {
+      background: var(--bg-primary);
+    }
+
+    .journey-inner {
+      padding: var(--slide-padding);
+      display: flex;
+      flex-direction: column;
+      gap: var(--content-gap);
+      justify-content: center;
+      height: 100%;
+    }
+
+    .journey-inner h2 {
+      font-family: var(--font-display);
+      font-size: var(--h2-size);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .chapters-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: clamp(0.4rem, 1vw, 0.8rem);
+    }
+
+    .chapter-card {
+      border: 1px solid var(--border-subtle);
+      padding: clamp(0.8rem, 2vw, 1.5rem);
+      display: flex;
+      flex-direction: column;
+      gap: var(--element-gap);
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.3s;
+    }
+
+    .chapter-card:hover { border-color: var(--border-active); }
+
+    .chapter-card--problem { background: rgba(255, 0, 170, 0.05); border-color: rgba(255, 0, 170, 0.2); }
+    .chapter-card--journey { background: rgba(67, 97, 255, 0.06); border-color: rgba(67, 97, 255, 0.2); }
+    .chapter-card--solution { background: rgba(0, 255, 204, 0.05); border-color: rgba(0, 255, 204, 0.2); }
+    .chapter-card--scale { background: rgba(0, 255, 204, 0.08); border-color: rgba(0, 255, 204, 0.35); }
+
+    .chapter-label {
+      font-family: var(--font-body);
+      font-size: var(--small-size);
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    .chapter-card--problem .chapter-label { color: var(--accent-magenta); }
+    .chapter-card--journey .chapter-label { color: var(--accent-blue); }
+    .chapter-card--solution .chapter-label { color: var(--accent-cyan); }
+    .chapter-card--scale .chapter-label { color: var(--accent-cyan); text-shadow: 0 0 10px var(--glow-cyan); }
+
+    .chapter-title {
+      font-family: var(--font-display);
+      font-size: clamp(0.75rem, 1.4vw, 1.05rem);
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1.3;
+    }
+
+    .chapter-desc {
+      font-size: var(--small-size);
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    .chapter-result {
+      font-size: var(--small-size);
+      color: var(--text-muted);
+      font-style: italic;
+      margin-top: auto;
+      padding-top: var(--element-gap);
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    @media (max-width: 700px) {
+      .chapters-row { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    /* ===========================================
+       SLIDE 7 — CTA
+       =========================================== */
+    .slide-cta {
+      background: var(--bg-primary);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .cta-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(90px);
+      pointer-events: none;
+    }
+
+    .cta-orb-1 {
+      width: clamp(200px, 45vw, 650px);
+      height: clamp(200px, 45vw, 650px);
+      background: radial-gradient(circle, rgba(0, 255, 204, 0.15), transparent 65%);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      animation: orb-drift 8s ease-in-out infinite alternate;
+    }
+
+    .cta-inner {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: var(--slide-padding);
+      max-width: min(700px, 88vw);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--content-gap);
+    }
+
+    .cta-kicker {
+      font-family: var(--font-body);
+      font-size: var(--small-size);
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--accent-cyan);
+      display: flex;
+      align-items: center;
+      gap: 0.6em;
+    }
+
+    .cta-kicker::before, .cta-kicker::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      max-width: 40px;
+      background: var(--accent-cyan);
+      box-shadow: 0 0 6px var(--glow-cyan);
+    }
+
+    .cta-headline {
+      font-family: var(--font-display);
+      font-size: clamp(1.5rem, 4.5vw, 4rem);
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      text-align: center;
+    }
+
+    .cta-headline .cyan {
+      color: var(--accent-cyan);
+      text-shadow: 0 0 30px var(--glow-cyan);
+    }
+
+    .cta-sub {
+      font-size: var(--body-size);
+      color: var(--text-secondary);
+      line-height: 1.7;
+      max-width: 480px;
+      text-align: center;
+    }
+
+    .cta-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: clamp(0.6rem, 1.5vw, 1.2rem);
+      justify-content: center;
+      margin-top: clamp(0.5rem, 1.5vw, 1rem);
+    }
+
+    .btn-neon {
+      font-family: var(--font-body);
+      font-size: var(--body-size);
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      padding: clamp(0.7rem, 1.5vw, 1.1rem) clamp(1.5rem, 3vw, 2.8rem);
+      background: var(--accent-cyan);
+      color: var(--bg-primary);
+      border: none;
+      cursor: pointer;
+      transition: box-shadow 0.3s, transform 0.3s;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5em;
+    }
+
+    .btn-neon:hover {
+      box-shadow: 0 0 30px var(--glow-cyan), 0 0 60px rgba(0, 255, 204, 0.2);
+      transform: translateY(-2px);
+    }
+
+    .btn-ghost-neon {
+      font-family: var(--font-body);
+      font-size: var(--body-size);
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      padding: clamp(0.7rem, 1.5vw, 1.1rem) clamp(1.5rem, 3vw, 2.8rem);
+      background: transparent;
+      color: var(--text-secondary);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      cursor: pointer;
+      transition: border-color 0.3s, color 0.3s, transform 0.3s;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5em;
+    }
+
+    .btn-ghost-neon:hover {
+      border-color: rgba(0, 255, 204, 0.4);
+      color: var(--accent-cyan);
+      transform: translateY(-2px);
+    }
+
+    /* ===========================================
+       INLINE EDITING — user opted in
+       =========================================== */
+    .edit-hotzone {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 80px;
+      height: 80px;
+      z-index: 10000;
+      cursor: pointer;
+    }
+
+    .edit-toggle {
+      position: fixed;
+      top: 16px;
+      left: 16px;
+      width: 36px;
+      height: 36px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-subtle);
+      color: var(--accent-cyan);
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 10001;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s, box-shadow 0.3s;
+    }
+
+    .edit-toggle.show,
+    .edit-toggle.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .edit-toggle.active {
+      background: var(--accent-cyan);
+      color: var(--bg-primary);
+      box-shadow: 0 0 16px var(--glow-cyan);
+    }
+
+    [contenteditable="true"] {
+      outline: 1px dashed rgba(0, 255, 204, 0.4);
+      cursor: text;
+    }
+
+    .edit-banner {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-active);
+      color: var(--accent-cyan);
+      font-family: var(--font-body);
+      font-size: var(--small-size);
+      letter-spacing: 0.1em;
+      padding: 0.5em 1.5em;
+      z-index: 10002;
+      box-shadow: 0 0 20px var(--glow-cyan);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+    }
+
+    .edit-banner.show { opacity: 1; }
+  </style>
+</head>
+<body>
+
+  <!-- Global grid overlay (fixed, behind all slides) -->
+  <div class="global-grid" aria-hidden="true"></div>
+
+  <!-- Progress bar -->
+  <div class="progress-bar" id="progressBar" aria-hidden="true"></div>
+
+  <!-- Navigation dots (populated by JS) -->
+  <nav class="nav-dots" id="navDots" aria-label="投影片導覽"></nav>
+
+  <!-- Inline editing elements -->
+  <div class="edit-hotzone" id="editHotzone" aria-hidden="true"></div>
+  <button class="edit-toggle" id="editToggle" title="編輯模式 (E 鍵)" aria-label="切換編輯模式">✏️</button>
+  <div class="edit-banner" id="editBanner">編輯模式 — 點擊文字進行修改 · Ctrl+S 儲存</div>
+
+  <!-- Custom cursor -->
+  <div class="cursor" id="cursor" aria-hidden="true"></div>
+  <div class="cursor-ring" id="cursorRing" aria-hidden="true"></div>
+
+  <!-- ===========================================
+       SLIDE 1 — TITLE
+       =========================================== -->
+  <section class="slide slide-title" id="slide-1" aria-label="標題投影片">
+    <!-- Neon orbs -->
+    <div class="orb orb-1" aria-hidden="true"></div>
+    <div class="orb orb-2" aria-hidden="true"></div>
+    <!-- Scan line animation -->
+    <div class="scanline" aria-hidden="true"></div>
+    <!-- Corner brackets -->
+    <div class="corner-bracket corner-bracket--tl" aria-hidden="true"></div>
+    <div class="corner-bracket corner-bracket--tr" aria-hidden="true"></div>
+    <div class="corner-bracket corner-bracket--bl" aria-hidden="true"></div>
+    <div class="corner-bracket corner-bracket--br" aria-hidden="true"></div>
+
+    <div class="slide-logo" aria-hidden="true">Ke<span>Fu</span></div>
+
+    <div class="slide-content" style="justify-content: center;">
+      <div class="title-eyebrow reveal">Beta CEO 合夥人計畫</div>
+
+      <h1 class="hero-title reveal">
+        打造你的<br />
+        <span class="cyan">虛擬團隊</span><br />
+        <span class="magenta">組織</span>
+      </h1>
+
+      <p class="hero-desc reveal">
+        KeFu 不是單一聊天機器人，而是把你的日常營運拆成角色與流程，
+        讓每位 AI 員工專注做對的事。
+      </p>
+
+      <div class="hero-stats reveal">
+        <div class="hero-stat">
+          <span class="hero-stat-val">5min</span>
+          <span class="hero-stat-lbl">完成上線</span>
+        </div>
+        <div class="hero-stat">
+          <span class="hero-stat-val">24/7</span>
+          <span class="hero-stat-lbl">自動回覆</span>
+        </div>
+        <div class="hero-stat">
+          <span class="hero-stat-val">0</span>
+          <span class="hero-stat-lbl">排班 · 訓練 · 盯訊息</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="page-num" aria-hidden="true">01 / 07</div>
+  </section>
+
+  <!-- ===========================================
+       SLIDE 2 — PROBLEM
+       =========================================== -->
+  <section class="slide slide-problem" id="slide-2" aria-label="問題定義">
+    <div class="corner-bracket corner-bracket--tl" aria-hidden="true"></div>
+    <div class="corner-bracket corner-bracket--br" aria-hidden="true"></div>
+
+    <div class="problem-inner">
+      <div class="problem-left">
+        <div class="tag reveal">Problem</div>
+        <h2 class="reveal">
+          訊息太多，<br />
+          品質越回<br />
+          <span class="highlight">越亂。</span>
+        </h2>
+        <p class="reveal">
+          人忙、訊息多，回答變得不一致，品牌語氣逐漸失控。
+          每天花大量時間重複回答同樣問題，卻還是漏訊、延遲。
+        </p>
+      </div>
+      <ul class="pain-list">
+        <li class="pain-item reveal">
+          <span class="pain-icon">▸</span>
+          回覆延遲，客戶流失率上升
+        </li>
+        <li class="pain-item reveal">
+          <span class="pain-icon">▸</span>
+          品牌語氣前後不一致，形象受損
+        </li>
+        <li class="pain-item reveal">
+          <span class="pain-icon">▸</span>
+          重複問題佔用大量人力時間
+        </li>
+        <li class="pain-item reveal">
+          <span class="pain-icon">▸</span>
+          沒有制度，難以擴大規模
+        </li>
+      </ul>
+    </div>
+
+    <div class="page-num" aria-hidden="true">02 / 07</div>
+  </section>
+
+  <!-- ===========================================
+       SLIDE 3 — SOLUTION (Core Team)
+       =========================================== -->
+  <section class="slide slide-solution" id="slide-3" aria-label="解決方案：核心團隊">
+    <div class="corner-bracket corner-bracket--tl" aria-hidden="true"></div>
+    <div class="corner-bracket corner-bracket--br" aria-hidden="true"></div>
+
+    <div class="solution-inner">
+      <div class="tag reveal">Solution</div>
+      <h2 class="reveal">
+        核心角色，<br /><span class="cyan">已經上線。</span>
+      </h2>
+      <p class="reveal" style="font-size: var(--body-size); color: var(--text-secondary); max-width: 520px;">
+        每個職位都有清楚分工，你只需要給規則，其他由 AI 執行。
+      </p>
+
+      <div class="org-grid">
+        <!-- Apple — Root Agent -->
+        <div class="org-card org-card--active reveal-scale" style="transition-delay:0.1s">
+          <span class="org-role">Root Agent · 營運總監</span>
+          <div class="org-name">Apple</div>
+          <p class="org-desc">指揮中心：決定交給誰處理，並統一回覆語氣與禁語規則。</p>
+          <span class="org-badge">● LIVE</span>
+        </div>
+        <!-- Kai — FAQ Agent -->
+        <div class="org-card org-card--active reveal-scale" style="transition-delay:0.2s">
+          <span class="org-role">FAQ Agent · 客服專員</span>
+          <div class="org-name">Kai</div>
+          <p class="org-desc">24/7 接起重複問題，讓你不用一直回訊息。整理常見 FAQ 自動回答。</p>
+          <span class="org-badge">● LIVE</span>
+        </div>
+        <!-- Mina — Handover Agent -->
+        <div class="org-card org-card--active reveal-scale" style="transition-delay:0.3s">
+          <span class="org-role">Handover Agent · 協作專員</span>
+          <div class="org-name">Mina</div>
+          <p class="org-desc">將需要真人回覆的對話彙整重點，自動轉交後續人工處理。</p>
+          <span class="org-badge">● LIVE</span>
+        </div>
+        <!-- Coming Soon -->
+        <div class="org-card org-card--coming reveal-scale" style="transition-delay:0.4s">
+          <span class="org-role">Marketing Agent</span>
+          <div class="org-name">行銷專員</div>
+          <p class="org-desc">自動化行銷與推播訊息，提升轉換率。</p>
+          <span class="org-badge org-badge--coming">Coming Soon</span>
+        </div>
+        <div class="org-card org-card--coming reveal-scale" style="transition-delay:0.5s">
+          <span class="org-role">Order Agent</span>
+          <div class="org-name">訂單助理</div>
+          <p class="org-desc">訂單追蹤與管理，減少人工作業。</p>
+          <span class="org-badge org-badge--coming">Coming Soon</span>
+        </div>
+        <div class="org-card org-card--coming reveal-scale" style="transition-delay:0.6s">
+          <span class="org-role">Analytics Agent</span>
+          <div class="org-name">數據分析</div>
+          <p class="org-desc">深入分析對話數據，提供營運洞察。</p>
+          <span class="org-badge org-badge--coming">Coming Soon</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="page-num" aria-hidden="true">03 / 07</div>
+  </section>
+
+  <!-- ===========================================
+       SLIDE 4 — WHY KEFU
+       =========================================== -->
+  <section class="slide slide-why" id="slide-4" aria-label="為什麼選擇 KeFu">
+    <div class="corner-bracket corner-bracket--tl" aria-hidden="true"></div>
+    <div class="corner-bracket corner-bracket--br" aria-hidden="true"></div>
+
+    <div class="why-inner">
+      <div class="tag reveal">Why KeFu</div>
+      <h2 class="reveal">為什麼你該選擇<br />「虛擬員工」？</h2>
+
+      <div class="why-grid">
+        <div class="why-card reveal" style="transition-delay:0.1s">
+          <div class="why-num">01</div>
+          <h3>5 分鐘完成上線</h3>
+          <p>填完公司設定與 FAQ，虛擬團隊立刻開始運作。不用寫 SOP、不用等訓練，馬上把常見問題交給 AI。</p>
+        </div>
+        <div class="why-card reveal" style="transition-delay:0.2s">
+          <div class="why-num">02</div>
+          <h3>0 排班、0 訓練、0 盯訊息</h3>
+          <p>不用教、不用管，24/7 自動回覆。減少漏回與流失，把注意力留給真正重要的決策。</p>
+        </div>
+        <div class="why-card reveal" style="transition-delay:0.3s">
+          <div class="why-num">03</div>
+          <h3>一人公司，也能有完整部門</h3>
+          <p>客服 / 轉接 / 營運各司其職，流程清楚可控。升級成有分工的組織：誰處理、怎麼回，都有制度。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="page-num" aria-hidden="true">04 / 07</div>
+  </section>
+
+  <!-- ===========================================
+       SLIDE 5 — 4 STEPS
+       =========================================== -->
+  <section class="slide slide-steps" id="slide-5" aria-label="上線流程四步驟">
+    <div class="corner-bracket corner-bracket--tl" aria-hidden="true"></div>
+    <div class="corner-bracket corner-bracket--br" aria-hidden="true"></div>
+
+    <div class="steps-inner">
+      <div class="tag reveal">上線流程</div>
+      <h2 class="reveal">5 分鐘上線你的<br />虛擬公司</h2>
+      <p class="reveal" style="font-size: var(--body-size); color: var(--text-secondary);">
+        跟著這四步，快速把 AI 團隊導入營運流程，團隊立刻開工。
+      </p>
+
+      <div class="steps-grid">
+        <div class="step-card reveal" style="transition-delay:0.1s">
+          <div class="step-num">01</div>
+          <div class="step-title">填寫公司設定</div>
+          <p class="step-desc">輸入品牌介紹、FAQ 與服務範圍，AI 立刻理解你的營運需求。</p>
+        </div>
+        <div class="step-card reveal" style="transition-delay:0.2s">
+          <div class="step-num">02</div>
+          <div class="step-title">AI 自動編制團隊</div>
+          <p class="step-desc">系統自動建立訊息接待與人機協作轉接角色，並指派各自職責。</p>
+        </div>
+        <div class="step-card reveal" style="transition-delay:0.3s">
+          <div class="step-num">03</div>
+          <div class="step-title">一鍵串接 LINE</div>
+          <p class="step-desc">訊息即時導入你的 AI 團隊，開始接住重複問題。</p>
+        </div>
+        <div class="step-card reveal" style="transition-delay:0.4s">
+          <div class="step-num">04</div>
+          <div class="step-title">立即開始營運</div>
+          <p class="step-desc">AI 全天候接待顧客，你專心做決策與產品迭代。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="page-num" aria-hidden="true">05 / 07</div>
+  </section>
+
+  <!-- ===========================================
+       SLIDE 6 — JOURNEY / SCALE STORY
+       =========================================== -->
+  <section class="slide slide-journey" id="slide-6" aria-label="營運故事">
+    <div class="corner-bracket corner-bracket--tl" aria-hidden="true"></div>
+    <div class="corner-bracket corner-bracket--br" aria-hidden="true"></div>
+
+    <div class="journey-inner">
+      <div class="tag reveal">一場有節奏的故事</div>
+      <h2 class="reveal">從混亂，到可控的<br />組織化營運。</h2>
+      <p class="reveal" style="font-size: var(--body-size); color: var(--text-secondary);">
+        從第一位 AI 員工開始，逐步加入新角色，把混亂的訊息變成可控的流程。
+      </p>
+
+      <div class="chapters-row">
+        <div class="chapter-card chapter-card--problem reveal" style="transition-delay:0.1s">
+          <span class="chapter-label">Problem · 01</span>
+          <div class="chapter-title">訊息太多，品質越回越亂。</div>
+          <p class="chapter-desc">人忙、訊息多，回答不一致，品牌語氣逐漸失控。</p>
+          <div class="chapter-result">回覆延遲，品牌一致性下滑</div>
+        </div>
+        <div class="chapter-card chapter-card--journey reveal" style="transition-delay:0.2s">
+          <span class="chapter-label">Journey · 02</span>
+          <div class="chapter-title">建立 FAQ 與人設，交給 AI。</div>
+          <p class="chapter-desc">把常見問題、禁語規則、語氣設定交給虛擬員工執行。</p>
+          <div class="chapter-result">回覆邏輯與語氣被標準化</div>
+        </div>
+        <div class="chapter-card chapter-card--solution reveal" style="transition-delay:0.3s">
+          <span class="chapter-label">Solution · 03</span>
+          <div class="chapter-title">自動分流，真人只看重點。</div>
+          <p class="chapter-desc">需要真人的訊息自動彙整標注，縮短接手時間。</p>
+          <div class="chapter-result">例外案件才轉人工，效率更高</div>
+        </div>
+        <div class="chapter-card chapter-card--scale reveal" style="transition-delay:0.4s">
+          <span class="chapter-label">Scale · 04</span>
+          <div class="chapter-title">每月擴編，組織升級。</div>
+          <p class="chapter-desc">從客服走向行銷、留存、數據分析，像公司一樣運作。</p>
+          <div class="chapter-result">從單點自動化升級成可擴張團隊</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="page-num" aria-hidden="true">06 / 07</div>
+  </section>
+
+  <!-- ===========================================
+       SLIDE 7 — CTA
+       =========================================== -->
+  <section class="slide slide-cta" id="slide-7" aria-label="立即加入">
+    <div class="cta-orb cta-orb-1" aria-hidden="true"></div>
+    <div class="scanline" aria-hidden="true"></div>
+    <div class="corner-bracket corner-bracket--tl" aria-hidden="true"></div>
+    <div class="corner-bracket corner-bracket--tr" aria-hidden="true"></div>
+    <div class="corner-bracket corner-bracket--bl" aria-hidden="true"></div>
+    <div class="corner-bracket corner-bracket--br" aria-hidden="true"></div>
+
+    <div class="slide-logo" aria-hidden="true">Ke<span>Fu</span></div>
+
+    <div class="cta-inner">
+      <div class="cta-kicker reveal">封測免費開放中</div>
+      <h2 class="cta-headline reveal">
+        現在就讓 <span class="cyan">KeFu</span> 成為<br />你的第一位員工。
+      </h2>
+      <p class="cta-sub reveal">
+        封測期間免費體驗核心功能，並獲得優先解鎖新職位的資格。
+        你給回饋，我們一起把組織做更好。
+      </p>
+      <div class="cta-buttons reveal">
+        <a class="btn-neon" href="https://line.me/R/ti/p/@304dgdjo" target="_blank" rel="noreferrer">
+          加 LINE 立即申請 ↗
+        </a>
+        <a class="btn-ghost-neon" href="https://line.me/ti/g2/EUKFAFOioWdGOSvRXtRO1BtcKDIdPMeV1sajaQ" target="_blank" rel="noreferrer">
+          加入社群交流 →
+        </a>
+      </div>
+    </div>
+
+    <div class="page-num" aria-hidden="true">07 / 07</div>
+  </section>
+
+  <!-- ===========================================
+       JAVASCRIPT — PRESENTATION CONTROLLER
+       =========================================== -->
+  <script>
+    /* === SLIDE PRESENTATION CONTROLLER === */
+    class SlidePresentation {
+      constructor() {
+        this.slides = document.querySelectorAll('.slide');
+        this.total = this.slides.length;
+        this.current = 0;
+
+        this.progressBar = document.getElementById('progressBar');
+        this.navDotsContainer = document.getElementById('navDots');
+
+        this.setupNavDots();
+        this.setupIntersectionObserver();
+        this.setupKeyboardNav();
+        this.setupTouchNav();
+        this.setupScrollUpdate();
+        this.updateProgress(0);
+      }
+
+      /* Build navigation dots */
+      setupNavDots() {
+        const labels = ['標題', '問題', '核心團隊', '為什麼', '上線流程', '旅程故事', '立即加入'];
+        this.slides.forEach((_, i) => {
+          const dot = document.createElement('button');
+          dot.className = 'nav-dot' + (i === 0 ? ' active' : '');
+          dot.setAttribute('aria-label', labels[i] || `投影片 ${i + 1}`);
+          dot.addEventListener('click', () => this.goTo(i));
+          this.navDotsContainer.appendChild(dot);
+        });
+        this.dots = this.navDotsContainer.querySelectorAll('.nav-dot');
+      }
+
+      /* Intersection observer to trigger reveal animations */
+      setupIntersectionObserver() {
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+              const idx = Array.from(this.slides).indexOf(entry.target);
+              if (idx !== -1) {
+                this.current = idx;
+                this.updateDots(idx);
+                this.updateProgress(idx);
+              }
+            }
+          });
+        }, { threshold: 0.5 });
+
+        this.slides.forEach(slide => observer.observe(slide));
+      }
+
+      /* Keyboard navigation */
+      setupKeyboardNav() {
+        document.addEventListener('keydown', (e) => {
+          // Skip when in edit mode or editing text
+          if (e.target.getAttribute('contenteditable') === 'true') return;
+          if (['ArrowDown', 'ArrowRight', 'Space', 'PageDown'].includes(e.code) ||
+              (e.code === 'Space' && !e.shiftKey)) {
+            e.preventDefault();
+            this.next();
+          } else if (['ArrowUp', 'ArrowLeft', 'PageUp'].includes(e.code) ||
+                     (e.code === 'Space' && e.shiftKey)) {
+            e.preventDefault();
+            this.prev();
+          }
+        });
+      }
+
+      /* Touch / swipe navigation */
+      setupTouchNav() {
+        let startY = 0;
+        let startX = 0;
+        document.addEventListener('touchstart', e => {
+          startY = e.touches[0].clientY;
+          startX = e.touches[0].clientX;
+        }, { passive: true });
+        document.addEventListener('touchend', e => {
+          const dy = startY - e.changedTouches[0].clientY;
+          const dx = startX - e.changedTouches[0].clientX;
+          if (Math.abs(dy) > Math.abs(dx) && Math.abs(dy) > 50) {
+            dy > 0 ? this.next() : this.prev();
+          }
+        }, { passive: true });
+      }
+
+      /* Update progress on scroll */
+      setupScrollUpdate() {
+        let ticking = false;
+        window.addEventListener('scroll', () => {
+          if (!ticking) {
+            requestAnimationFrame(() => {
+              const scrolled = window.scrollY;
+              const total = document.body.scrollHeight - window.innerHeight;
+              const progress = total > 0 ? (scrolled / total) * 100 : 0;
+              this.progressBar.style.width = progress + '%';
+              ticking = false;
+            });
+            ticking = true;
+          }
+        }, { passive: true });
+      }
+
+      goTo(idx) {
+        if (idx < 0 || idx >= this.total) return;
+        this.slides[idx].scrollIntoView({ behavior: 'smooth' });
+      }
+
+      next() { this.goTo(this.current + 1); }
+      prev() { this.goTo(this.current - 1); }
+
+      updateDots(idx) {
+        this.dots.forEach((dot, i) => {
+          dot.classList.toggle('active', i === idx);
+        });
+      }
+
+      updateProgress(idx) {
+        this.progressBar.style.width = ((idx / (this.total - 1)) * 100) + '%';
+      }
+    }
+
+    /* === CUSTOM CURSOR === */
+    const cursor = document.getElementById('cursor');
+    const cursorRing = document.getElementById('cursorRing');
+
+    document.addEventListener('mousemove', e => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top = e.clientY + 'px';
+      cursorRing.style.left = e.clientX + 'px';
+      cursorRing.style.top = e.clientY + 'px';
+    });
+
+    document.querySelectorAll('a, button, .why-card, .org-card, .step-card, .pain-item, .chapter-card').forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        cursor.style.width = '14px';
+        cursor.style.height = '14px';
+        cursor.style.background = 'var(--accent-magenta)';
+        cursor.style.boxShadow = '0 0 12px var(--glow-magenta)';
+      });
+      el.addEventListener('mouseleave', () => {
+        cursor.style.width = '8px';
+        cursor.style.height = '8px';
+        cursor.style.background = 'var(--accent-cyan)';
+        cursor.style.boxShadow = '0 0 10px var(--glow-cyan)';
+      });
+    });
+
+    /* Hide cursor when leaving window */
+    document.addEventListener('mouseleave', () => {
+      cursor.style.opacity = '0';
+      cursorRing.style.opacity = '0';
+    });
+    document.addEventListener('mouseenter', () => {
+      cursor.style.opacity = '1';
+      cursorRing.style.opacity = '1';
+    });
+
+    /* === INLINE EDITING — user opted in === */
+    const editor = {
+      isActive: false,
+      editables: [],
+
+      toggleEditMode() {
+        this.isActive = !this.isActive;
+        const toggle = document.getElementById('editToggle');
+        const banner = document.getElementById('editBanner');
+
+        toggle.classList.toggle('active', this.isActive);
+        banner.classList.toggle('show', this.isActive);
+
+        if (this.isActive) {
+          /* Make text content editable */
+          this.editables = document.querySelectorAll(
+            'h1, h2, h3, p, .hero-stat-val, .hero-stat-lbl, .title-eyebrow,' +
+            ' .org-name, .org-desc, .org-role, .why-num, .step-title,' +
+            ' .step-desc, .chapter-title, .chapter-desc, .chapter-result,' +
+            ' .cta-headline, .cta-sub, .cta-kicker, .hero-desc, .chapter-label'
+          );
+          this.editables.forEach(el => {
+            el.contentEditable = 'true';
+            el.setAttribute('spellcheck', 'false');
+          });
+        } else {
+          if (this.editables) {
+            this.editables.forEach(el => {
+              el.contentEditable = 'false';
+              el.removeAttribute('spellcheck');
+            });
+          }
+          this.saveToStorage();
+        }
+      },
+
+      saveToStorage() {
+        const html = document.documentElement.innerHTML;
+        try {
+          localStorage.setItem('kefu-slides-content', html);
+        } catch (e) {
+          /* localStorage quota exceeded — skip silently */
+        }
+      },
+
+      exportFile() {
+        const html = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+        const blob = new Blob([html], { type: 'text/html' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'kefu-slides.html';
+        a.click();
+        URL.revokeObjectURL(a.href);
+      }
+    };
+
+    /* Hotzone hover with 400ms grace period */
+    const hotzone = document.getElementById('editHotzone');
+    const editToggle = document.getElementById('editToggle');
+    let hideTimeout = null;
+
+    hotzone.addEventListener('mouseenter', () => {
+      clearTimeout(hideTimeout);
+      editToggle.classList.add('show');
+    });
+    hotzone.addEventListener('mouseleave', () => {
+      hideTimeout = setTimeout(() => {
+        if (!editor.isActive) editToggle.classList.remove('show');
+      }, 400);
+    });
+    editToggle.addEventListener('mouseenter', () => clearTimeout(hideTimeout));
+    editToggle.addEventListener('mouseleave', () => {
+      hideTimeout = setTimeout(() => {
+        if (!editor.isActive) editToggle.classList.remove('show');
+      }, 400);
+    });
+
+    editToggle.addEventListener('click', () => editor.toggleEditMode());
+    hotzone.addEventListener('click', () => editor.toggleEditMode());
+
+    /* Keyboard shortcuts */
+    document.addEventListener('keydown', e => {
+      /* E key toggles edit mode (only when not editing text) */
+      if ((e.key === 'e' || e.key === 'E') && !e.target.getAttribute('contenteditable')) {
+        editor.toggleEditMode();
+      }
+      /* Ctrl+S saves */
+      if (e.ctrlKey && e.key === 's') {
+        e.preventDefault();
+        editor.exportFile();
+      }
+    });
+
+    /* Initialize presentation */
+    const pres = new SlidePresentation();
+  </script>
+</body>
+</html>
