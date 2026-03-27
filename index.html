@@ -72,7 +72,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
-    href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&family=Source+Sans+3:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap"
     rel="stylesheet" />
 
   <script src="https://unpkg.com/lucide@latest"></script>
@@ -80,19 +80,19 @@
   <style>
     :root {
       --bg: #f6f8ff;
-      --ink-900: #0b1220;
-      --ink-700: #1f2a44;
-      --ink-500: #364566;
-      --primary: #2563eb;
-      --secondary: #22d3ee;
-      --accent: #8b5cf6;
+      --ink-900: #122033;
+      --ink-700: #42536a;
+      --ink-500: #64748b;
+      --primary: #0ea5e9;
+      --secondary: #38bdf8;
+      --accent: #2563eb;
       --cta: #f97316;
       --surface: rgba(255, 255, 255, 0.86);
       --border: rgba(15, 23, 42, 0.12);
       --shadow: 0 28px 70px rgba(15, 23, 42, 0.16);
       --anchor-offset: 106px;
-      --font-display: "Space Grotesk", "Noto Sans TC", sans-serif;
-      --font-body: "Manrope", "Noto Sans TC", sans-serif;
+      --font-display: "Lexend", "Noto Sans TC", sans-serif;
+      --font-body: "Source Sans 3", "Noto Sans TC", sans-serif;
     }
 
     * {
@@ -105,13 +105,15 @@
       font-family: var(--font-body);
       color: var(--ink-900);
       background:
-        radial-gradient(circle at 12% 10%, rgba(37, 99, 235, 0.18), transparent 40%),
-        radial-gradient(circle at 88% 8%, rgba(249, 115, 22, 0.2), transparent 46%),
-        radial-gradient(circle at 72% 82%, rgba(34, 211, 238, 0.16), transparent 48%),
+        radial-gradient(circle at 12% 10%, rgba(14, 165, 233, 0.15), transparent 38%),
+        radial-gradient(circle at 88% 8%, rgba(249, 115, 22, 0.12), transparent 42%),
+        radial-gradient(circle at 72% 82%, rgba(56, 189, 248, 0.12), transparent 46%),
         linear-gradient(180deg, #ffffff 0%, #f6f8ff 55%, #eef3ff 100%);
       min-height: 100vh;
       position: relative;
       overflow-x: hidden;
+      line-height: 1.55;
+      letter-spacing: 0.01em;
     }
 
     body::before {
@@ -121,7 +123,7 @@
       background-image:
         radial-gradient(rgba(15, 23, 42, 0.05) 1px, transparent 1px);
       background-size: 36px 36px;
-      opacity: 0.45;
+      opacity: 0.24;
       pointer-events: none;
       z-index: -1;
     }
@@ -139,6 +141,21 @@
     .cta-card__title,
     .panel__title {
       font-family: var(--font-display);
+    }
+
+    .hero__title,
+    .section__title,
+    .cta-card__title,
+    .why-card-title,
+    .chapter__title,
+    .step-title,
+    .org-person-name,
+    .intro-card__title,
+    .intro-card__price,
+    .points-card__name,
+    .points-card__price {
+      font-family: "Noto Sans TC", var(--font-display), sans-serif;
+      font-weight: 700;
     }
 
     img {
@@ -206,8 +223,8 @@
       display: flex;
       align-items: center;
       gap: 12px;
-      font-weight: 700;
-      letter-spacing: -0.02em;
+      font-weight: 500;
+      letter-spacing: -0.015em;
       font-family: var(--font-display);
       min-width: 0;
     }
@@ -237,7 +254,7 @@
       gap: 12px;
       align-items: center;
       font-size: 13px;
-      font-weight: 600;
+      font-weight: 500;
       color: var(--ink-700);
     }
 
@@ -350,7 +367,7 @@
       border: 1px solid rgba(37, 99, 235, 0.22);
       background: #ffffff;
       color: var(--ink-700);
-      font-weight: 600;
+      font-weight: 500;
       transition: transform 0.2s ease, box-shadow 0.2s ease;
       cursor: pointer;
     }
@@ -406,7 +423,7 @@
       background: rgba(37, 99, 235, 0.12);
       color: var(--ink-700);
       font-size: 12px;
-      font-weight: 700;
+      font-weight: 500;
       letter-spacing: 0.2em;
       text-transform: uppercase;
       border: 1px solid rgba(37, 99, 235, 0.2);
@@ -421,12 +438,12 @@
     .hero__title {
       margin-top: 22px;
       font-size: clamp(2.9rem, 6vw, 5.2rem);
-      font-weight: 700;
       letter-spacing: -0.05em;
       line-height: 1.05;
       text-align: center;
       margin-left: auto;
       margin-right: auto;
+      max-width: 12ch;
     }
 
     .hero__title span {
@@ -435,7 +452,7 @@
 
     .hero__title .accent {
       color: transparent;
-      background: linear-gradient(120deg, #2563eb, #8b5cf6, #f97316);
+      background: linear-gradient(120deg, #0ea5e9, #2563eb 58%, #f97316);
       -webkit-background-clip: text;
       background-clip: text;
     }
@@ -446,7 +463,7 @@
       line-height: 1.8;
       color: var(--ink-700);
       max-width: 540px;
-      font-weight: 500;
+      font-weight: 400;
       text-align: center;
       margin-left: auto;
       margin-right: auto;
@@ -478,7 +495,7 @@
       background: rgba(255, 255, 255, 0.9);
       border: 1px solid var(--border);
       font-size: 12px;
-      font-weight: 600;
+      font-weight: 500;
       color: var(--ink-700);
       box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
     }
@@ -498,7 +515,7 @@
 
     .hero__trust-label {
       font-size: 12px;
-      font-weight: 700;
+      font-weight: 500;
       text-transform: uppercase;
       letter-spacing: 0.2em;
       color: var(--ink-500);
@@ -516,7 +533,7 @@
       background: rgba(255, 255, 255, 0.8);
       border: 1px solid var(--border);
       font-size: 12px;
-      font-weight: 600;
+      font-weight: 500;
       color: var(--ink-700);
     }
 
@@ -526,7 +543,8 @@
       gap: 10px;
       padding: 14px 22px;
       border-radius: 16px;
-      font-weight: 700;
+      font-weight: 500;
+      letter-spacing: 0.01em;
       border: none;
       cursor: pointer;
       transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -603,7 +621,7 @@
 
     .panel__title {
       font-size: 18px;
-      font-weight: 700;
+      font-weight: 500;
     }
 
     .panel__pill {
@@ -612,7 +630,7 @@
       background: rgba(37, 99, 235, 0.14);
       color: var(--ink-700);
       font-size: 12px;
-      font-weight: 700;
+      font-weight: 500;
       letter-spacing: 0.08em;
       text-transform: uppercase;
     }
@@ -649,6 +667,7 @@
       font-size: 15px;
       margin-bottom: 4px;
       font-family: var(--font-display);
+      font-weight: 500;
     }
 
     .panel__item p {
@@ -666,23 +685,31 @@
 
     .section__title {
       font-size: clamp(2rem, 4vw, 3rem);
-      font-weight: 700;
       letter-spacing: -0.04em;
       line-height: 1.12;
       margin-bottom: 20px;
       text-align: center;
       margin-left: auto;
       margin-right: auto;
+      max-width: 16ch;
+    }
+
+    .section__title--wide {
+      max-width: none;
+      white-space: nowrap;
+      font-size: clamp(1.7rem, 3vw, 2.55rem);
+      letter-spacing: -0.028em;
     }
 
     .section__subtitle {
       font-size: 18px;
       color: var(--ink-700);
-      line-height: 1.8;
+      line-height: 1.75;
       max-width: 600px;
       text-align: center;
       margin-left: auto;
       margin-right: auto;
+      font-weight: 400;
     }
 
     .stats {
@@ -767,7 +794,7 @@
       background: rgba(15, 23, 42, 0.06);
       border: 1px solid rgba(15, 23, 42, 0.08);
       font-size: 11px;
-      font-weight: 700;
+      font-weight: 500;
       letter-spacing: 0.14em;
       text-transform: uppercase;
       color: var(--ink-700);
@@ -775,13 +802,12 @@
 
     .why-card-title {
       font-size: 18px;
-      font-weight: 700;
       font-family: var(--font-display);
     }
 
     .why-card-lead {
       font-size: 14px;
-      font-weight: 600;
+      font-weight: 400;
       color: var(--ink-700);
       line-height: 1.7;
     }
@@ -884,14 +910,13 @@
       font-size: 11px;
       text-transform: uppercase;
       letter-spacing: 0.14em;
-      font-weight: 700;
+      font-weight: 500;
       color: var(--ink-500);
       font-family: var(--font-display);
     }
 
     .chapter__title {
       font-size: 19px;
-      font-weight: 700;
       margin: 0;
       font-family: var(--font-display);
       line-height: 1.4;
@@ -910,7 +935,7 @@
       background: rgba(37, 99, 235, 0.12);
       color: var(--ink-700);
       font-size: 11px;
-      font-weight: 700;
+      font-weight: 500;
       letter-spacing: 0.08em;
       white-space: nowrap;
     }
@@ -1054,7 +1079,6 @@
 
     .step-title {
       font-size: 18px;
-      font-weight: 700;
       font-family: var(--font-display);
     }
 
@@ -1232,7 +1256,7 @@
       background: rgba(37, 99, 235, 0.12);
       color: var(--ink-700);
       font-size: 12px;
-      font-weight: 700;
+      font-weight: 500;
       letter-spacing: 0.18em;
       text-transform: uppercase;
       white-space: nowrap;
@@ -1328,7 +1352,6 @@
 
     .org-person-name {
       font-size: 18px;
-      font-weight: 700;
       font-family: var(--font-display);
       line-height: 1.2;
       display: -webkit-box;
@@ -1339,7 +1362,7 @@
 
     .org-person-role {
       font-size: 12px;
-      font-weight: 700;
+      font-weight: 500;
       letter-spacing: 0.18em;
       text-transform: uppercase;
       color: var(--ink-500);
@@ -1385,7 +1408,7 @@
       background: rgba(15, 23, 42, 0.06);
       border: 1px solid rgba(15, 23, 42, 0.08);
       font-size: 12px;
-      font-weight: 600;
+      font-weight: 500;
       color: var(--ink-700);
     }
 
@@ -1582,6 +1605,7 @@
       letter-spacing: 0.28em;
       color: var(--ink-500);
       font-family: var(--font-display);
+      font-weight: 500;
     }
 
     .org-coming__grid {
@@ -1685,7 +1709,7 @@
       background: rgba(37, 99, 235, 0.12);
       border: 1px solid rgba(37, 99, 235, 0.18);
       font-size: 12px;
-      font-weight: 700;
+      font-weight: 500;
       letter-spacing: 0.14em;
       text-transform: uppercase;
       color: var(--ink-700);
@@ -1708,11 +1732,11 @@
       position: relative;
       display: flex;
       flex-direction: column;
-      gap: 18px;
+      gap: 20px;
       min-height: 100%;
       padding: 28px;
       border-radius: 28px;
-      background: linear-gradient(160deg, rgba(255, 255, 255, 0.98), rgba(242, 247, 255, 0.9));
+      background: linear-gradient(160deg, rgba(255, 255, 255, 0.99), rgba(246, 250, 255, 0.94));
       border: 1px solid rgba(37, 99, 235, 0.14);
       box-shadow: 0 28px 64px rgba(15, 23, 42, 0.14);
       overflow: hidden;
@@ -1745,13 +1769,45 @@
 
     .intro-card--vip {
       --intro-soft: rgba(249, 115, 22, 0.16);
-      transform: translateY(-8px);
-      border-color: rgba(249, 115, 22, 0.24);
-      box-shadow: 0 34px 74px rgba(249, 115, 22, 0.2);
+      transform: translateY(-6px);
+      border-color: rgba(249, 115, 22, 0.34);
+      box-shadow: 0 38px 86px rgba(249, 115, 22, 0.24);
+      isolation: isolate;
     }
 
     .intro-card--vip::before {
       background: linear-gradient(135deg, #f97316, #fb923c 45%, #f59e0b);
+    }
+
+    .intro-card--vip::after {
+      background:
+        radial-gradient(circle at top right, rgba(249, 115, 22, 0.22), transparent 42%),
+        radial-gradient(circle at bottom left, rgba(255, 237, 213, 0.9), transparent 34%);
+    }
+
+    .intro-card--vip .intro-card__top {
+      position: relative;
+      padding-top: 28px;
+    }
+
+    .intro-card__spotlight {
+      position: absolute;
+      top: -10px;
+      right: 0;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #fff7ed, #ffedd5);
+      border: 1px solid rgba(249, 115, 22, 0.22);
+      color: #c2410c;
+      box-shadow: 0 14px 30px rgba(249, 115, 22, 0.16);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      white-space: nowrap;
     }
 
     .intro-card:hover {
@@ -1762,8 +1818,8 @@
 
     .intro-card--vip:hover {
       transform: translateY(-10px);
-      box-shadow: 0 38px 80px rgba(249, 115, 22, 0.24);
-      border-color: rgba(249, 115, 22, 0.3);
+      box-shadow: 0 42px 88px rgba(249, 115, 22, 0.28);
+      border-color: rgba(249, 115, 22, 0.42);
     }
 
     .intro-card__top {
@@ -1782,7 +1838,7 @@
       background: rgba(15, 23, 42, 0.06);
       border: 1px solid rgba(15, 23, 42, 0.08);
       font-size: 11px;
-      font-weight: 700;
+      font-weight: 500;
       letter-spacing: 0.14em;
       text-transform: uppercase;
       color: var(--ink-700);
@@ -1795,33 +1851,39 @@
     }
 
     .intro-card__price {
-      font-size: clamp(2rem, 4vw, 3rem);
-      font-weight: 700;
+      font-size: clamp(1.7rem, 3.2vw, 2.45rem);
       font-family: var(--font-display);
-      letter-spacing: -0.04em;
+      font-weight: 400;
+      letter-spacing: -0.035em;
       line-height: 1;
       text-align: right;
+      color: #0f1d31;
     }
 
     .intro-card__price-note {
       display: block;
-      margin-top: 6px;
-      font-size: 12px;
-      font-weight: 600;
+      margin-top: 8px;
+      font-size: 13px;
+      font-weight: 500;
       color: var(--ink-500);
     }
 
     .intro-card__title {
-      font-size: 28px;
-      line-height: 1.18;
-      letter-spacing: -0.04em;
+      font-size: clamp(1.35rem, 1.55vw, 1.75rem);
+      line-height: 1.12;
+      letter-spacing: -0.03em;
       font-family: var(--font-display);
+      max-width: none;
+      white-space: nowrap !important;
+      word-break: keep-all;
+      overflow-wrap: normal;
     }
 
     .intro-card__desc {
       color: var(--ink-700);
-      line-height: 1.8;
-      font-size: 15px;
+      line-height: 1.85;
+      font-size: 17px;
+      font-weight: 400;
     }
 
     .intro-card__perk {
@@ -1848,13 +1910,14 @@
       text-transform: uppercase;
       color: var(--ink-500);
       margin-bottom: 4px;
+      font-weight: 500;
     }
 
     .intro-card__perk span {
       display: block;
       color: var(--ink-900);
       font-size: 16px;
-      font-weight: 700;
+      font-weight: 500;
       line-height: 1.5;
     }
 
@@ -1873,11 +1936,11 @@
       position: relative;
       display: flex;
       flex-direction: column;
-      gap: 18px;
+      gap: 16px;
       min-height: 100%;
       padding: 24px;
       border-radius: 24px;
-      background: linear-gradient(160deg, rgba(255, 255, 255, 0.97), rgba(248, 250, 255, 0.88));
+      background: linear-gradient(160deg, rgba(255, 255, 255, 0.99), rgba(247, 250, 255, 0.94));
       border: 1px solid rgba(37, 99, 235, 0.14);
       box-shadow: 0 22px 50px rgba(15, 23, 42, 0.12);
       overflow: hidden;
@@ -1898,9 +1961,25 @@
     }
 
     .points-card--popular {
-      transform: translateY(-10px);
-      border-color: rgba(249, 115, 22, 0.24);
-      box-shadow: 0 30px 66px rgba(249, 115, 22, 0.18);
+      transform: translateY(-8px);
+      border-color: rgba(249, 115, 22, 0.34);
+      box-shadow: 0 38px 82px rgba(249, 115, 22, 0.22);
+      background: linear-gradient(160deg, rgba(255, 255, 255, 1), rgba(255, 247, 237, 0.96));
+    }
+
+    .points-card__head {
+      display: grid;
+      grid-template-rows: auto auto auto;
+      gap: 14px;
+      min-height: 196px;
+    }
+
+    .points-card__head-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      min-height: 46px;
     }
 
     .points-card:hover {
@@ -1911,8 +1990,8 @@
 
     .points-card--popular:hover {
       transform: translateY(-12px);
-      box-shadow: 0 36px 74px rgba(249, 115, 22, 0.22);
-      border-color: rgba(249, 115, 22, 0.32);
+      box-shadow: 0 44px 90px rgba(249, 115, 22, 0.26);
+      border-color: rgba(249, 115, 22, 0.42);
     }
 
     .points-card__badge {
@@ -1924,33 +2003,63 @@
       background: rgba(15, 23, 42, 0.06);
       border: 1px solid rgba(15, 23, 42, 0.08);
       font-size: 11px;
-      font-weight: 700;
+      font-weight: 500;
       letter-spacing: 0.14em;
       text-transform: uppercase;
       color: var(--ink-700);
     }
 
     .points-card__badge--popular {
-      background: rgba(249, 115, 22, 0.14);
-      border-color: rgba(249, 115, 22, 0.2);
+      background: linear-gradient(135deg, #fff7ed, #ffedd5);
+      border-color: rgba(249, 115, 22, 0.24);
       color: #c2410c;
+      box-shadow: 0 10px 20px rgba(249, 115, 22, 0.12);
     }
 
     .points-card__name {
-      font-size: 24px;
-      font-weight: 700;
+      font-size: 22px;
       line-height: 1.2;
       letter-spacing: -0.03em;
       font-family: var(--font-display);
+      white-space: nowrap;
+      min-height: 53px;
+      display: flex;
+      align-items: flex-end;
     }
 
     .points-card__price {
-      font-size: 40px;
-      font-weight: 700;
+      font-size: 28px;
+      font-weight: 400;
       line-height: 1;
-      letter-spacing: -0.05em;
+      letter-spacing: -0.035em;
       font-family: var(--font-display);
       color: var(--ink-900);
+      min-height: 52px;
+      display: flex;
+      align-items: flex-end;
+    }
+
+    @media (min-width: 641px) {
+      #why-virtual-employees .section__title,
+      #steps .section__title,
+      #chapters .section__title,
+      #pricing .section__title,
+      .intro-card__title,
+      .points-card__name {
+        white-space: nowrap !important;
+        word-break: keep-all;
+        overflow-wrap: normal;
+      }
+
+      #chapters .section__title {
+        max-width: none;
+        font-size: clamp(1.7rem, 2.9vw, 2.5rem);
+      }
+
+      #pricing .section__title {
+        max-width: none;
+        font-size: clamp(1.45rem, 2.25vw, 2.05rem);
+      }
     }
 
     .points-card__points {
@@ -1964,7 +2073,7 @@
       display: block;
       margin-bottom: 6px;
       font-size: 12px;
-      font-weight: 700;
+      font-weight: 500;
       letter-spacing: 0.12em;
       text-transform: uppercase;
       color: var(--ink-500);
@@ -1973,7 +2082,7 @@
     .points-card__points-value {
       display: block;
       font-size: 28px;
-      font-weight: 700;
+      font-weight: 500;
       letter-spacing: -0.04em;
       font-family: var(--font-display);
       color: var(--primary);
@@ -1983,14 +2092,31 @@
       display: block;
       margin-top: 6px;
       font-size: 12px;
-      font-weight: 600;
+      font-weight: 500;
       color: var(--ink-700);
     }
 
     .points-card__desc {
       color: var(--ink-700);
       line-height: 1.8;
-      font-size: 15px;
+      font-size: 16px;
+      font-weight: 400;
+    }
+
+    .points-card__highlight {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #f97316, #fb923c);
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      box-shadow: 0 14px 28px rgba(249, 115, 22, 0.24);
+      margin-left: auto;
     }
 
     .pricing-note {
@@ -2036,7 +2162,7 @@
       justify-content: space-between;
       gap: 12px;
       cursor: pointer;
-      font-weight: 700;
+      font-weight: 500;
       color: var(--ink-900);
     }
 
@@ -2117,9 +2243,11 @@
 
     .cta-card__title {
       font-size: clamp(2rem, 4vw, 3.2rem);
-      font-weight: 700;
-      letter-spacing: -0.04em;
+      letter-spacing: -0.035em;
       text-align: center;
+      max-width: 14ch;
+      margin-left: auto;
+      margin-right: auto;
     }
 
     .cta-card__desc {
@@ -2127,6 +2255,7 @@
       line-height: 1.8;
       font-size: 17px;
       text-align: center;
+      font-weight: 400;
     }
 
     .footer {
@@ -2343,6 +2472,10 @@
         letter-spacing: 0.12em;
       }
 
+      .section__title--wide {
+        white-space: normal;
+      }
+
       .pricing-block+.pricing-block {
         margin-top: 28px;
       }
@@ -2365,6 +2498,26 @@
         transform: none;
       }
 
+      .intro-card__spotlight,
+      .points-card__highlight {
+        position: static;
+        width: fit-content;
+      }
+
+      .points-card__head {
+        min-height: auto;
+        gap: 12px;
+      }
+
+      .points-card__head-top {
+        min-height: auto;
+        flex-wrap: wrap;
+      }
+
+      .intro-card--vip .intro-card__top {
+        gap: 12px;
+      }
+
       .intro-card__top {
         flex-direction: column;
         align-items: flex-start;
@@ -2377,6 +2530,7 @@
 
       .intro-card__title {
         font-size: 24px;
+        white-space: normal;
       }
 
       .intro-card__desc,
@@ -2390,10 +2544,12 @@
 
       .points-card__name {
         font-size: 22px;
+        min-height: auto;
       }
 
       .points-card__price {
         font-size: 34px;
+        min-height: auto;
       }
 
       .points-card__points {
@@ -2683,9 +2839,9 @@
         <a class="nav-link" href="#faq">FAQ</a>
         <a class="nav-link" href="#cta">立即開始</a>
       </div>
-      <a class="nav__cta" href="https://line.me/R/ti/p/@304dgdjo" target="_blank" rel="noreferrer">
-        <i data-lucide="message-circle" class="w-4 h-4"></i>
-        加 LINE 申請封測
+      <a class="nav__cta" href="https://kefu-frontend.vercel.app/" target="_blank" rel="noreferrer">
+        <i data-lucide="sparkles" class="w-4 h-4"></i>
+        免費開始
       </a>
     </div>
   </nav>
@@ -2716,7 +2872,7 @@
         <div class="reveal">
           <div class="hero__eyebrow">
             <i data-lucide="sparkles" class="w-4 h-4"></i>
-            Beta CEO 合夥人計畫
+            正式上線
           </div>
           <h1 class="hero__title">
             <span>打造你的</span>
@@ -2724,7 +2880,7 @@
             <span>從客服開始擴編</span>
           </h1>
           <p class="hero__subtitle">
-            KeFu 不是單一聊天機器人，而是把你的日常營運拆成角色與流程，讓每位 AI 員工專注做對的事。
+            自動接住 LINE 常見問題、穩定回覆品質、需要時再轉你接手。讓你不用一直盯訊息，也不再漏掉客人。
           </p>
           <div class="hero__signals">
             <span class="hero__signal">
@@ -2732,17 +2888,17 @@
               5 分鐘完成上線
             </span>
             <span class="hero__signal">
-              <i data-lucide="shield-check" class="w-3.5 h-3.5"></i>
-              封測免費開放
+              <i data-lucide="headset" class="w-3.5 h-3.5"></i>
+              24/7 接住常見問題
             </span>
             <span class="hero__signal">
-              <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
-              每月擴編新職位
+              <i data-lucide="coins" class="w-3.5 h-3.5"></i>
+              用多少付多少
             </span>
           </div>
           <div class="hero__actions">
-            <a class="btn btn--primary" href="https://line.me/R/ti/p/@304dgdjo" target="_blank" rel="noreferrer">
-              加 LINE 成為封測夥伴
+            <a class="btn btn--primary" href="https://kefu-frontend.vercel.app/" target="_blank" rel="noreferrer">
+              免費開始
               <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
             </a>
             <a class="btn btn--ghost" href="#chapters">
@@ -2896,8 +3052,8 @@
     <section class="why-section" id="why-virtual-employees">
       <div class="container reveal">
         <div class="why-header">
-          <h2 class="section__title">為什麼你該選擇「虛擬員工」？</h2>
-          <p class="section__subtitle">比起傳統招聘，KeFu 用更快的上線速度與更清楚的分工。</p>
+          <h2 class="section__title section__title--wide">讓客服穩定、不漏接、不中斷</h2>
+          <p class="section__subtitle">老闆要的不是更複雜的 AI，而是能穩定接住客人、少漏訊息、把真人時間留給真正重要的對話。</p>
         </div>
         <div class="why-grid">
           <article class="why-card why-card--speed">
@@ -2928,8 +3084,8 @@
     <section class="steps-section" id="steps">
       <div class="container reveal">
         <div class="steps-intro">
-          <h2 class="section__title">5 分鐘上線你的虛擬公司，團隊立刻開工</h2>
-          <p class="section__subtitle">跟著這四步，快速把 AI 團隊導入營運流程。</p>
+          <h2 class="section__title section__title--wide">5 分鐘完成設定，今天就能開始接客</h2>
+          <p class="section__subtitle">不用寫程式，不用重整一堆 SOP，照著流程做完就能讓 KeFu 開始接住常見問題。</p>
         </div>
         <div class="steps-carousel">
           <button class="steps-nav steps-nav--prev" type="button" data-steps-prev aria-label="上一個步驟">
@@ -3028,8 +3184,8 @@
 
     <section class="section" id="chapters">
       <div class="container reveal">
-        <h2 class="section__title">一場有節奏的營運故事。</h2>
-        <p class="section__subtitle">從第一位 AI 員工開始，逐步加入新的角色，把混亂的訊息變成可控的流程。</p>
+        <h2 class="section__title">KeFu 怎麼把混亂訊息變成穩定流程</h2>
+        <p class="section__subtitle">從 FAQ 建立、AI 接待到需要時轉人工，把原本容易漏接的客服變成可控、可擴張的流程。</p>
         <div class="chapters">
           <article class="chapter chapter--problem">
             <div class="chapter__head">
@@ -3114,14 +3270,18 @@
                   <span>註冊即贈 500 點體驗金</span>
                 </div>
               </div>
-              <a class="btn btn--ghost" href="https://line.me/R/ti/p/@304dgdjo" target="_blank" rel="noreferrer">
-                免費註冊，立即體驗
+              <a class="btn btn--ghost" href="https://kefu-frontend.vercel.app/" target="_blank" rel="noreferrer">
+                免費開始
                 <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
               </a>
             </article>
 
             <article class="intro-card intro-card--vip">
               <div class="intro-card__top">
+                <div class="intro-card__spotlight">
+                  <i data-lucide="star" class="w-4 h-4"></i>
+                  推薦方案
+                </div>
                 <div class="intro-card__label intro-card__label--vip">
                   <i data-lucide="crown" class="w-4 h-4"></i>
                   VIP 真人導入
@@ -3141,7 +3301,7 @@
                 </div>
               </div>
               <a class="btn btn--primary" href="https://line.me/R/ti/p/@304dgdjo" target="_blank" rel="noreferrer">
-                預約專人諮詢
+                加入 LINE 諮詢
                 <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
               </a>
             </article>
@@ -3159,9 +3319,13 @@
           </div>
           <div class="points-grid">
             <article class="points-card">
-              <div class="points-card__badge">Starter</div>
-              <h3 class="points-card__name">單日急救包</h3>
-              <div class="points-card__price">NT$ 99</div>
+              <div class="points-card__head">
+                <div class="points-card__head-top">
+                  <div class="points-card__badge">Starter</div>
+                </div>
+                <h3 class="points-card__name">單日急救包</h3>
+                <div class="points-card__price">NT$ 99</div>
+              </div>
               <div class="points-card__points">
                 <span class="points-card__points-label">獲得點數</span>
                 <span class="points-card__points-value">2,000 點</span>
@@ -3170,9 +3334,17 @@
             </article>
 
             <article class="points-card points-card--popular">
-              <div class="points-card__badge points-card__badge--popular">Best Value</div>
-              <h3 class="points-card__name">週末代班包</h3>
-              <div class="points-card__price">NT$ 290</div>
+              <div class="points-card__head">
+                <div class="points-card__head-top">
+                  <div class="points-card__badge points-card__badge--popular">Best Value</div>
+                  <div class="points-card__highlight">
+                    <i data-lucide="flame" class="w-4 h-4"></i>
+                    最受歡迎
+                  </div>
+                </div>
+                <h3 class="points-card__name">週末代班包</h3>
+                <div class="points-card__price">NT$ 290</div>
+              </div>
               <div class="points-card__points">
                 <span class="points-card__points-label">獲得點數</span>
                 <span class="points-card__points-value">6,500 點</span>
@@ -3182,9 +3354,13 @@
             </article>
 
             <article class="points-card">
-              <div class="points-card__badge">Growth</div>
-              <h3 class="points-card__name">常態營運包</h3>
-              <div class="points-card__price">NT$ 490</div>
+              <div class="points-card__head">
+                <div class="points-card__head-top">
+                  <div class="points-card__badge">Growth</div>
+                </div>
+                <h3 class="points-card__name">常態營運包</h3>
+                <div class="points-card__price">NT$ 490</div>
+              </div>
               <div class="points-card__points">
                 <span class="points-card__points-label">獲得點數</span>
                 <span class="points-card__points-value">12,000 點</span>
@@ -3209,66 +3385,66 @@
             <summary class="faq-summary">
               <span class="faq-summary-left">
                 <span class="faq-icon"><i data-lucide="help-circle" class="w-4 h-4"></i></span>
-                <span>要如何試用？/ 怎麼試用？</span>
+                <span>要如何開始使用？</span>
               </span>
               <i data-lucide="chevron-down" class="w-4 h-4 faq-chevron"></i>
             </summary>
-            <p class="faq-body">目前封測採「白名單」開通。請先加入官方 LINE，然後回覆「試用」即可開始申請。</p>
+            <p class="faq-body">現在可以直接從註冊頁免費開始，完成基本設定後就能啟用 AI 客服。如果想由專人協助導入，也可以直接加入官方 LINE 詢問。</p>
           </details>
 
           <details class="faq-item">
             <summary class="faq-summary">
               <span class="faq-summary-left">
                 <span class="faq-icon"><i data-lucide="help-circle" class="w-4 h-4"></i></span>
-                <span>為什麼需要白名單？/ 為什麼要讀取 LINE userID？</span>
+                <span>為什麼需要讀取 LINE userID？</span>
               </span>
               <i data-lucide="chevron-down" class="w-4 h-4 faq-chevron"></i>
             </summary>
-            <p class="faq-body">因為封測是限量開通，我們用 LINE userID 當作你的識別碼來開通權限與辨識試用狀態。userID 只用於封測開通與服務運作。</p>
+            <p class="faq-body">LINE userID 會作為系統識別碼，用來綁定你的官方帳號、辨識管理者身分與啟用對應服務。它只用於產品運作與必要通知，不會對外公開。</p>
           </details>
 
           <details class="faq-item">
             <summary class="faq-summary">
               <span class="faq-summary-left">
                 <span class="faq-icon"><i data-lucide="help-circle" class="w-4 h-4"></i></span>
-                <span>封測要做什麼？</span>
+                <span>現在有免費方案嗎？</span>
               </span>
               <i data-lucide="chevron-down" class="w-4 h-4 faq-chevron"></i>
             </summary>
-            <p class="faq-body">為了讓使用者有更好的體驗，先進行封測進行測試，再根據回饋進行調整。封測期間可以有完整的體驗。</p>
+            <p class="faq-body">有。現在提供可直接開始的免費體驗方式，註冊後會先贈送體驗點數；之後再依你的實際使用量加值，不需要先綁月費。</p>
           </details>
 
           <details class="faq-item">
             <summary class="faq-summary">
               <span class="faq-summary-left">
                 <span class="faq-icon"><i data-lucide="help-circle" class="w-4 h-4"></i></span>
-                <span>封測是免費的嗎？</span>
+                <span>正式版可以先試再上線嗎？</span>
               </span>
               <i data-lucide="chevron-down" class="w-4 h-4 faq-chevron"></i>
             </summary>
-            <p class="faq-body">是的，封測期間免費體驗核心功能（建立 FAQ、測試 AI 回覆、轉人工）。封測結束後再決定是否升級正式方案。</p>
+            <p class="faq-body">可以。你可以先完成品牌設定、FAQ 與串接流程，確認回覆內容沒問題後，再正式開啟全量自動回覆。</p>
           </details>
 
           <details class="faq-item">
             <summary class="faq-summary">
               <span class="faq-summary-left">
                 <span class="faq-icon"><i data-lucide="help-circle" class="w-4 h-4"></i></span>
-                <span>有免費方案嗎？（正式版）</span>
+                <span>正式版怎麼收費？</span>
               </span>
               <i data-lucide="chevron-down" class="w-4 h-4 faq-chevron"></i>
             </summary>
-            <p class="faq-body">目前先以封測為主。正式版會提供「基礎可體驗」的方案與付費方案（依使用量或功能等級），我們會在封測結束前公告清楚。</p>
+            <p class="faq-body">正式版以點數制為主，不綁月費。你可以先用體驗點數開始，之後再依回覆量與功能使用量彈性加值，對小型商家也比較沒有負擔。</p>
           </details>
 
           <details class="faq-item">
             <summary class="faq-summary">
               <span class="faq-summary-left">
                 <span class="faq-icon"><i data-lucide="help-circle" class="w-4 h-4"></i></span>
-                <span>封測結束後會怎樣？資料會不會不見？</span>
+                <span>如果暫停使用，資料會不會不見？</span>
               </span>
               <i data-lucide="chevron-down" class="w-4 h-4 faq-chevron"></i>
             </summary>
-            <p class="faq-body">封測結束後您可以選擇升級正式方案；不升級也不會影響您原本的客服渠道（只會停止 KeFu 的自動回覆功能）。</p>
+            <p class="faq-body">不會。若你暫停使用，自動回覆功能會停止，但原本的客服渠道不受影響；既有設定與資料仍可保留，方便之後再重新啟用。</p>
           </details>
 
           <details class="faq-item">
@@ -3323,7 +3499,7 @@
               </span>
               <i data-lucide="chevron-down" class="w-4 h-4 faq-chevron"></i>
             </summary>
-            <p class="faq-body">正式版會以「使用量或功能等級」計費，讓小型一人商家也能負擔；需要更大規模的商家也能彈性擴充。我們會在封測結束前提供明確方案與價格說明。</p>
+            <p class="faq-body">目前採點數制與彈性加值，讓小型一人商家也能輕鬆開始；若有更大規模或客製導入需求，也可以透過官方 LINE 洽詢專人方案。</p>
           </details>
         </div>
       </div>
@@ -3333,17 +3509,15 @@
       <div class="container reveal">
         <div class="cta-card">
           <h2 class="cta-card__title">現在就讓 KeFu 先成為你的第一位員工。</h2>
-          <p class="cta-card__desc">封測期間免費體驗核心功能，並獲得優先解鎖新職位的資格。你給回饋，我們一起把組織做更好。</p>
+          <p class="cta-card__desc">現在就能直接免費開始，先把重複客服交給 AI；若你想更快上線，也可以透過官方 LINE 找我們協助導入。</p>
           <div class="hero__actions">
-            <a class="btn btn--primary" href="https://line.me/R/ti/p/@304dgdjo" target="_blank" rel="noreferrer">
-              加 LINE 立即申請
+            <a class="btn btn--primary" href="https://kefu-frontend.vercel.app/" target="_blank" rel="noreferrer">
+              免費開始
               <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
             </a>
-            <a class="btn btn--ghost"
-              href="https://line.me/ti/g2/EUKFAFOioWdGOSvRXtRO1BtcKDIdPMeV1sajaQ?utm_source=invitation&utm_medium=link_copy&utm_campaign=default"
-              target="_blank" rel="noreferrer">
-              加入社群交流
-              <i data-lucide="messages-square" class="w-4 h-4"></i>
+            <a class="btn btn--ghost" href="https://line.me/R/ti/p/@304dgdjo" target="_blank" rel="noreferrer">
+              加入 LINE 詢問
+              <i data-lucide="message-circle" class="w-4 h-4"></i>
             </a>
           </div>
         </div>
