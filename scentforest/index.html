@@ -1,0 +1,1316 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KeFu x 香氛森林｜提案簡報</title>
+  <meta
+    name="description"
+    content="KeFu 為香氛森林打造的 7 頁 HTML Pitch Deck，聚焦品牌語氣、CRM、自動進化 FAQ 與彈性點數制。" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@500;600;700&display=swap"
+    rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg: #f9f8f6;
+      --surface: rgba(255, 255, 255, 0.74);
+      --surface-strong: rgba(255, 255, 255, 0.9);
+      --surface-soft: rgba(212, 197, 185, 0.18);
+      --line: rgba(74, 93, 78, 0.16);
+      --line-strong: rgba(74, 93, 78, 0.3);
+      --text: #3e3e3e;
+      --text-soft: #645d58;
+      --text-muted: #8d837a;
+      --green: #4a5d4e;
+      --green-soft: #5c7060;
+      --wood: #b5a397;
+      --wood-soft: #d4c5b9;
+      --gold: #d8b766;
+      --shadow: 0 28px 80px rgba(78, 67, 57, 0.08);
+      --shadow-soft: 0 18px 45px rgba(78, 67, 57, 0.06);
+      --radius-xl: 34px;
+      --radius-lg: 24px;
+      --radius-md: 14px;
+      --slide-padding: clamp(28px, 5vw, 68px);
+      --content-gap: clamp(18px, 2vw, 28px);
+      --element-gap: clamp(12px, 1.4vw, 18px);
+      --hero-size: clamp(2.9rem, 6vw, 5.6rem);
+      --title-size: clamp(2.15rem, 4.4vw, 4rem);
+      --card-title: clamp(1.1rem, 1.7vw, 1.55rem);
+      --body-size: clamp(0.98rem, 1.2vw, 1.16rem);
+      --small-size: clamp(0.78rem, 0.98vw, 0.92rem);
+      --ease: cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      height: 100%;
+      overflow-x: hidden;
+    }
+
+    html {
+      scroll-snap-type: y mandatory;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: "Noto Sans TC", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(181, 163, 151, 0.18), transparent 28%),
+        radial-gradient(circle at top right, rgba(74, 93, 78, 0.08), transparent 30%),
+        linear-gradient(180deg, #fcfbf8 0%, var(--bg) 100%);
+      color: var(--text);
+      line-height: 1.8;
+      letter-spacing: 0.01em;
+    }
+
+    .progress-bar {
+      position: fixed;
+      inset: 0 auto auto 0;
+      width: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--wood), var(--green));
+      box-shadow: 0 4px 18px rgba(74, 93, 78, 0.22);
+      z-index: 40;
+      transition: width 0.32s var(--ease);
+    }
+
+    .nav-dots {
+      position: fixed;
+      right: clamp(14px, 2.6vw, 28px);
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 30;
+    }
+
+    .nav-dot {
+      width: 10px;
+      height: 10px;
+      border: 1px solid rgba(74, 93, 78, 0.35);
+      background: rgba(255, 255, 255, 0.75);
+      border-radius: 999px;
+      cursor: pointer;
+      transition: transform 0.24s ease, background 0.24s ease, border-color 0.24s ease;
+    }
+
+    .nav-dot.active {
+      transform: scale(1.25);
+      background: var(--green);
+      border-color: var(--green);
+    }
+
+    .ambient-grain {
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(74, 93, 78, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(74, 93, 78, 0.03) 1px, transparent 1px);
+      background-size: 44px 44px;
+      opacity: 0.45;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .slide {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      height: 100dvh;
+      scroll-snap-align: start;
+      overflow: hidden;
+      display: flex;
+      align-items: stretch;
+      isolation: isolate;
+    }
+
+    .slide::before {
+      content: "";
+      position: absolute;
+      inset: 24px;
+      border: 1px solid rgba(74, 93, 78, 0.08);
+      border-radius: 42px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .slide-content {
+      position: relative;
+      z-index: 1;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: var(--content-gap);
+      padding: var(--slide-padding);
+      max-height: 100%;
+    }
+
+    .brand-mark {
+      position: absolute;
+      top: clamp(20px, 3vw, 34px);
+      left: clamp(26px, 4vw, 52px);
+      z-index: 2;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--green);
+      font-size: 0.95rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+    }
+
+    .brand-mark__leaf {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.72);
+      border: 1px solid rgba(74, 93, 78, 0.12);
+      box-shadow: var(--shadow-soft);
+      font-size: 1.1rem;
+    }
+
+    .page-num {
+      position: absolute;
+      right: clamp(26px, 4vw, 48px);
+      bottom: clamp(20px, 3vw, 32px);
+      color: var(--text-muted);
+      font-size: 0.84rem;
+      letter-spacing: 0.18em;
+      z-index: 2;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      width: fit-content;
+      padding: 9px 14px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.7);
+      border: 1px solid rgba(74, 93, 78, 0.12);
+      color: var(--green);
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .tag::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--gold);
+      box-shadow: 0 0 0 6px rgba(216, 183, 102, 0.14);
+      flex-shrink: 0;
+    }
+
+    h1,
+    h2,
+    h3,
+    blockquote {
+      font-family: "Noto Serif TC", serif;
+      letter-spacing: -0.02em;
+      color: var(--green);
+    }
+
+    h1 {
+      font-size: var(--hero-size);
+      line-height: 1.06;
+      font-weight: 600;
+    }
+
+    h2 {
+      font-size: var(--title-size);
+      line-height: 1.14;
+      font-weight: 600;
+    }
+
+    h3 {
+      font-size: var(--card-title);
+      line-height: 1.35;
+      font-weight: 600;
+    }
+
+    p,
+    li {
+      font-size: var(--body-size);
+      color: var(--text);
+    }
+
+    p.soft,
+    .soft {
+      color: var(--text-soft);
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
+    }
+
+    .slide.visible .reveal {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal:nth-child(1) { transition-delay: 0.05s; }
+    .reveal:nth-child(2) { transition-delay: 0.12s; }
+    .reveal:nth-child(3) { transition-delay: 0.19s; }
+    .reveal:nth-child(4) { transition-delay: 0.26s; }
+    .reveal:nth-child(5) { transition-delay: 0.33s; }
+
+    .slide-cover .slide-content {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: clamp(24px, 4vw, 48px);
+      align-items: center;
+    }
+
+    .hero-copy {
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+      max-width: 680px;
+    }
+
+    .hero-subtitle {
+      font-size: clamp(1.05rem, 1.4vw, 1.32rem);
+      color: var(--text-soft);
+      max-width: 38ch;
+    }
+
+    .hero-note {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .pill {
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.75);
+      border: 1px solid rgba(74, 93, 78, 0.1);
+      color: var(--text-soft);
+      font-size: 0.9rem;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .hero-art {
+      position: relative;
+      min-height: min(64vh, 680px);
+      border-radius: var(--radius-xl);
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.88), rgba(255, 255, 255, 0.72)),
+        radial-gradient(circle at top, rgba(181, 163, 151, 0.34), transparent 46%),
+        linear-gradient(150deg, #f2eee8, #ece7df);
+      border: 1px solid rgba(74, 93, 78, 0.1);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .hero-art::before,
+    .hero-art::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(24px);
+      opacity: 0.6;
+    }
+
+    .hero-art::before {
+      width: 240px;
+      height: 240px;
+      background: rgba(181, 163, 151, 0.42);
+      top: -30px;
+      right: 10%;
+    }
+
+    .hero-art::after {
+      width: 180px;
+      height: 180px;
+      background: rgba(74, 93, 78, 0.14);
+      bottom: 8%;
+      left: 10%;
+    }
+
+    .product-scene {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      padding: clamp(24px, 4vw, 38px);
+    }
+
+    .scene-card {
+      width: min(100%, 430px);
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      padding: 26px;
+      border-radius: 30px;
+      background: rgba(255, 255, 255, 0.76);
+      border: 1px solid rgba(74, 93, 78, 0.1);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 30px 70px rgba(78, 67, 57, 0.1);
+    }
+
+    .scene-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .scene-bottle {
+      width: 86px;
+      height: 130px;
+      border-radius: 28px 28px 18px 18px;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.68), rgba(212, 197, 185, 0.52)),
+        linear-gradient(180deg, #d9c4a8, #9f8d82);
+      border: 1px solid rgba(74, 93, 78, 0.12);
+      position: relative;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.35), 0 16px 38px rgba(78, 67, 57, 0.08);
+    }
+
+    .scene-bottle::before {
+      content: "";
+      position: absolute;
+      top: -18px;
+      left: 24px;
+      width: 38px;
+      height: 26px;
+      border-radius: 12px 12px 6px 6px;
+      background: #9f8d82;
+    }
+
+    .scene-copy {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .scene-copy strong {
+      font-family: "Noto Serif TC", serif;
+      font-size: 1.55rem;
+      color: var(--green);
+    }
+
+    .scene-copy span {
+      color: var(--text-soft);
+      font-size: 0.98rem;
+    }
+
+    .scene-lines {
+      display: grid;
+      gap: 10px;
+    }
+
+    .scene-line {
+      height: 12px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, rgba(74, 93, 78, 0.16), rgba(181, 163, 151, 0.24));
+    }
+
+    .scene-line.short { width: 62%; }
+
+    .scene-message {
+      margin-top: 8px;
+      padding: 16px 18px;
+      border-radius: 20px;
+      background: rgba(74, 93, 78, 0.08);
+      color: var(--green);
+      font-size: 1rem;
+      line-height: 1.85;
+    }
+
+    .split-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(24px, 4vw, 46px);
+      align-items: center;
+      height: 100%;
+    }
+
+    .panel-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .panel {
+      padding: 22px;
+      border-radius: var(--radius-lg);
+      background: var(--surface);
+      border: 1px solid rgba(74, 93, 78, 0.12);
+      box-shadow: var(--shadow-soft);
+      backdrop-filter: blur(10px);
+    }
+
+    .panel h3 {
+      margin-bottom: 8px;
+    }
+
+    .quote-box {
+      padding: 26px;
+      border-radius: 28px;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.88), rgba(255, 255, 255, 0.74)),
+        linear-gradient(135deg, rgba(181, 163, 151, 0.16), rgba(74, 93, 78, 0.06));
+      border: 1px solid rgba(74, 93, 78, 0.12);
+      box-shadow: var(--shadow-soft);
+    }
+
+    blockquote {
+      font-size: clamp(1.25rem, 2.2vw, 2rem);
+      line-height: 1.65;
+      color: var(--green);
+    }
+
+    .check-list {
+      list-style: none;
+      display: grid;
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    .check-list li {
+      display: flex;
+      gap: 12px;
+      padding: 16px 18px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.68);
+      border: 1px solid rgba(74, 93, 78, 0.1);
+    }
+
+    .check-list li::before {
+      content: "✦";
+      color: var(--green);
+      font-size: 1rem;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .mock-card {
+      min-height: 420px;
+      padding: 26px;
+      border-radius: 30px;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.76)),
+        linear-gradient(145deg, rgba(181, 163, 151, 0.14), rgba(74, 93, 78, 0.04));
+      border: 1px solid rgba(74, 93, 78, 0.12);
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .mock-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(74, 93, 78, 0.08);
+    }
+
+    .mock-top strong {
+      font-size: 1.1rem;
+      color: var(--green);
+    }
+
+    .mock-badge {
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(181, 163, 151, 0.24);
+      color: var(--green);
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+    }
+
+    .chat-thread {
+      display: grid;
+      gap: 12px;
+      margin-top: 4px;
+    }
+
+    .bubble {
+      max-width: 86%;
+      padding: 14px 16px;
+      border-radius: 18px;
+      font-size: 0.98rem;
+      line-height: 1.8;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .bubble.user {
+      margin-left: auto;
+      background: rgba(212, 197, 185, 0.34);
+      color: var(--text);
+      border-bottom-right-radius: 6px;
+    }
+
+    .bubble.ai {
+      background: rgba(74, 93, 78, 0.1);
+      color: var(--green);
+      border-bottom-left-radius: 6px;
+    }
+
+    .crm-stack {
+      display: grid;
+      gap: 14px;
+      margin-top: 8px;
+    }
+
+    .crm-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 14px;
+      align-items: center;
+      padding: 16px 18px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.72);
+      border: 1px solid rgba(74, 93, 78, 0.08);
+    }
+
+    .crm-name {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .crm-name strong {
+      color: var(--green);
+      font-size: 1rem;
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .mini-tag {
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(74, 93, 78, 0.08);
+      color: var(--green);
+      font-size: 0.8rem;
+    }
+
+    .faq-chain {
+      display: grid;
+      gap: 14px;
+      margin-top: 8px;
+    }
+
+    .faq-card {
+      padding: 18px 18px 16px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.76);
+      border: 1px solid rgba(74, 93, 78, 0.1);
+    }
+
+    .faq-card strong {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--green);
+      font-size: 1rem;
+    }
+
+    .learn-note {
+      padding: 14px 16px;
+      border-radius: 16px;
+      background: rgba(74, 93, 78, 0.08);
+      color: var(--green);
+      font-size: 0.94rem;
+    }
+
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: clamp(22px, 3vw, 40px);
+      align-items: stretch;
+    }
+
+    .pricing-main {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .pricing-card {
+      padding: 24px;
+      border-radius: 28px;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.8)),
+        linear-gradient(135deg, rgba(181, 163, 151, 0.16), rgba(74, 93, 78, 0.05));
+      border: 1px solid rgba(74, 93, 78, 0.12);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .pricing-list {
+      list-style: none;
+      display: grid;
+      gap: 14px;
+      margin-top: 12px;
+    }
+
+    .pricing-list li {
+      display: flex;
+      gap: 12px;
+      padding: 16px 18px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.72);
+      border: 1px solid rgba(74, 93, 78, 0.08);
+    }
+
+    .pricing-list li::before {
+      content: "•";
+      color: var(--gold);
+      font-size: 1.3rem;
+      line-height: 1;
+      margin-top: 3px;
+    }
+
+    .value-box {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 18px;
+      min-height: 100%;
+      padding: 28px;
+      border-radius: 30px;
+      background: var(--green);
+      color: #f7f4ef;
+      box-shadow: 0 28px 70px rgba(74, 93, 78, 0.2);
+    }
+
+    .value-box h3,
+    .value-box p,
+    .value-box li {
+      color: inherit;
+    }
+
+    .value-box h3 {
+      font-size: 1.6rem;
+    }
+
+    .value-pill {
+      display: inline-flex;
+      width: fit-content;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.12);
+      color: rgba(255, 255, 255, 0.86);
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .value-box ul {
+      list-style: none;
+      display: grid;
+      gap: 10px;
+    }
+
+    .value-box li {
+      padding-left: 18px;
+      position: relative;
+    }
+
+    .value-box li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 12px;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--gold);
+    }
+
+    .cta-layout {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: clamp(24px, 4vw, 42px);
+      align-items: center;
+      height: 100%;
+    }
+
+    .cta-card {
+      padding: 28px;
+      border-radius: 32px;
+      background: rgba(255, 255, 255, 0.76);
+      border: 1px solid rgba(74, 93, 78, 0.1);
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .cta-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 8px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 14px 22px;
+      border-radius: 10px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: transform 0.24s ease, box-shadow 0.24s ease, background 0.24s ease;
+    }
+
+    .button:hover {
+      transform: translateY(-2px);
+    }
+
+    .button--primary {
+      background: var(--green);
+      color: #fff;
+      box-shadow: 0 18px 30px rgba(74, 93, 78, 0.16);
+    }
+
+    .button--primary:hover {
+      background: var(--green-soft);
+    }
+
+    .button--secondary {
+      background: rgba(255, 255, 255, 0.82);
+      color: var(--green);
+      border: 1px solid rgba(74, 93, 78, 0.16);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .cta-side {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .cta-side .panel {
+      min-height: 150px;
+    }
+
+    .footer-note {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .keyboard-hint {
+      position: fixed;
+      left: 50%;
+      bottom: 18px;
+      transform: translateX(-50%);
+      z-index: 20;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.74);
+      border: 1px solid rgba(74, 93, 78, 0.1);
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      letter-spacing: 0.08em;
+      box-shadow: var(--shadow-soft);
+    }
+
+    @media (max-width: 960px) {
+      .slide-cover .slide-content,
+      .split-layout,
+      .pricing-grid,
+      .cta-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-art,
+      .mock-card {
+        min-height: auto;
+      }
+    }
+
+    @media (max-width: 700px) {
+      :root {
+        --slide-padding: 22px;
+        --hero-size: clamp(2.2rem, 11vw, 3.4rem);
+        --title-size: clamp(1.85rem, 7.5vw, 2.6rem);
+      }
+
+      .nav-dots,
+      .keyboard-hint {
+        display: none;
+      }
+
+      .slide::before {
+        inset: 12px;
+        border-radius: 24px;
+      }
+
+      .brand-mark {
+        position: static;
+        margin-bottom: 8px;
+      }
+
+      .slide-content {
+        justify-content: flex-start;
+        padding-top: 28px;
+        padding-bottom: 54px;
+        overflow-y: auto;
+      }
+
+      .page-num {
+        right: 22px;
+        bottom: 14px;
+      }
+
+      .scene-card,
+      .mock-card,
+      .pricing-card,
+      .cta-card,
+      .panel {
+        padding: 20px;
+        border-radius: 22px;
+      }
+
+      .crm-row {
+        grid-template-columns: 1fr;
+      }
+
+      .bubble {
+        max-width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="progress-bar" id="progressBar" aria-hidden="true"></div>
+  <div class="ambient-grain" aria-hidden="true"></div>
+  <nav class="nav-dots" id="navDots" aria-label="投影片導覽"></nav>
+  <div class="keyboard-hint">使用滑鼠滾輪、方向鍵或觸控滑動切換投影片</div>
+
+  <section class="slide slide-cover visible" id="slide-1" aria-label="封面">
+    <div class="slide-content">
+      <div class="brand-mark reveal">
+        <span class="brand-mark__leaf">🌲</span>
+        <span>KeFu for Scent Forest</span>
+      </div>
+
+      <div class="hero-copy">
+        <span class="tag reveal">Pitch Deck / 香氛森林專屬提案</span>
+        <h1 class="reveal">專屬香氛森林的 24 小時 AI 數位員工 🌲</h1>
+        <p class="hero-subtitle reveal">讓你們專心調香，把繁瑣的客服與行政交給 KeFu。這不是冷冰冰的機器人，而是懂品牌語氣、能持續進化的雲端小幫手。</p>
+        <div class="hero-note reveal">
+          <span class="pill">自然、溫暖、療癒、極簡</span>
+          <span class="pill">品牌語氣客製化</span>
+          <span class="pill">客服 + CRM + 行政自動化</span>
+        </div>
+      </div>
+
+      <div class="hero-art reveal">
+        <div class="product-scene">
+          <div class="scene-card">
+            <div class="scene-top">
+              <div class="scene-bottle" aria-hidden="true"></div>
+              <div class="scene-copy">
+                <strong>Scent Forest</strong>
+                <span>把香氣留給產品，把時間留給品牌。</span>
+              </div>
+            </div>
+            <div class="scene-lines" aria-hidden="true">
+              <div class="scene-line"></div>
+              <div class="scene-line short"></div>
+            </div>
+            <div class="scene-message">「您好，雪松系列很適合喜歡木質調又想要安定感的客人 🌲 如果是送禮，我也可以幫你快速整理推薦組合。」</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="page-num">01 / 07</div>
+  </section>
+
+  <section class="slide" id="slide-2" aria-label="破冰與共鳴">
+    <div class="slide-content">
+      <div class="brand-mark reveal">
+        <span class="brand-mark__leaf">🌲</span>
+        <span>Scent Forest Opportunity</span>
+      </div>
+
+      <div class="split-layout">
+        <div class="panel-stack">
+          <span class="tag reveal">The Hook</span>
+          <h2 class="reveal">聽說，這座森林最近需要一點幫手？</h2>
+          <p class="soft reveal">看到你們在尋找外包夥伴，我們非常懂那種「想專注研發，卻被無止盡的私訊與建檔綁架」的焦慮。KeFu 智能營運系統，正是為了幫質感品牌買回時間而生。</p>
+          <div class="panel reveal">
+            <h3>我們看見的品牌狀態</h3>
+            <ul class="check-list">
+              <li>想把時間花在調香、產品打磨與品牌經營，而不是重複回答同樣問題。</li>
+              <li>私訊、訂單資訊、客製化需求分散在不同對話裡，整理成本高。</li>
+              <li>需要的是懂美感、懂節奏、懂品牌感受的營運夥伴，而不是只會回罐頭訊息的工具。</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="quote-box reveal">
+          <blockquote>「我們不是想找一個更吵的系統，而是想找一個真正能讓團隊安靜下來、把事情接住的幫手。」</blockquote>
+        </div>
+      </div>
+    </div>
+    <div class="page-num">02 / 07</div>
+  </section>
+
+  <section class="slide" id="slide-3" aria-label="核心亮點一">
+    <div class="slide-content">
+      <div class="brand-mark reveal">
+        <span class="brand-mark__leaf">💛</span>
+        <span>Warmth First</span>
+      </div>
+
+      <div class="split-layout">
+        <div class="panel-stack">
+          <span class="tag reveal">Highlight 01</span>
+          <h2 class="reveal">迷思打破：AI 也可以很有溫度 💛</h2>
+          <div class="quote-box reveal">
+            <blockquote>「我們的品牌很有溫度，用 AI 會不會顯得太官方、氣跑客人？」</blockquote>
+          </div>
+          <ul class="check-list reveal">
+            <li><strong>專屬品牌人設：</strong>我們可以完全客製化「香氛森林」的專屬語氣，讓每一句回覆都像你們品牌在說話。</li>
+            <li><strong>像真人店長一樣親切：</strong>半夜的香氣諮詢、急迫的出貨詢問，AI 都能帶上 🌲 與 💛 溫柔秒回，絕不漏接任何一份心意。</li>
+          </ul>
+        </div>
+
+        <div class="mock-card reveal">
+          <div class="mock-top">
+            <strong>AI 對話示意</strong>
+            <span class="mock-badge">品牌語氣已套用</span>
+          </div>
+          <div class="chat-thread">
+            <div class="bubble user">請問雪松系列聞起來會不會太重？我想找偏安定、睡前也適合的味道。</div>
+            <div class="bubble ai">如果你喜歡木質調但不想太厚重，雪松與白茶的搭配會很適合你 🌲 香氣會更柔和，也很適合夜晚放鬆時使用。</div>
+            <div class="bubble ai">如果是送禮，我也可以幫你整理一組比較不容易踩雷的推薦清單 💛</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="page-num">03 / 07</div>
+  </section>
+
+  <section class="slide" id="slide-4" aria-label="核心亮點二">
+    <div class="slide-content">
+      <div class="brand-mark reveal">
+        <span class="brand-mark__leaf">🏷️</span>
+        <span>CRM Intelligence</span>
+      </div>
+
+      <div class="split-layout">
+        <div class="panel-stack">
+          <span class="tag reveal">Highlight 02</span>
+          <h2 class="reveal">業績推進器：自動貼標的專屬 CRM 🏷️</h2>
+          <div class="quote-box reveal">
+            <blockquote>「交給 AI，會不會反而讓我越來越不認識客人？」</blockquote>
+          </div>
+          <ul class="check-list reveal">
+            <li><strong>從聊天中讀懂客人：</strong>客人在 LINE 或 Telegram 發問，KeFu 就會自動辨識需求，貼上 `#喜歡木質調`、`#家有寵物`、`#送禮需求` 的標籤。</li>
+            <li><strong>精準推廣不擾客：</strong>下次推出雪松新品，一鍵篩選精準發送。不再憑大腦死記硬背，這才是深度的顧客互動。</li>
+          </ul>
+        </div>
+
+        <div class="mock-card reveal">
+          <div class="mock-top">
+            <strong>CRM 標籤示意</strong>
+            <span class="mock-badge">聊天即貼標</span>
+          </div>
+          <div class="crm-stack">
+            <div class="crm-row">
+              <div class="crm-name">
+                <strong>林小姐</strong>
+                <div class="tag-row">
+                  <span class="mini-tag">#喜歡木質調</span>
+                  <span class="mini-tag">#送禮需求</span>
+                </div>
+              </div>
+              <span class="mock-badge">雪松新品名單</span>
+            </div>
+            <div class="crm-row">
+              <div class="crm-name">
+                <strong>陳先生</strong>
+                <div class="tag-row">
+                  <span class="mini-tag">#家有寵物</span>
+                  <span class="mini-tag">#低刺激偏好</span>
+                </div>
+              </div>
+              <span class="mock-badge">寵物友善推薦</span>
+            </div>
+            <div class="crm-row">
+              <div class="crm-name">
+                <strong>黃小姐</strong>
+                <div class="tag-row">
+                  <span class="mini-tag">#節慶檔期</span>
+                  <span class="mini-tag">#企業送禮</span>
+                </div>
+              </div>
+              <span class="mock-badge">大量客製追蹤</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="page-num">04 / 07</div>
+  </section>
+
+  <section class="slide" id="slide-5" aria-label="核心亮點三">
+    <div class="slide-content">
+      <div class="brand-mark reveal">
+        <span class="brand-mark__leaf">🧠</span>
+        <span>Living Knowledge</span>
+      </div>
+
+      <div class="split-layout">
+        <div class="panel-stack">
+          <span class="tag reveal">Highlight 03</span>
+          <h2 class="reveal">解放大腦：越用越聰明的自動進化 FAQ 🧠</h2>
+          <div class="quote-box reveal">
+            <blockquote>「香氛季節新品這麼多，每次都要進後台手動重設機器人，太麻煩了吧？」</blockquote>
+          </div>
+          <ul class="check-list reveal">
+            <li><strong>你專心調香，系統交給我們：</strong>遇到全新的客製化問題，只要真人店長親自回答過一次，KeFu 就會自動學習並記進知識庫。</li>
+            <li><strong>零維護成本：</strong>下次再有客人問同樣的問題，AI 就會直接完美代答。系統會跟著你們一起進化，越用越準。</li>
+          </ul>
+        </div>
+
+        <div class="mock-card reveal">
+          <div class="mock-top">
+            <strong>知識庫進化示意</strong>
+            <span class="mock-badge">真人回答後自動吸收</span>
+          </div>
+          <div class="faq-chain">
+            <div class="faq-card">
+              <strong>新問題</strong>
+              客人詢問：「春季限定香氛可以搭配擴香石還是比較適合空間噴霧？」
+            </div>
+            <div class="faq-card">
+              <strong>真人店長回覆一次</strong>
+              店長補充：春季限定較適合擴香石，若空間較大再搭配噴霧補香。
+            </div>
+            <div class="learn-note">KeFu 已自動把這則問答寫入知識庫，下次同類問題可直接代答。</div>
+            <div class="faq-card">
+              <strong>下一次客人提問</strong>
+              AI 會直接用香氛森林既有口吻回覆，不需要再重新設定或手動更新 FAQ。
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="page-num">05 / 07</div>
+  </section>
+
+  <section class="slide" id="slide-6" aria-label="定價與行政外包">
+    <div class="slide-content">
+      <div class="brand-mark reveal">
+        <span class="brand-mark__leaf">🧚‍♀️</span>
+        <span>Pricing & Operations</span>
+      </div>
+
+      <div class="pricing-grid">
+        <div class="pricing-main">
+          <span class="tag reveal">Flexible Pricing</span>
+          <h2 class="reveal">無月費綁架，就像請了計時小精靈 🧚‍♀️</h2>
+          <div class="pricing-card reveal">
+            <ul class="pricing-list">
+              <li><strong>用多少付多少：</strong>採用點數儲值制，只有 AI 實際幫忙回覆時才扣點。淡季不浪費，旺季擋砲火，沒有固定月費壓力。</li>
+              <li><strong>自動化資料歸檔：</strong>除了客服，還能把客人的訂單或報修需求，自動整理到 Notion 或 Google Sheet，省下複製貼上的時間。</li>
+              <li><strong>專屬客製化導入：</strong>提供專人代客建置服務，幫你們把 AI 訓練到好，直接無痛上線。</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="value-box reveal">
+          <span class="value-pill">KeFu 對香氛森林的價值</span>
+          <h3>不是多一套工具，而是少掉一堆重複工作。</h3>
+          <ul>
+            <li>把夜間與尖峰私訊先接住，不再漏掉高意圖客人。</li>
+            <li>把聊天變成 CRM 標籤資產，後續推廣更精準。</li>
+            <li>把新品問答和客製化經驗累積成會成長的知識庫。</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="page-num">06 / 07</div>
+  </section>
+
+  <section class="slide" id="slide-7" aria-label="行動呼籲">
+    <div class="slide-content">
+      <div class="brand-mark reveal">
+        <span class="brand-mark__leaf">🌳</span>
+        <span>Call To Action</span>
+      </div>
+
+      <div class="cta-layout">
+        <div class="cta-card reveal">
+          <span class="tag">Next Step</span>
+          <h2>說不定有機會，一起讓這座森林變得更好 🌳</h2>
+          <p>為了讓你們體驗 AI 的溫度，我們已經用香氛森林的資料，準備了一個專屬的 AI 互動小 Demo。你們不用先想像，直接體驗就能感受它是不是你們需要的節奏。</p>
+          <div class="cta-buttons">
+            <a class="button button--primary" href="https://kefu-frontend.vercel.app/" target="_blank" rel="noreferrer">點我體驗香氛森林專屬 AI</a>
+            <a class="button button--secondary" href="https://line.me/R/ti/p/@304dgdjo" target="_blank" rel="noreferrer">找我們聊聊</a>
+          </div>
+          <p class="footer-note">備註：目前 Demo 按鈕先沿用 KeFu 正式入口；若你之後有香氛森林專屬 Playground 連結，可直接替換。</p>
+        </div>
+
+        <div class="cta-side">
+          <div class="panel reveal">
+            <h3>這份提案想解決的事</h3>
+            <p>不是只讓客服變快，而是讓香氛森林在維持品牌溫度的前提下，把客服、客資整理與知識維護一起變得更輕。</p>
+          </div>
+          <div class="panel reveal">
+            <h3>最適合的合作方式</h3>
+            <p>先看 Demo，再決定是自己快速開始，還是直接交給我們代客建置與品牌語氣訓練。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="page-num">07 / 07</div>
+  </section>
+
+  <script>
+    class Presentation {
+      constructor() {
+        this.slides = [...document.querySelectorAll(".slide")];
+        this.progressBar = document.getElementById("progressBar");
+        this.navDots = document.getElementById("navDots");
+        this.current = 0;
+        this.total = this.slides.length;
+
+        this.buildDots();
+        this.observeSlides();
+        this.bindKeyboard();
+        this.bindTouch();
+        this.bindScrollProgress();
+        this.updateUI(0);
+      }
+
+      buildDots() {
+        const labels = [
+          "封面",
+          "破冰",
+          "品牌語氣",
+          "CRM",
+          "自動 FAQ",
+          "收費模式",
+          "行動呼籲"
+        ];
+
+        this.slides.forEach((_, index) => {
+          const button = document.createElement("button");
+          button.className = "nav-dot" + (index === 0 ? " active" : "");
+          button.type = "button";
+          button.setAttribute("aria-label", labels[index] || `投影片 ${index + 1}`);
+          button.addEventListener("click", () => this.goTo(index));
+          this.navDots.appendChild(button);
+        });
+
+        this.dots = [...this.navDots.querySelectorAll(".nav-dot")];
+      }
+
+      observeSlides() {
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            const index = this.slides.indexOf(entry.target);
+            if (index === -1) return;
+            entry.target.classList.add("visible");
+            this.current = index;
+            this.updateUI(index);
+          });
+        }, { threshold: 0.55 });
+
+        this.slides.forEach((slide) => observer.observe(slide));
+      }
+
+      bindKeyboard() {
+        document.addEventListener("keydown", (event) => {
+          if (["ArrowDown", "ArrowRight", "PageDown", "Space"].includes(event.code)) {
+            event.preventDefault();
+            this.goTo(this.current + 1);
+          }
+
+          if (["ArrowUp", "ArrowLeft", "PageUp"].includes(event.code)) {
+            event.preventDefault();
+            this.goTo(this.current - 1);
+          }
+        });
+      }
+
+      bindTouch() {
+        let startY = 0;
+        let startX = 0;
+
+        document.addEventListener("touchstart", (event) => {
+          startY = event.touches[0].clientY;
+          startX = event.touches[0].clientX;
+        }, { passive: true });
+
+        document.addEventListener("touchend", (event) => {
+          const deltaY = startY - event.changedTouches[0].clientY;
+          const deltaX = startX - event.changedTouches[0].clientX;
+          if (Math.abs(deltaY) <= Math.abs(deltaX) || Math.abs(deltaY) < 44) return;
+          this.goTo(this.current + (deltaY > 0 ? 1 : -1));
+        }, { passive: true });
+      }
+
+      bindScrollProgress() {
+        let ticking = false;
+        window.addEventListener("scroll", () => {
+          if (ticking) return;
+          requestAnimationFrame(() => {
+            const totalScrollable = document.body.scrollHeight - window.innerHeight;
+            const progress = totalScrollable > 0 ? (window.scrollY / totalScrollable) * 100 : 0;
+            this.progressBar.style.width = `${progress}%`;
+            ticking = false;
+          });
+          ticking = true;
+        }, { passive: true });
+      }
+
+      goTo(index) {
+        if (index < 0 || index >= this.total) return;
+        this.slides[index].scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+
+      updateUI(index) {
+        this.dots.forEach((dot, dotIndex) => {
+          dot.classList.toggle("active", dotIndex === index);
+        });
+
+        if (this.total > 1) {
+          this.progressBar.style.width = `${(index / (this.total - 1)) * 100}%`;
+        }
+      }
+    }
+
+    new Presentation();
+  </script>
+</body>
+</html>
